@@ -451,7 +451,7 @@ const T: Template[] = [
     summary: 'Business development pitch for a prospective client (non-billable).',
     render: (ctx, block, start, minutes) => {
       const end = start + minutes * MIN;
-      return { end, trueSeconds: end - start, ids: [doc(ctx, block, { path: '/BD/Pitch - Northgate Foods (prospect).pptx', start, end })] };
+      return { end, trueSeconds: end - start, ids: [doc(ctx, block, { path: '/BD/Pitch - Wrenmoor Foods (prospect).pptx', start, end })] };
     },
   },
 
