@@ -1,0 +1,185 @@
+{
+  "day_id": "day-06",
+  "date": "2026-03-13",
+  "emails": [
+    {
+      "id": "d06e01",
+      "thread_id": "d06t01",
+      "direction": "received",
+      "from": "cle@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Registration confirmed: CLE Webinar",
+      "body": "You're registered for Ethics in E-Discovery (1.0 ethics credit). The link is in your calendar invite.",
+      "at": "2026-03-13T06:23:00-04:00",
+      "opened_at": "2026-03-13T08:00:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d06e04",
+      "thread_id": "d06t03",
+      "direction": "received",
+      "from": "lpark@brightline.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Preliminary imaging report",
+      "body": "Dana,\n\nAttached is our preliminary report. Short version: three USB transfers in the week before her resignation.\n\nLena",
+      "at": "2026-03-13T13:32:23-04:00",
+      "opened_at": "2026-03-13T14:39:23-04:00",
+      "attachments": [
+        "Brightline Preliminary Imaging Report.pdf"
+      ]
+    },
+    {
+      "id": "d06e05",
+      "thread_id": "d06t04",
+      "direction": "received",
+      "from": "lchu@halberd.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Access log export",
+      "body": "Dana, IT can export the access logs for January through March. Do you want them as CSV or PDF? Lauren",
+      "at": "2026-03-13T13:37:23-04:00",
+      "opened_at": "2026-03-13T15:37:23-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d06e02",
+      "thread_id": "d06t02",
+      "direction": "received",
+      "from": "treyes@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "custodian list",
+      "body": "Dana, should I add the two dispatch supervisors to the custodian list before it goes out tomorrow? -Tom",
+      "at": "2026-03-13T13:58:00-04:00",
+      "opened_at": "2026-03-13T14:31:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d06e07",
+      "thread_id": "d06t05",
+      "direction": "received",
+      "from": "jmoss@kestrel.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Dispatch logs from the Newark terminal",
+      "body": "Dana,\n\nHere are the dispatch logs from the Newark terminal for March through June 2025. Let me know if you need the driver assignments too.\n\nJanet",
+      "at": "2026-03-13T14:30:38-04:00",
+      "opened_at": "2026-03-13T15:49:38-04:00",
+      "attachments": [
+        "Newark dispatch logs Mar-Jun 2025.xlsx"
+      ]
+    },
+    {
+      "id": "d06e03",
+      "thread_id": "d06t02",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "treyes@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Re: custodian list",
+      "body": "Yes, add both and flag the warehouse manager as well. Thanks.",
+      "at": "2026-03-13T14:33:23-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d06e06",
+      "thread_id": "d06t04",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Re: Access log export",
+      "body": "Lauren, CSV is best, with the user IDs included. Thank you. Dana",
+      "at": "2026-03-13T15:40:38-04:00",
+      "opened_at": "",
+      "attachments": []
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d06c01",
+      "title": "CLE Webinar: Ethics in E-Discovery",
+      "start": "2026-03-13T08:30:00-04:00",
+      "end": "2026-03-13T09:30:00-04:00",
+      "attendees": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d06c02",
+      "title": "Kestrel/Calder strategy",
+      "start": "2026-03-13T09:37:00-04:00",
+      "end": "2026-03-13T10:18:00-04:00",
+      "attendees": [
+        "rcalloway@ashgrove.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d06c03",
+      "title": "Call w/ Janet Moss re interrogatory responses",
+      "start": "2026-03-13T10:25:00-04:00",
+      "end": "2026-03-13T10:55:00-04:00",
+      "attendees": [
+        "jmoss@kestrel.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": "Dial +1-212-555-0141"
+    },
+    {
+      "id": "d06c04",
+      "title": "Mediation - Ruiz v. Bellhaven (Strand ADR)",
+      "start": "2026-03-13T11:18:00-04:00",
+      "end": "2026-03-13T14:18:00-04:00",
+      "attendees": [
+        "estrand@strandadr.example",
+        "dholt@bellhaven.example",
+        "namaro@amarolutz.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": "Strand ADR offices, 4th floor"
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d06d01",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Brightline Preliminary Imaging Report.pdf",
+      "title": "Brightline Preliminary Imaging Report.pdf",
+      "start": "2026-03-13T14:41:23-04:00",
+      "end": "2026-03-13T15:23:23-04:00",
+      "active_seconds": 2325
+    }
+  ],
+  "calls": [
+    {
+      "id": "d06p01",
+      "direction": "out",
+      "number": "+1-212-555-0141",
+      "start": "2026-03-13T10:26:00-04:00",
+      "duration_seconds": 2520
+    }
+  ]
+}

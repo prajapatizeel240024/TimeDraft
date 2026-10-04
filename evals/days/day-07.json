@@ -1,0 +1,152 @@
+{
+  "day_id": "day-07",
+  "date": "2026-03-16",
+  "emails": [
+    {
+      "id": "d07e05",
+      "thread_id": "d07t04",
+      "direction": "received",
+      "from": "digest@lawdigest.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "This week in litigation",
+      "body": "Top stories: appellate roundup, new e-discovery rules, and a profile of the year in trade secret verdicts.",
+      "at": "2026-03-16T07:00:00-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d07e01",
+      "thread_id": "d07t01",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "estrand@strandadr.example"
+      ],
+      "cc": [],
+      "subject": "Bellhaven mediation statement",
+      "body": "Judge Strand,\n\nAttached is Bellhaven's confidential mediation statement for the April 2 session.\n\nRespectfully,\nDana Whitfield",
+      "at": "2026-03-16T10:39:00-04:00",
+      "opened_at": "",
+      "attachments": [
+        "Mediation Statement - Bellhaven.docx"
+      ]
+    },
+    {
+      "id": "d07e04",
+      "thread_id": "d07t03",
+      "direction": "received",
+      "from": "dholt@bellhaven.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ruiz payroll and timekeeping records",
+      "body": "Dana,\n\nAttached are Carlos Ruiz's payroll and timekeeping records for 2024 and 2025.\n\nDerek",
+      "at": "2026-03-16T14:06:04-04:00",
+      "opened_at": "2026-03-16T16:05:04-04:00",
+      "attachments": [
+        "Ruiz_Payroll_2024-2025.xlsx"
+      ]
+    },
+    {
+      "id": "d07e02",
+      "thread_id": "d07t02",
+      "direction": "received",
+      "from": "lpark@brightline.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Imaging timeline",
+      "body": "Dana,\n\nWe can image the laptop on Thursday once opposing counsel confirms the chain-of-custody protocol. Can you send me the device inventory?\n\nLena",
+      "at": "2026-03-16T14:37:00-04:00",
+      "opened_at": "2026-03-16T15:48:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d07e03",
+      "thread_id": "d07t02",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lpark@brightline.example"
+      ],
+      "cc": [],
+      "subject": "Re: Imaging timeline",
+      "body": "Lena,\n\nThursday works. I'll send the device inventory today and confirm the protocol with opposing counsel.\n\nDana",
+      "at": "2026-03-16T15:50:04-04:00",
+      "opened_at": "",
+      "attachments": []
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d07c01",
+      "title": "Mediation - Ruiz v. Bellhaven (Strand ADR)",
+      "start": "2026-03-16T10:52:00-04:00",
+      "end": "2026-03-16T14:16:00-04:00",
+      "attendees": [
+        "estrand@strandadr.example",
+        "dholt@bellhaven.example",
+        "namaro@amarolutz.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": "Strand ADR offices, 4th floor"
+    },
+    {
+      "id": "d07c03",
+      "title": "Vendor webinar: AI in legal ops",
+      "start": "2026-03-16T13:00:00-04:00",
+      "end": "2026-03-16T13:45:00-04:00",
+      "attendees": [
+        "events@legaltechvendor.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "declined",
+      "description": ""
+    },
+    {
+      "id": "d07c02",
+      "title": "Call w/ Janet Moss re custodians",
+      "start": "2026-03-16T15:09:00-04:00",
+      "end": "2026-03-16T15:40:00-04:00",
+      "attendees": [
+        "jmoss@kestrel.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": "Video call"
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d07d01",
+      "path": "/Matters/M-1003 Ruiz v Bellhaven/Mediation Statement - Bellhaven.docx",
+      "title": "Mediation Statement - Bellhaven.docx",
+      "start": "2026-03-16T08:46:00-04:00",
+      "end": "2026-03-16T10:34:00-04:00",
+      "active_seconds": 5841
+    },
+    {
+      "id": "d07d02",
+      "path": "/Matters/M-1001 Kestrel v Calder/Notes.docx",
+      "title": "Notes.docx",
+      "start": "2026-03-16T14:23:00-04:00",
+      "end": "2026-03-16T14:58:00-04:00",
+      "active_seconds": 1967
+    },
+    {
+      "id": "d07d03",
+      "path": "/Matters/M-1003 Ruiz v Bellhaven/Ruiz_Payroll_2024-2025.xlsx",
+      "title": "Ruiz_Payroll_2024-2025.xlsx",
+      "start": "2026-03-16T16:07:04-04:00",
+      "end": "2026-03-16T17:26:04-04:00",
+      "active_seconds": 4306
+    }
+  ],
+  "calls": []
+}

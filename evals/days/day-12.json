@@ -1,0 +1,246 @@
+{
+  "day_id": "day-12",
+  "date": "2026-03-23",
+  "emails": [
+    {
+      "id": "d12e03",
+      "thread_id": "d12t02",
+      "direction": "received",
+      "from": "jmoss@kestrel.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Dispatch logs from the Newark terminal",
+      "body": "Dana,\n\nHere are the dispatch logs from the Newark terminal for March through June 2025. Let me know if you need the driver assignments too.\n\nJanet",
+      "at": "2026-03-23T08:19:30-04:00",
+      "opened_at": "2026-03-23T10:18:30-04:00",
+      "attachments": [
+        "Newark dispatch logs Mar-Jun 2025.xlsx"
+      ]
+    },
+    {
+      "id": "d12e01",
+      "thread_id": "d12t01",
+      "direction": "received",
+      "from": "lpark@brightline.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Imaging timeline",
+      "body": "Dana,\n\nWe can image the laptop on Thursday once opposing counsel confirms the chain-of-custody protocol. Can you send me the device inventory?\n\nLena",
+      "at": "2026-03-23T08:27:00-04:00",
+      "opened_at": "2026-03-23T10:10:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d12e06",
+      "thread_id": "d12t04",
+      "direction": "received",
+      "from": "treyes@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "custodian list",
+      "body": "Dana, should I add the two dispatch supervisors to the custodian list before it goes out tomorrow? -Tom",
+      "at": "2026-03-23T09:41:32-04:00",
+      "opened_at": "2026-03-23T12:09:32-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d12e04",
+      "thread_id": "d12t03",
+      "direction": "received",
+      "from": "gvance@pryorvance.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Calder 30(b)(6) dates",
+      "body": "Dana,\n\nOur designee is available April 14 or April 16. Please let us know which works and whether you will notice it in person.\n\nGrant",
+      "at": "2026-03-23T09:52:30-04:00",
+      "opened_at": "2026-03-23T11:07:30-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d12e02",
+      "thread_id": "d12t01",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lpark@brightline.example"
+      ],
+      "cc": [],
+      "subject": "Re: Imaging timeline",
+      "body": "Lena,\n\nThursday works. I'll send the device inventory today and confirm the protocol with opposing counsel.\n\nDana",
+      "at": "2026-03-23T10:12:30-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d12e08",
+      "thread_id": "d12t05",
+      "direction": "received",
+      "from": "lpark@brightline.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Preliminary imaging report",
+      "body": "Dana,\n\nAttached is our preliminary report. Short version: three USB transfers in the week before her resignation.\n\nLena",
+      "at": "2026-03-23T11:02:48-04:00",
+      "opened_at": "2026-03-23T12:25:48-04:00",
+      "attachments": [
+        "Brightline Preliminary Imaging Report.pdf"
+      ]
+    },
+    {
+      "id": "d12e05",
+      "thread_id": "d12t03",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "gvance@pryorvance.example"
+      ],
+      "cc": [],
+      "subject": "Re: Calder 30(b)(6) dates",
+      "body": "Grant,\n\nApril 16 works for us. We will serve an amended notice this week and plan to proceed in person at your offices.\n\nDana",
+      "at": "2026-03-23T11:09:32-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d12e07",
+      "thread_id": "d12t04",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "treyes@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Re: custodian list",
+      "body": "Yes, add both and flag the warehouse manager as well. Thanks.",
+      "at": "2026-03-23T12:12:48-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d12e09",
+      "thread_id": "d12t06",
+      "direction": "received",
+      "from": "ekessler@graykessler.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ostrander - opposition to PI motion",
+      "body": "Counsel,\n\nAttached is Dr. Ostrander's opposition to the motion for preliminary injunction, filed this morning, with her supporting declaration.\n\nEvan Kessler\nGray Kessler LLP",
+      "at": "2026-03-23T12:57:48-04:00",
+      "opened_at": "2026-03-23T13:44:48-04:00",
+      "attachments": [
+        "Opposition to PI Motion.pdf"
+      ]
+    },
+    {
+      "id": "d12e11",
+      "thread_id": "d12t08",
+      "direction": "received",
+      "from": "dholt@bellhaven.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ruiz payroll and timekeeping records",
+      "body": "Dana,\n\nAttached are Carlos Ruiz's payroll and timekeeping records for 2024 and 2025.\n\nDerek",
+      "at": "2026-03-23T14:23:48-04:00",
+      "opened_at": "2026-03-23T15:28:48-04:00",
+      "attachments": [
+        "Ruiz_Payroll_2024-2025.xlsx"
+      ]
+    },
+    {
+      "id": "d12e10",
+      "thread_id": "d12t07",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Supplemental declaration for your review",
+      "body": "Lauren,\n\nAttached is a draft supplemental declaration describing the server access logs. Please confirm paragraphs 4-9 match what your IT team found.\n\nDana",
+      "at": "2026-03-23T15:20:48-04:00",
+      "opened_at": "",
+      "attachments": [
+        "Supplemental Declaration of L. Chu.docx"
+      ]
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d12c01",
+      "title": "Call w/ Janet Moss re interrogatory responses",
+      "start": "2026-03-23T11:21:32-04:00",
+      "end": "2026-03-23T11:51:32-04:00",
+      "attendees": [
+        "jmoss@kestrel.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": "Dial +1-212-555-0141"
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d12d01",
+      "path": "/Matters/M-1001 Kestrel v Calder/Calder 30(b)(6) Deposition Outline.docx",
+      "title": "Calder 30(b)(6) Deposition Outline.docx",
+      "start": "2026-03-23T08:45:00-04:00",
+      "end": "2026-03-23T10:03:00-04:00",
+      "active_seconds": 4257
+    },
+    {
+      "id": "d12d02",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Brightline Preliminary Imaging Report.pdf",
+      "title": "Brightline Preliminary Imaging Report.pdf",
+      "start": "2026-03-23T12:27:48-04:00",
+      "end": "2026-03-23T13:31:48-04:00",
+      "active_seconds": 3626
+    },
+    {
+      "id": "d12d03",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Opposition to PI Motion.pdf",
+      "title": "Opposition to PI Motion.pdf",
+      "start": "2026-03-23T13:46:48-04:00",
+      "end": "2026-03-23T14:26:48-04:00",
+      "active_seconds": 2178
+    },
+    {
+      "id": "d12d04",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Supplemental Declaration of L. Chu.docx",
+      "title": "Supplemental Declaration of L. Chu.docx",
+      "start": "2026-03-23T14:35:48-04:00",
+      "end": "2026-03-23T15:15:48-04:00",
+      "active_seconds": 2113
+    },
+    {
+      "id": "d12d05",
+      "path": "/Matters/M-1003 Ruiz v Bellhaven/Ruiz_Payroll_2024-2025.xlsx",
+      "title": "Ruiz_Payroll_2024-2025.xlsx",
+      "start": "2026-03-23T15:30:48-04:00",
+      "end": "2026-03-23T16:29:48-04:00",
+      "active_seconds": 3255
+    }
+  ],
+  "calls": [
+    {
+      "id": "d12p01",
+      "direction": "out",
+      "number": "+1-212-555-0141",
+      "start": "2026-03-23T11:22:32-04:00",
+      "duration_seconds": 2520
+    }
+  ]
+}

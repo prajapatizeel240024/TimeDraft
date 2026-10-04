@@ -1,0 +1,208 @@
+{
+  "day_id": "day-10",
+  "date": "2026-03-19",
+  "emails": [
+    {
+      "id": "d10e01",
+      "thread_id": "d10t01",
+      "direction": "received",
+      "from": "treyes@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "custodian list",
+      "body": "Dana, should I add the two dispatch supervisors to the custodian list before it goes out tomorrow? -Tom",
+      "at": "2026-03-19T06:46:00-04:00",
+      "opened_at": "2026-03-19T08:43:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d10e10",
+      "thread_id": "d10t08",
+      "direction": "received",
+      "from": "digest@lawdigest.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "This week in litigation",
+      "body": "Top stories: appellate roundup, new e-discovery rules, and a profile of the year in trade secret verdicts.",
+      "at": "2026-03-19T07:00:00-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d10e03",
+      "thread_id": "d10t02",
+      "direction": "received",
+      "from": "jmoss@kestrel.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Dispatch logs from the Newark terminal",
+      "body": "Dana,\n\nHere are the dispatch logs from the Newark terminal for March through June 2025. Let me know if you need the driver assignments too.\n\nJanet",
+      "at": "2026-03-19T07:56:24-04:00",
+      "opened_at": "2026-03-19T08:51:24-04:00",
+      "attachments": [
+        "Newark dispatch logs Mar-Jun 2025.xlsx"
+      ]
+    },
+    {
+      "id": "d10e02",
+      "thread_id": "d10t01",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "treyes@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Re: custodian list",
+      "body": "Yes, add both and flag the warehouse manager as well. Thanks.",
+      "at": "2026-03-19T08:46:24-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d10e04",
+      "thread_id": "d10t03",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "estrand@strandadr.example"
+      ],
+      "cc": [],
+      "subject": "Bellhaven mediation statement",
+      "body": "Judge Strand,\n\nAttached is Bellhaven's confidential mediation statement for the April 2 session.\n\nRespectfully,\nDana Whitfield",
+      "at": "2026-03-19T11:21:24-04:00",
+      "opened_at": "",
+      "attachments": [
+        "Mediation Statement - Bellhaven.docx"
+      ]
+    },
+    {
+      "id": "d10e06",
+      "thread_id": "d10t05",
+      "direction": "received",
+      "from": "ekessler@graykessler.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ostrander - opposition to PI motion",
+      "body": "Counsel,\n\nAttached is Dr. Ostrander's opposition to the motion for preliminary injunction, filed this morning, with her supporting declaration.\n\nEvan Kessler\nGray Kessler LLP",
+      "at": "2026-03-19T12:45:24-04:00",
+      "opened_at": "2026-03-19T13:44:24-04:00",
+      "attachments": [
+        "Opposition to PI Motion.pdf"
+      ]
+    },
+    {
+      "id": "d10e05",
+      "thread_id": "d10t04",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Supplemental declaration for your review",
+      "body": "Lauren,\n\nAttached is a draft supplemental declaration describing the server access logs. Please confirm paragraphs 4-9 match what your IT team found.\n\nDana",
+      "at": "2026-03-19T13:37:24-04:00",
+      "opened_at": "",
+      "attachments": [
+        "Supplemental Declaration of L. Chu.docx"
+      ]
+    },
+    {
+      "id": "d10e08",
+      "thread_id": "d10t07",
+      "direction": "received",
+      "from": "lchu@halberd.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Access log export",
+      "body": "Dana, IT can export the access logs for January through March. Do you want them as CSV or PDF? Lauren",
+      "at": "2026-03-19T14:00:24-04:00",
+      "opened_at": "2026-03-19T16:00:24-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d10e07",
+      "thread_id": "d10t06",
+      "direction": "received",
+      "from": "it-help@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ticket #4471: VPN password reset",
+      "body": "Your VPN password reset request is open. A technician will call you shortly.",
+      "at": "2026-03-19T15:26:24-04:00",
+      "opened_at": "2026-03-19T15:31:24-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d10e09",
+      "thread_id": "d10t07",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Re: Access log export",
+      "body": "Lauren, CSV is best, with the user IDs included. Thank you. Dana",
+      "at": "2026-03-19T16:02:57-04:00",
+      "opened_at": "",
+      "attachments": []
+    }
+  ],
+  "calendar": [],
+  "doc_sessions": [
+    {
+      "id": "d10d01",
+      "path": "/Matters/M-1003 Ruiz v Bellhaven/Mediation Statement - Bellhaven.docx",
+      "title": "Mediation Statement - Bellhaven.docx",
+      "start": "2026-03-19T09:54:24-04:00",
+      "end": "2026-03-19T11:16:24-04:00",
+      "active_seconds": 4567
+    },
+    {
+      "id": "d10d02",
+      "path": "/Matters/M-1001 Kestrel v Calder/Notes.docx",
+      "title": "Notes.docx",
+      "start": "2026-03-19T11:33:24-04:00",
+      "end": "2026-03-19T12:08:24-04:00",
+      "active_seconds": 1962
+    },
+    {
+      "id": "d10d03",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Supplemental Declaration of L. Chu.docx",
+      "title": "Supplemental Declaration of L. Chu.docx",
+      "start": "2026-03-19T12:14:24-04:00",
+      "end": "2026-03-19T13:32:24-04:00",
+      "active_seconds": 4487
+    },
+    {
+      "id": "d10d04",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Opposition to PI Motion.pdf",
+      "title": "Opposition to PI Motion.pdf",
+      "start": "2026-03-19T13:46:24-04:00",
+      "end": "2026-03-19T15:22:24-04:00",
+      "active_seconds": 4954
+    }
+  ],
+  "calls": [
+    {
+      "id": "d10p01",
+      "direction": "in",
+      "number": "+1-212-555-0100",
+      "start": "2026-03-19T15:34:24-04:00",
+      "duration_seconds": 900
+    }
+  ]
+}

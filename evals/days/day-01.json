@@ -1,0 +1,178 @@
+{
+  "day_id": "day-01",
+  "date": "2026-03-05",
+  "emails": [
+    {
+      "id": "d01e02",
+      "thread_id": "d01t02",
+      "direction": "received",
+      "from": "jmoss@kestrel.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Dispatch logs from the Newark terminal",
+      "body": "Dana,\n\nHere are the dispatch logs from the Newark terminal for March through June 2025. Let me know if you need the driver assignments too.\n\nJanet",
+      "at": "2026-03-05T11:04:12-05:00",
+      "opened_at": "2026-03-05T12:57:12-05:00",
+      "attachments": [
+        "Newark dispatch logs Mar-Jun 2025.xlsx"
+      ]
+    },
+    {
+      "id": "d01e03",
+      "thread_id": "d01t03",
+      "direction": "received",
+      "from": "lchu@halberd.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Access log export",
+      "body": "Dana, IT can export the access logs for January through March. Do you want them as CSV or PDF? Lauren",
+      "at": "2026-03-05T11:24:12-05:00",
+      "opened_at": "2026-03-05T13:47:12-05:00",
+      "attachments": []
+    },
+    {
+      "id": "d01e01",
+      "thread_id": "d01t01",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Supplemental declaration for your review",
+      "body": "Lauren,\n\nAttached is a draft supplemental declaration describing the server access logs. Please confirm paragraphs 4-9 match what your IT team found.\n\nDana",
+      "at": "2026-03-05T12:44:12-05:00",
+      "opened_at": "",
+      "attachments": [
+        "Supplemental Declaration of L. Chu.docx"
+      ]
+    },
+    {
+      "id": "d01e05",
+      "thread_id": "d01t04",
+      "direction": "received",
+      "from": "billing@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Reminder: submit February time entries",
+      "body": "Please submit all February time entries by Friday so invoices can go out on time.",
+      "at": "2026-03-05T13:20:50-05:00",
+      "opened_at": "2026-03-05T13:54:50-05:00",
+      "attachments": []
+    },
+    {
+      "id": "d01e04",
+      "thread_id": "d01t03",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Re: Access log export",
+      "body": "Lauren, CSV is best, with the user IDs included. Thank you. Dana",
+      "at": "2026-03-05T13:48:50-05:00",
+      "opened_at": "",
+      "attachments": []
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d01c01",
+      "title": "Kestrel/Calder strategy",
+      "start": "2026-03-05T09:08:12-05:00",
+      "end": "2026-03-05T09:50:12-05:00",
+      "attendees": [
+        "rcalloway@ashgrove.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d01c02",
+      "title": "Call w/ Derek Holt re scheduling records",
+      "start": "2026-03-05T09:58:12-05:00",
+      "end": "2026-03-05T10:31:12-05:00",
+      "attendees": [
+        "dholt@bellhaven.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d01c03",
+      "title": "Meet and confer - Calder interrogatory responses",
+      "start": "2026-03-05T10:36:12-05:00",
+      "end": "2026-03-05T11:12:12-05:00",
+      "attendees": [
+        "gvance@pryorvance.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d01c04",
+      "title": "Vendor webinar: AI in legal ops",
+      "start": "2026-03-05T11:00:00-05:00",
+      "end": "2026-03-05T11:45:00-05:00",
+      "attendees": [
+        "events@legaltechvendor.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "declined",
+      "description": ""
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d01d01",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Supplemental Declaration of L. Chu.docx",
+      "title": "Supplemental Declaration of L. Chu.docx",
+      "start": "2026-03-05T11:24:12-05:00",
+      "end": "2026-03-05T12:39:12-05:00",
+      "active_seconds": 4176
+    },
+    {
+      "id": "d01d02",
+      "path": "/Admin/Time/February time entries.xlsx",
+      "title": "February time entries.xlsx",
+      "start": "2026-03-05T13:55:50-05:00",
+      "end": "2026-03-05T14:18:50-05:00",
+      "active_seconds": 1237
+    },
+    {
+      "id": "d01d03",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Motion for Expedited Discovery.docx",
+      "title": "Motion for Expedited Discovery.docx",
+      "start": "2026-03-05T14:28:50-05:00",
+      "end": "2026-03-05T15:34:50-05:00",
+      "active_seconds": 3648
+    },
+    {
+      "id": "d01d04",
+      "path": "/Matters/M-1001 Kestrel v Calder/Calder 30(b)(6) Deposition Outline.docx",
+      "title": "Calder 30(b)(6) Deposition Outline.docx",
+      "start": "2026-03-05T15:48:50-05:00",
+      "end": "2026-03-05T16:46:50-05:00",
+      "active_seconds": 3020
+    }
+  ],
+  "calls": [
+    {
+      "id": "d01p01",
+      "direction": "in",
+      "number": "+1-212-555-0141",
+      "start": "2026-03-05T08:42:00-05:00",
+      "duration_seconds": 1092
+    }
+  ]
+}

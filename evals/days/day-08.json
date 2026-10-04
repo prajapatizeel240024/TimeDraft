@@ -1,0 +1,129 @@
+{
+  "day_id": "day-08",
+  "date": "2026-03-17",
+  "emails": [
+    {
+      "id": "d08e01",
+      "thread_id": "d08t01",
+      "direction": "received",
+      "from": "ekessler@graykessler.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ostrander - opposition to PI motion",
+      "body": "Counsel,\n\nAttached is Dr. Ostrander's opposition to the motion for preliminary injunction, filed this morning, with her supporting declaration.\n\nEvan Kessler\nGray Kessler LLP",
+      "at": "2026-03-17T06:17:00-04:00",
+      "opened_at": "2026-03-17T08:42:00-04:00",
+      "attachments": [
+        "Opposition to PI Motion.pdf"
+      ]
+    },
+    {
+      "id": "d08e04",
+      "thread_id": "d08t03",
+      "direction": "received",
+      "from": "billing@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Reminder: submit February time entries",
+      "body": "Please submit all February time entries by Friday so invoices can go out on time.",
+      "at": "2026-03-17T09:42:57-04:00",
+      "opened_at": "2026-03-17T10:50:57-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d08e02",
+      "thread_id": "d08t02",
+      "direction": "received",
+      "from": "lchu@halberd.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Access log export",
+      "body": "Dana, IT can export the access logs for January through March. Do you want them as CSV or PDF? Lauren",
+      "at": "2026-03-17T10:06:00-04:00",
+      "opened_at": "2026-03-17T10:41:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d08e03",
+      "thread_id": "d08t02",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Re: Access log export",
+      "body": "Lauren, CSV is best, with the user IDs included. Thank you. Dana",
+      "at": "2026-03-17T10:43:57-04:00",
+      "opened_at": "",
+      "attachments": []
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d08c01",
+      "title": "Meet and confer - Calder interrogatory responses",
+      "start": "2026-03-17T10:08:00-04:00",
+      "end": "2026-03-17T10:34:00-04:00",
+      "attendees": [
+        "gvance@pryorvance.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d08c02",
+      "title": "Kestrel/Calder strategy",
+      "start": "2026-03-17T15:56:57-04:00",
+      "end": "2026-03-17T16:35:57-04:00",
+      "attendees": [
+        "rcalloway@ashgrove.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d08d01",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Opposition to PI Motion.pdf",
+      "title": "Opposition to PI Motion.pdf",
+      "start": "2026-03-17T08:44:00-04:00",
+      "end": "2026-03-17T09:53:00-04:00",
+      "active_seconds": 3852
+    },
+    {
+      "id": "d08d02",
+      "path": "/Admin/Time/February time entries.xlsx",
+      "title": "February time entries.xlsx",
+      "start": "2026-03-17T10:51:57-04:00",
+      "end": "2026-03-17T11:06:57-04:00",
+      "active_seconds": 778
+    },
+    {
+      "id": "d08d03",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Reply ISO Motion for Preliminary Injunction.docx",
+      "title": "Reply ISO Motion for Preliminary Injunction.docx",
+      "start": "2026-03-17T11:16:57-04:00",
+      "end": "2026-03-17T15:46:57-04:00",
+      "active_seconds": 13988
+    }
+  ],
+  "calls": [
+    {
+      "id": "d08p01",
+      "direction": "in",
+      "number": "+1-212-555-0175",
+      "start": "2026-03-17T16:43:57-04:00",
+      "duration_seconds": 1148
+    }
+  ]
+}
