@@ -29,6 +29,11 @@ describe('draft validation', () => {
     expect(v.errors.join(' ')).not.toMatch(/aren't placed/);
     expect(v.unplaced).toEqual(['d1', 'd2']);
   });
+  it('asks for a repair only when a narrative runs past 60 words', () => {
+    const words = (n: number) => ['Draft', ...Array(n - 1).fill('word')].join(' ');
+    expect(validateDraft({ entries: [entry(['d1', 'd2', 'd3'], { narrative: words(60) })], not_billed: [] }, acts).errors).toEqual([]);
+    expect(validateDraft({ entries: [entry(['d1', 'd2', 'd3'], { narrative: words(61) })], not_billed: [] }, acts).errors).toEqual(["Entry 1's narrative is 61 words; keep it under 35."]);
+  });
   it('finds names that no source mentions', () => {
     const words = loadFirm().words;
     expect(ungroundedTerms('Correspond with J. Moss regarding Hendricks deposition', ['jmoss@kestrel.example dispatch logs'], 'Janet Moss (client contact)', words)).toEqual(['Hendricks']);

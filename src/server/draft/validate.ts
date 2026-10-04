@@ -19,6 +19,11 @@ export interface Validation {
   unplaced: string[];
 }
 
+// The draft prompt asks for at most 35 words. Only a narrative over 60 costs a repair call; one a little
+// over 35 is kept, and the repair message restates the target.
+const TARGET_WORDS = 35;
+const REPAIR_ABOVE_WORDS = 60;
+
 export function validateDraft(out: DraftOutput, activities: DraftActivity[]): Validation {
   const known = new Set(activities.map((a) => a.ref));
   const placed = new Set<string>();
@@ -42,7 +47,7 @@ export function validateDraft(out: DraftOutput, activities: DraftActivity[]): Va
       }
     }
     const words = e.narrative.trim().split(/\s+/).length;
-    if (words > 60) errors.push(`Entry ${i + 1}'s narrative is ${words} words; keep it under 35.`);
+    if (words > REPAIR_ABOVE_WORDS) errors.push(`Entry ${i + 1}'s narrative is ${words} words; keep it under ${TARGET_WORDS}.`);
     if (refs.length && isTaskCode(task) && isActivityCode(act)) {
       entries.push({ refs, task_code: task, activity_code: act, narrative: e.narrative.trim(), thin: e.thin, why: e.why.trim() });
       for (const r of refs) kept.add(r);
