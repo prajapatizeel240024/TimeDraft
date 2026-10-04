@@ -620,9 +620,10 @@ function checkContacts(): void {
 }
 
 function main() {
-  const at = process.argv.indexOf('--seed');
-  const seed = at === -1 ? 42 : Number(process.argv[at + 1]);
-  if (!Number.isInteger(seed)) throw new Error('--seed needs a whole number, such as --seed 42.');
+  const at = process.argv.findIndex((a) => a === '--seed' || a.startsWith('--seed='));
+  const raw = at === -1 ? '42' : process.argv[at] === '--seed' ? process.argv[at + 1] : process.argv[at].slice('--seed='.length);
+  if (!/^\d+$/.test(raw ?? '')) throw new Error('--seed needs a whole number, such as --seed 42.');
+  const seed = Number(raw);
   checkContacts();
   const rows: string[] = [];
   for (let i = 0; i < DATES.length; i++) {
