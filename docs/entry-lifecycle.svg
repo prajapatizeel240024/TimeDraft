@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 616" width="760" height="616" role="img" aria-labelledby="title desc">
+<title id="title">Every change locks the entry, checks its version and writes one audit row</title>
+<desc id="desc">An entry is born a draft and changes only along the arrows: approve and reject move its status, reopen sends it back to draft, and an edit or saved rewrite keeps it a draft. Each of those attorney actions runs the same steps in one transaction, so a stale page gets a 409 and every real change leaves exactly one audit row.</desc>
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  .bg { fill: #ffffff; } .ink { fill: #1f1f1d; } .quiet { fill: #5f5e59; }
+  .line { fill: none; stroke: #9b9a94; stroke-width: 1.25; } .guide { fill: none; stroke: #d9d8d3; stroke-width: 1.25; }
+  .dash { stroke-dasharray: 4 4; } .box { fill: none; stroke: #9b9a94; stroke-width: 1.25; }
+  .main { fill: #2c6ecb; fill-opacity: 0.12; stroke: #2c6ecb; stroke-width: 2; }
+  .tint { fill: #f2f1ed; stroke: #9b9a94; stroke-width: 1.25; } .head { fill: #9b9a94; }
+  .span { fill: #9b9a94; fill-opacity: 0.18; stroke: #9b9a94; stroke-width: 1.25; }
+  .span-main { fill: #2c6ecb; fill-opacity: 0.18; stroke: #2c6ecb; stroke-width: 1.25; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1c1c1b; } .ink { fill: #ecebe6; } .quiet { fill: #a9a8a2; }
+    .line, .box { stroke: #74736d; } .guide { stroke: #3a3936; }
+    .main { fill: #6fa2ff; fill-opacity: 0.16; stroke: #6fa2ff; }
+    .tint { fill: #262624; stroke: #74736d; } .head { fill: #74736d; }
+    .span { fill: #74736d; stroke: #74736d; } .span-main { fill: #6fa2ff; stroke: #6fa2ff; }
+  }
+</style>
+<defs><marker id="entry-lifecycle-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="head"/></marker></defs>
+<rect x="0" y="0" width="760" height="616" class="bg"/>
+<text x="24" y="34" class="ink" font-size="15" font-weight="600">Every change locks the entry, checks its version and writes one audit row</text>
+<text x="24" y="54" class="quiet" font-size="11.5">Arrows are the only moves the service allows. Accent: the version check and the single audit row.</text>
+<rect x="24" y="448" width="712" height="144" rx="8" class="tint"/>
+<text x="40" y="470" class="ink" font-size="13" font-weight="600">Each attorney action, in one transaction</text>
+<path d="M380 144V184" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M224 200H192V224H224" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M240 240V336" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M288 336V240" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M472 336V240" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M520 240V336" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M312 372H448" class="line dash" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M156 516H181" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M305 516H330" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M446 516H471" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<path d="M583 516H608" class="line" marker-end="url(#entry-lifecycle-arrow)"/>
+<text x="184" y="208" class="quiet" font-size="11.5" text-anchor="end">edit or save a rewrite</text>
+<text x="184" y="224" class="quiet" font-size="11.5" text-anchor="end">no change: nothing saved</text>
+<text x="232" y="284" class="quiet" font-size="11.5" text-anchor="end">approve</text>
+<text x="232" y="300" class="quiet" font-size="11.5" text-anchor="end">a block flag needs a reason</text>
+<text x="296" y="292" class="quiet" font-size="11.5">reopen</text>
+<text x="464" y="292" class="quiet" font-size="11.5" text-anchor="end">reopen</text>
+<text x="528" y="284" class="quiet" font-size="11.5">reject</text>
+<text x="528" y="300" class="quiet" font-size="11.5">with a reason</text>
+<text x="380" y="364" class="quiet" font-size="11.5" text-anchor="middle">reject, API only</text>
+<text x="40" y="576" class="quiet" font-size="11.5">Then the day's flags are recomputed in the same transaction, except after approve.</text>
+<rect x="264" y="72" width="232" height="72" rx="8" class="box"/>
+<text x="276" y="96" class="ink" font-size="13" font-weight="600">Drafter creates it</text>
+<text x="276" y="112" class="ink" font-size="11.5">Inserted as a draft, version 1</text>
+<text x="276" y="128" class="ink" font-size="11.5">One audit row: created</text>
+<rect x="224" y="184" width="312" height="56" rx="8" class="box"/>
+<text x="236" y="208" class="ink" font-size="13" font-weight="600">draft</text>
+<text x="236" y="224" class="ink" font-size="11.5">Only a draft can be edited or approved</text>
+<rect x="40" y="336" width="272" height="72" rx="8" class="box"/>
+<text x="52" y="360" class="ink" font-size="13" font-weight="600">approved</text>
+<text x="52" y="376" class="ink" font-size="11.5">LEDES export takes it if billable</text>
+<text x="52" y="392" class="ink" font-size="11.5">Block flags keep the override reason</text>
+<rect x="448" y="336" width="272" height="72" rx="8" class="box"/>
+<text x="460" y="360" class="ink" font-size="13" font-weight="600">rejected</text>
+<text x="460" y="376" class="ink" font-size="11.5">Keeps its sources: never redrafted</text>
+<text x="460" y="392" class="ink" font-size="11.5">Out of flag checks and hour totals</text>
+<rect x="40" y="480" width="116" height="72" rx="8" class="box"/>
+<text x="52" y="504" class="ink" font-size="13" font-weight="600">Lock the row</text>
+<text x="52" y="520" class="ink" font-size="11.5">others wait</text>
+<text x="52" y="536" class="ink" font-size="11.5">gone: 404</text>
+<rect x="181" y="480" width="124" height="72" rx="8" class="main"/>
+<text x="193" y="504" class="ink" font-size="13" font-weight="600">Check version</text>
+<text x="193" y="520" class="ink" font-size="11.5">from the page</text>
+<text x="193" y="536" class="ink" font-size="11.5">stale: 409</text>
+<rect x="330" y="480" width="116" height="72" rx="8" class="box"/>
+<text x="342" y="504" class="ink" font-size="13" font-weight="600">Check status</text>
+<text x="342" y="520" class="ink" font-size="11.5">per the arrows</text>
+<text x="342" y="536" class="ink" font-size="11.5">else 409</text>
+<rect x="471" y="480" width="112" height="72" rx="8" class="box"/>
+<text x="483" y="504" class="ink" font-size="13" font-weight="600">Save change</text>
+<text x="483" y="520" class="ink" font-size="11.5">new values</text>
+<text x="483" y="536" class="ink" font-size="11.5">version + 1</text>
+<rect x="608" y="480" width="112" height="72" rx="8" class="main"/>
+<text x="620" y="504" class="ink" font-size="13" font-weight="600">Audit row</text>
+<text x="620" y="520" class="ink" font-size="11.5">exactly one</text>
+<text x="620" y="536" class="ink" font-size="11.5">append-only</text>
+</svg>

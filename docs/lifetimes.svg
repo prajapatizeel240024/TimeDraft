@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 826" width="760" height="826" role="img" aria-labelledby="title desc">
+<title id="title">Caches expire or re-check within a day; records stay for years</title>
+<desc id="desc"></desc>
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  .bg { fill: #ffffff; } .ink { fill: #1f1f1d; } .quiet { fill: #5f5e59; }
+  .line { fill: none; stroke: #9b9a94; stroke-width: 1.25; } .guide { fill: none; stroke: #d9d8d3; stroke-width: 1.25; }
+  .dash { stroke-dasharray: 4 4; } .box { fill: none; stroke: #9b9a94; stroke-width: 1.25; }
+  .main { fill: #2c6ecb; fill-opacity: 0.12; stroke: #2c6ecb; stroke-width: 2; }
+  .tint { fill: #f2f1ed; stroke: #9b9a94; stroke-width: 1.25; } .head { fill: #9b9a94; }
+  .span { fill: #9b9a94; fill-opacity: 0.18; stroke: #9b9a94; stroke-width: 1.25; }
+  .span-main { fill: #2c6ecb; fill-opacity: 0.18; stroke: #2c6ecb; stroke-width: 1.25; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1c1c1b; } .ink { fill: #ecebe6; } .quiet { fill: #a9a8a2; }
+    .line, .box { stroke: #74736d; } .guide { stroke: #3a3936; }
+    .main { fill: #6fa2ff; fill-opacity: 0.16; stroke: #6fa2ff; }
+    .tint { fill: #262624; stroke: #74736d; } .head { fill: #74736d; }
+    .span { fill: #74736d; stroke: #74736d; } .span-main { fill: #6fa2ff; stroke: #6fa2ff; }
+  }
+</style>
+<defs><marker id="lifetimes-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="head"/></marker></defs>
+<rect x="0" y="0" width="760" height="826" class="bg"/>
+<text x="24" y="34" class="ink" font-size="15" font-weight="600">Caches expire or re-check within a day; records stay for years</text>
+<text x="24" y="54" class="quiet" font-size="11.5">Log scale; every period is a proposed default. Accent: holds activity text or narratives.</text>
+<rect x="24" y="96" width="712" height="320" rx="8" class="tint"/>
+<text x="40" y="118" class="ink" font-size="13" font-weight="600">Caches and short-lived state</text>
+<rect x="24" y="432" width="712" height="360" rx="8" class="tint"/>
+<text x="40" y="454" class="ink" font-size="13" font-weight="600">Records, logs and backups</text>
+<path d="M110.6 145V159M110.6 185V199M110.6 225V239M110.6 265V279M110.6 305V319M110.6 345V359M110.6 481V495M110.6 521V535M110.6 561V575M110.6 601V615M110.6 641V655M110.6 681V695M110.6 721V735" class="guide dash"/>
+<path d="M271.8 145V159M271.8 185V199M271.8 225V239M271.8 265V279M271.8 305V319M271.8 345V359M271.8 481V495M271.8 521V535M271.8 561V575M271.8 601V615M271.8 641V655M271.8 681V695M271.8 721V735" class="guide dash"/>
+<path d="M397.0 145V159M397.0 185V199M397.0 225V239M397.0 265V279M397.0 305V319M397.0 345V359M397.0 481V495M397.0 521V535M397.0 561V575M397.0 601V615M397.0 641V655M397.0 681V695M397.0 721V735" class="guide dash"/>
+<path d="M530.9 145V159M530.9 185V199M530.9 225V239M530.9 265V279M530.9 305V319M530.9 345V359M530.9 481V495M530.9 521V535M530.9 561V575M530.9 601V615M530.9 641V655M530.9 681V695M530.9 721V735" class="guide dash"/>
+<path d="M629.3 145V159M629.3 185V199M629.3 225V239M629.3 265V279M629.3 305V319M629.3 345V359M629.3 481V495M629.3 521V535M629.3 561V575M629.3 601V615M629.3 641V655M629.3 681V695M629.3 721V735" class="guide dash"/>
+<rect x="40" y="146" width="70.6" height="12" rx="4" class="span"/>
+<rect x="40" y="186" width="70.6" height="12" rx="4" class="span"/>
+<rect x="40" y="226" width="133.9" height="12" rx="4" class="span"/>
+<rect x="40" y="266" width="329.7" height="12" rx="4" class="span"/>
+<rect x="40" y="306" width="357.0" height="12" rx="4" class="span-main"/>
+<rect x="40" y="346" width="357.0" height="12" rx="4" class="span"/>
+<rect x="40" y="482" width="490.9" height="12" rx="4" class="span"/>
+<rect x="40" y="522" width="490.9" height="12" rx="4" class="span"/>
+<rect x="40" y="562" width="497.0" height="12" rx="4" class="span-main"/>
+<rect x="40" y="602" width="534.2" height="12" rx="4" class="span-main"/>
+<rect x="40" y="642" width="592.4" height="12" rx="4" class="span"/>
+<rect x="40" y="682" width="666.0" height="12" rx="4" class="span-main"/>
+<rect x="40" y="722" width="666.0" height="12" rx="4" class="span-main"/>
+<text x="110.6" y="84" class="quiet" font-size="11.5" text-anchor="middle">1 min</text>
+<text x="271.8" y="84" class="quiet" font-size="11.5" text-anchor="middle">1 hour</text>
+<text x="397.0" y="84" class="quiet" font-size="11.5" text-anchor="middle">1 day</text>
+<text x="530.9" y="84" class="quiet" font-size="11.5" text-anchor="middle">1 month</text>
+<text x="629.3" y="84" class="quiet" font-size="11.5" text-anchor="middle">1 year</text>
+<text x="40" y="140" class="ink" font-size="11.5">Rate limits and Claude token buckets, Redis: 60 s windows</text>
+<text x="40" y="180" class="ink" font-size="11.5">Firm config, pod memory: version re-checked every 60 s; writes check every time</text>
+<text x="40" y="220" class="ink" font-size="11.5">Anthropic prompt cache: 5 min from the last request that wrote or read it</text>
+<text x="40" y="260" class="ink" font-size="11.5">Sessions, Redis: 30 min idle, 12 h at most; only user actions count</text>
+<text x="40" y="300" class="ink" font-size="11.5">Claude replay cache, Postgres: 24 h, zod-valid answers only</text>
+<text x="40" y="340" class="ink" font-size="11.5">Progress events (day_events), Postgres: 24 h, ids only</text>
+<text x="40" y="380" class="ink" font-size="11.5">API responses and the day view: never cached (no-store, 304 when unchanged)</text>
+<text x="40" y="476" class="ink" font-size="11.5">Jobs, Postgres: 30 days, ids only</text>
+<text x="40" y="516" class="ink" font-size="11.5">Application logs, allow-listed fields only: 30 days</text>
+<text x="40" y="556" class="ink" font-size="11.5">Backups: point-in-time restore 14 days, snapshots 35 days</text>
+<text x="40" y="596" class="ink" font-size="11.5">Activity text and Claude quotes: 90 days after the day closes</text>
+<text x="40" y="636" class="ink" font-size="11.5">Claude call metadata (llm_calls): 13 months, no prompt or answer text</text>
+<text x="40" y="676" class="ink" font-size="11.5">Entries, flags and audit rows: 7 years, or the firm's policy</text>
+<text x="40" y="716" class="ink" font-size="11.5">LEDES invoices, object storage under lock: 7 years</text>
+<text x="40" y="756" class="ink" font-size="11.5">Prompts and answers at Anthropic: per the organization's retention setting</text>
+<text x="110.6" y="810" class="quiet" font-size="11.5" text-anchor="middle">1 min</text>
+<text x="271.8" y="810" class="quiet" font-size="11.5" text-anchor="middle">1 hour</text>
+<text x="397.0" y="810" class="quiet" font-size="11.5" text-anchor="middle">1 day</text>
+<text x="530.9" y="810" class="quiet" font-size="11.5" text-anchor="middle">1 month</text>
+<text x="629.3" y="810" class="quiet" font-size="11.5" text-anchor="middle">1 year</text>
+</svg>

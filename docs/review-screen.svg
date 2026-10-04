@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1496" width="760" height="1496" role="img" aria-labelledby="title desc">
+<title id="title">Queued items wait for a matter; drafts wait for approval before Export LEDES</title>
+<desc id="desc">Activities TimeDraft could not place wait under Needs a matter; picking a matter drafts them at once. Drafts wait for Approve, which asks for a reason when a chip is red, and Export LEDES takes only approved, billable entries.</desc>
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  .bg { fill: #ffffff; } .ink { fill: #1f1f1d; } .quiet { fill: #5f5e59; }
+  .line { fill: none; stroke: #9b9a94; stroke-width: 1.25; } .guide { fill: none; stroke: #d9d8d3; stroke-width: 1.25; }
+  .dash { stroke-dasharray: 4 4; } .box { fill: none; stroke: #9b9a94; stroke-width: 1.25; }
+  .main { fill: #2c6ecb; fill-opacity: 0.12; stroke: #2c6ecb; stroke-width: 2; }
+  .tint { fill: #f2f1ed; stroke: #9b9a94; stroke-width: 1.25; } .head { fill: #9b9a94; }
+  .span { fill: #9b9a94; fill-opacity: 0.18; stroke: #9b9a94; stroke-width: 1.25; }
+  .span-main { fill: #2c6ecb; fill-opacity: 0.18; stroke: #2c6ecb; stroke-width: 1.25; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1c1c1b; } .ink { fill: #ecebe6; } .quiet { fill: #a9a8a2; }
+    .line, .box { stroke: #74736d; } .guide { stroke: #3a3936; }
+    .main { fill: #6fa2ff; fill-opacity: 0.16; stroke: #6fa2ff; }
+    .tint { fill: #262624; stroke: #74736d; } .head { fill: #74736d; }
+    .span { fill: #74736d; stroke: #74736d; } .span-main { fill: #6fa2ff; stroke: #6fa2ff; }
+  }
+</style>
+<defs><marker id="review-screen-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="head"/></marker></defs>
+<rect x="0" y="0" width="760" height="1496" class="bg"/>
+<text x="24" y="34" class="ink" font-size="15" font-weight="600">Queued items wait for a matter; drafts wait for approval before Export LEDES</text>
+<text x="24" y="54" class="quiet" font-size="11.5">The day review page, top to bottom. Accent: the two places the attorney decides.</text>
+<rect x="24" y="72" width="712" height="1400" rx="8" class="tint"/>
+<text x="40" y="94" class="ink" font-size="13" font-weight="600">Day review page, /days/[dayId]</text>
+<rect x="40" y="416" width="680" height="288" rx="8" class="tint"/>
+<text x="56" y="438" class="ink" font-size="13" font-weight="600">Needs a matter</text>
+<rect x="56" y="448" width="648" height="240" rx="8" class="tint"/>
+<text x="72" y="470" class="ink" font-size="13" font-weight="600">One queued item</text>
+<rect x="40" y="720" width="680" height="560" rx="8" class="tint"/>
+<text x="56" y="742" class="ink" font-size="13" font-weight="600">Matter section</text>
+<rect x="56" y="856" width="648" height="256" rx="8" class="tint"/>
+<text x="72" y="878" class="ink" font-size="13" font-weight="600">Entry row: draft</text>
+<rect x="56" y="1128" width="648" height="136" rx="8" class="tint"/>
+<text x="72" y="1150" class="ink" font-size="13" font-weight="600">Entry row: approved</text>
+<text x="720" y="94" class="quiet" font-size="11.5" text-anchor="end">Loads from GET /api/days/[id]; reloads after each change</text>
+<text x="704" y="438" class="quiet" font-size="11.5" text-anchor="end">TimeDraft wasn't sure enough to place these, so it asked instead of guessing.</text>
+<text x="704" y="742" class="quiet" font-size="11.5" text-anchor="end">One per matter with entries that day</text>
+<rect x="40" y="104" width="680" height="88" rx="8" class="box"/>
+<text x="52" y="128" class="ink" font-size="13" font-weight="600">Header</text>
+<text x="52" y="144" class="ink" font-size="11.5">All days: back to the list of days</text>
+<text x="52" y="160" class="ink" font-size="11.5">Date, e.g. Tuesday, March 10, 2026</text>
+<text x="52" y="176" class="ink" font-size="11.5">Attorney: Dana Whitfield, Ashgrove LLP</text>
+<rect x="40" y="208" width="332" height="88" rx="8" class="box"/>
+<text x="52" y="232" class="ink" font-size="13" font-weight="600">Status line</text>
+<text x="52" y="248" class="ink" font-size="11.5">A day not yet drafted runs on open;</text>
+<text x="52" y="264" class="ink" font-size="11.5">each stage shows here, e.g.</text>
+<text x="52" y="280" class="quiet" font-size="11.5">Matching activities to matters</text>
+<rect x="388" y="208" width="332" height="88" rx="8" class="box"/>
+<text x="400" y="232" class="ink" font-size="13" font-weight="600">Error banner</text>
+<text x="400" y="248" class="ink" font-size="11.5">Run, queue and export errors, in red</text>
+<text x="400" y="264" class="ink" font-size="11.5">Try again, when the run failed</text>
+<text x="400" y="280" class="ink" font-size="11.5">Row actions show theirs in the row</text>
+<rect x="40" y="312" width="680" height="88" rx="8" class="box"/>
+<text x="52" y="336" class="ink" font-size="13" font-weight="600">Totals bar</text>
+<text x="52" y="352" class="ink" font-size="11.5">Billable and Not billed hours</text>
+<text x="52" y="368" class="ink" font-size="11.5">How many entries are approved</text>
+<text x="52" y="384" class="ink" font-size="11.5">Amber: queue count, day total over 10.0 h</text>
+<rect x="72" y="480" width="300" height="72" rx="8" class="box"/>
+<text x="84" y="504" class="ink" font-size="13" font-weight="600">Item heading</text>
+<text x="84" y="520" class="ink" font-size="11.5">Email, Meeting, Document or Call,</text>
+<text x="84" y="536" class="ink" font-size="11.5">its time and its title</text>
+<rect x="388" y="480" width="300" height="72" rx="8" class="box"/>
+<text x="400" y="504" class="ink" font-size="13" font-weight="600">Claude suggests</text>
+<text x="400" y="520" class="ink" font-size="11.5">Its best matter, how sure, and why</text>
+<text x="400" y="536" class="ink" font-size="11.5">Only when Claude named a matter</text>
+<rect x="72" y="568" width="616" height="104" rx="8" class="main"/>
+<text x="84" y="592" class="ink" font-size="13" font-weight="600">Pick a matter</text>
+<text x="84" y="608" class="ink" font-size="11.5">Matters, then Admin, Personal, Not work</text>
+<text x="84" y="624" class="ink" font-size="11.5">A matter drafts the work right away</text>
+<text x="84" y="640" class="ink" font-size="11.5">Queued items in the same thread go too</text>
+<text x="84" y="656" class="ink" font-size="11.5">Admin, Personal, Not work: no entry</text>
+<rect x="56" y="752" width="280" height="88" rx="8" class="box"/>
+<text x="68" y="776" class="ink" font-size="13" font-weight="600">Matter heading</text>
+<text x="68" y="792" class="quiet" font-size="11.5">Halberd Therapeutics v. Ostrander</text>
+<text x="68" y="808" class="quiet" font-size="11.5">Matter M-1002, client matter HT-LIT-0392</text>
+<text x="68" y="824" class="ink" font-size="11.5">Strict: entries over 2.0 h are flagged</text>
+<rect x="352" y="752" width="224" height="88" rx="8" class="box"/>
+<text x="364" y="776" class="ink" font-size="13" font-weight="600">Export LEDES</text>
+<text x="364" y="792" class="ink" font-size="11.5">Off until an entry is approved</text>
+<text x="364" y="808" class="ink" font-size="11.5">Downloads TD-M1002-20260310.txt</text>
+<text x="364" y="824" class="ink" font-size="11.5">Repeat exports add -2, -3</text>
+<rect x="592" y="752" width="112" height="88" rx="8" class="box"/>
+<text x="604" y="776" class="ink" font-size="13" font-weight="600">Hours</text>
+<text x="604" y="792" class="ink" font-size="11.5">Billable</text>
+<text x="604" y="808" class="ink" font-size="11.5">total for</text>
+<text x="604" y="824" class="ink" font-size="11.5">the matter</text>
+<rect x="72" y="888" width="120" height="208" rx="8" class="box"/>
+<text x="84" y="912" class="ink" font-size="13" font-weight="600">Hours</text>
+<text x="84" y="928" class="ink" font-size="11.5">From the</text>
+<text x="84" y="944" class="ink" font-size="11.5">activities,</text>
+<text x="84" y="960" class="ink" font-size="11.5">never from</text>
+<text x="84" y="976" class="ink" font-size="11.5">Claude</text>
+<rect x="208" y="888" width="232" height="88" rx="8" class="box"/>
+<text x="220" y="912" class="ink" font-size="13" font-weight="600">Narrative and codes</text>
+<text x="220" y="928" class="ink" font-size="11.5">The drafted narrative, then</text>
+<text x="220" y="944" class="ink" font-size="11.5">task code / activity code with</text>
+<text x="220" y="960" class="ink" font-size="11.5">labels, e.g. A103 Draft/revise</text>
+<rect x="456" y="888" width="232" height="88" rx="8" class="box"/>
+<text x="468" y="912" class="ink" font-size="13" font-weight="600">Flag chip, e.g. Vague</text>
+<text x="468" y="928" class="ink" font-size="11.5">Red blocks, amber only warns</text>
+<text x="468" y="944" class="ink" font-size="11.5">Its message sits beside it</text>
+<text x="468" y="960" class="ink" font-size="11.5">Rewrite: Claude rewords or asks</text>
+<rect x="208" y="992" width="232" height="104" rx="8" class="main"/>
+<text x="220" y="1016" class="ink" font-size="13" font-weight="600">Approve, Edit, Reject</text>
+<text x="220" y="1032" class="ink" font-size="11.5">Approve: asks why on a red chip</text>
+<text x="220" y="1048" class="ink" font-size="11.5">Edit: an editor opens in the row</text>
+<text x="220" y="1064" class="ink" font-size="11.5">and rechecks flags as you type</text>
+<text x="220" y="1080" class="ink" font-size="11.5">Reject: asks why, strikes it out</text>
+<rect x="456" y="992" width="232" height="104" rx="8" class="box"/>
+<text x="468" y="1016" class="ink" font-size="13" font-weight="600">Side drawers</text>
+<text x="468" y="1032" class="ink" font-size="11.5">Why this entry: the reason, each</text>
+<text x="468" y="1048" class="ink" font-size="11.5">source and the minutes counted</text>
+<text x="468" y="1064" class="ink" font-size="11.5">History: every change, newest</text>
+<text x="468" y="1080" class="ink" font-size="11.5">first, with old and new values</text>
+<rect x="72" y="1160" width="120" height="88" rx="8" class="box"/>
+<text x="84" y="1184" class="ink" font-size="13" font-weight="600">Hours</text>
+<text x="84" y="1200" class="ink" font-size="11.5">Rounded up to</text>
+<text x="84" y="1216" class="ink" font-size="11.5">tenths, once</text>
+<text x="84" y="1232" class="ink" font-size="11.5">per entry</text>
+<rect x="208" y="1160" width="232" height="88" rx="8" class="box"/>
+<text x="220" y="1184" class="ink" font-size="13" font-weight="600">Approved entry</text>
+<text x="220" y="1200" class="ink" font-size="11.5">Green tint and an Approved tag</text>
+<text x="220" y="1216" class="ink" font-size="11.5">Overridden chips show the reason</text>
+<text x="220" y="1232" class="ink" font-size="11.5">In the LEDES file if billable</text>
+<rect x="456" y="1160" width="232" height="88" rx="8" class="box"/>
+<text x="468" y="1184" class="ink" font-size="13" font-weight="600">Reopen</text>
+<text x="468" y="1200" class="ink" font-size="11.5">Back to draft, so it can change</text>
+<text x="468" y="1216" class="ink" font-size="11.5">Rejected rows get Reopen too</text>
+<text x="468" y="1232" class="ink" font-size="11.5">Why this entry and History stay</text>
+<rect x="40" y="1296" width="680" height="72" rx="8" class="box"/>
+<text x="52" y="1320" class="ink" font-size="13" font-weight="600">Left out of the bill</text>
+<text x="52" y="1336" class="ink" font-size="11.5">Collapsed: what the drafter left out</text>
+<text x="52" y="1352" class="ink" font-size="11.5">as not billable, each with its reason</text>
+<rect x="40" y="1384" width="680" height="72" rx="8" class="box"/>
+<text x="52" y="1408" class="ink" font-size="13" font-weight="600">Footer</text>
+<text x="52" y="1424" class="ink" font-size="11.5">Checker: TypeScript (ts@1) or Go (go@1)</text>
+<text x="52" y="1440" class="ink" font-size="11.5">Drafts by Claude, or a test stand-in</text>
+</svg>
