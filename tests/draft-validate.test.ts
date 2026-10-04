@@ -22,6 +22,13 @@ describe('draft validation', () => {
     expect(validateDraft({ entries: [entry(['d1', 'd2', 'd3'], { task_code: 'l310', activity_code: 'a103' })], not_billed: [] }, acts).entries[0].task_code).toBe('L310');
     expect(validateDraft({ entries: [entry(['d1', 'd2', 'd3'], { task_code: 'L999' })], not_billed: [] }, acts).errors[0]).toMatch(/L999/);
   });
+  it('sends the activities of an entry dropped for a bad code back as unplaced', () => {
+    const v = validateDraft({ entries: [entry(['d1', 'd2'], { task_code: 'L999' }), entry(['d3'])], not_billed: [] }, acts);
+    expect(v.entries.map((e) => e.refs)).toEqual([['d3']]);
+    expect(v.errors.join(' ')).toMatch(/L999/);
+    expect(v.errors.join(' ')).not.toMatch(/aren't placed/);
+    expect(v.unplaced).toEqual(['d1', 'd2']);
+  });
   it('finds names that no source mentions', () => {
     const words = loadFirm().words;
     expect(ungroundedTerms('Correspond with J. Moss regarding Hendricks deposition', ['jmoss@kestrel.example dispatch logs'], 'Janet Moss (client contact)', words)).toEqual(['Hendricks']);

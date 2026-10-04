@@ -22,6 +22,7 @@ export interface Validation {
 export function validateDraft(out: DraftOutput, activities: DraftActivity[]): Validation {
   const known = new Set(activities.map((a) => a.ref));
   const placed = new Set<string>();
+  const kept = new Set<string>(); // in an entry that passed, or in not_billed
   const errors: string[] = [];
   const entries: ValidEntry[] = [];
   const notBilled: { ref: string; reason: string }[] = [];
@@ -42,18 +43,24 @@ export function validateDraft(out: DraftOutput, activities: DraftActivity[]): Va
     }
     const words = e.narrative.trim().split(/\s+/).length;
     if (words > 60) errors.push(`Entry ${i + 1}'s narrative is ${words} words; keep it under 35.`);
-    if (refs.length && isTaskCode(task) && isActivityCode(act)) entries.push({ refs, task_code: task, activity_code: act, narrative: e.narrative.trim(), thin: e.thin, why: e.why.trim() });
+    if (refs.length && isTaskCode(task) && isActivityCode(act)) {
+      entries.push({ refs, task_code: task, activity_code: act, narrative: e.narrative.trim(), thin: e.thin, why: e.why.trim() });
+      for (const r of refs) kept.add(r);
+    }
   });
   for (const nb of out.not_billed) {
     if (!known.has(nb.activity_ref)) errors.push(`not_billed lists ${nb.activity_ref}, which isn't one of the activities.`);
     else if (placed.has(nb.activity_ref)) errors.push(`${nb.activity_ref} appears in more than one place.`);
     else {
       placed.add(nb.activity_ref);
+      kept.add(nb.activity_ref);
       notBilled.push({ ref: nb.activity_ref, reason: nb.reason });
     }
   }
-  const unplaced = activities.map((a) => a.ref).filter((r) => !placed.has(r));
-  if (unplaced.length) errors.push(`These activities aren't placed anywhere: ${unplaced.join(', ')}.`);
+  const missing = activities.map((a) => a.ref).filter((r) => !placed.has(r));
+  if (missing.length) errors.push(`These activities aren't placed anywhere: ${missing.join(', ')}.`);
+  // An entry dropped for a bad code takes its activities with it, so they count as unplaced and reach the queue.
+  const unplaced = activities.map((a) => a.ref).filter((r) => !kept.has(r));
   return { errors, entries, notBilled, unplaced };
 }
 
