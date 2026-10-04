@@ -87,4 +87,13 @@ describe('entries service', () => {
     expect(rows[0][23]).toBe('HT-LIT-0392');
     await expect(exportMatterDay(pool, 'M-1003', dayId, 'attorney:DW')).rejects.toMatchObject({ status: 422 });
   });
+
+  it('gives concurrent exports of the same matter and day their own invoice numbers', async () => {
+    const outs = await Promise.all([1, 2, 3].map(() => exportMatterDay(pool, 'M-1002', dayId, 'attorney:DW')));
+    const numbers = outs.map((o) => o.invoiceNumber);
+    expect(new Set(numbers).size).toBe(3);
+    for (const n of numbers) expect(n).toMatch(/^TD-M1002-20260310-\d$/);
+    const audited = await pool.query<{ n: number }>(`select count(*)::int as n from audit_events where subject_type = 'export' and action = 'exported'`);
+    expect(audited.rows[0].n).toBe(4);
+  });
 });
