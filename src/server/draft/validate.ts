@@ -19,8 +19,9 @@ export interface Validation {
   unplaced: string[];
 }
 
-// The draft prompt asks for at most 35 words. Only a narrative over 60 costs a repair call; one a little
-// over 35 is kept, and the repair message restates the target.
+// The draft prompt (src/server/llm/prompts/draft.v1.ts) asks for at most 35 words; keep TARGET_WORDS in step
+// with it. Only a narrative over 60 costs a repair call; one a little over 35 is kept, and the repair message
+// restates the target.
 const TARGET_WORDS = 35;
 const REPAIR_ABOVE_WORDS = 60;
 
