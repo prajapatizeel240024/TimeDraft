@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: timedraft
+      POSTGRES_PASSWORD: timedraft
+      POSTGRES_DB: time_draft_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Stretch: the Go guideline checker. Start it with `docker compose --profile go up -d checker`.
+  checker:
+    build: ./checker-go
+    profiles: ["go"]
+    ports:
+      - "8081:8081"
+
+volumes:
+  pgdata:
