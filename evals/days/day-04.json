@@ -1,0 +1,170 @@
+{
+  "day_id": "day-04",
+  "date": "2026-03-11",
+  "emails": [
+    {
+      "id": "d04e01",
+      "thread_id": "d04t01",
+      "direction": "received",
+      "from": "lpark@brightline.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Data request",
+      "body": "Dana,\n\nTo finish the damages model I need lane-level freight volumes for 2024 and the rate sheets you mentioned. Can you send them by Wednesday?\n\nLena",
+      "at": "2026-03-11T06:55:00-04:00",
+      "opened_at": "2026-03-11T08:31:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d04e02",
+      "thread_id": "d04t01",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lpark@brightline.example"
+      ],
+      "cc": [],
+      "subject": "Re: Data request",
+      "body": "Lena,\n\nI've asked the client for the lane-level volumes and rate sheets and will send them as soon as they arrive.\n\nDana",
+      "at": "2026-03-11T08:34:14-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d04e05",
+      "thread_id": "d04t04",
+      "direction": "received",
+      "from": "digest@lawdigest.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "This week in litigation",
+      "body": "Top stories: appellate roundup, new e-discovery rules, and a profile of the year in trade secret verdicts.",
+      "at": "2026-03-11T09:00:00-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d04e03",
+      "thread_id": "d04t02",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "estrand@strandadr.example"
+      ],
+      "cc": [],
+      "subject": "Bellhaven mediation statement",
+      "body": "Judge Strand,\n\nAttached is Bellhaven's confidential mediation statement for the April 2 session.\n\nRespectfully,\nDana Whitfield",
+      "at": "2026-03-11T10:13:14-04:00",
+      "opened_at": "",
+      "attachments": [
+        "Mediation Statement - Bellhaven.docx"
+      ]
+    },
+    {
+      "id": "d04e04",
+      "thread_id": "d04t03",
+      "direction": "received",
+      "from": "gvance@pryorvance.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Calder production volume 3",
+      "body": "Counsel,\n\nPlease find attached Calder Freight Lines' third production, Bates CAL-0451 through CAL-1290, consisting of bills of lading and driver logs.\n\nRegards,\nGrant Vance\nPryor Vance LLP",
+      "at": "2026-03-11T11:20:14-04:00",
+      "opened_at": "2026-03-11T11:47:14-04:00",
+      "attachments": [
+        "CAL_PROD_003.pdf"
+      ]
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d04c01",
+      "title": "Call w/ Lauren Chu re declaration",
+      "start": "2026-03-11T10:27:14-04:00",
+      "end": "2026-03-11T10:57:14-04:00",
+      "attendees": [
+        "lchu@halberd.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d04c04",
+      "title": "Vendor webinar: AI in legal ops",
+      "start": "2026-03-11T11:00:00-04:00",
+      "end": "2026-03-11T11:45:00-04:00",
+      "attendees": [
+        "events@legaltechvendor.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "declined",
+      "description": ""
+    },
+    {
+      "id": "d04c02",
+      "title": "Kestrel/Calder strategy",
+      "start": "2026-03-11T11:06:14-04:00",
+      "end": "2026-03-11T11:38:14-04:00",
+      "attendees": [
+        "rcalloway@ashgrove.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d04c03",
+      "title": "Hearing: Halberd v. Ostrander PI motion (Part 12)",
+      "start": "2026-03-11T14:02:26-04:00",
+      "end": "2026-03-11T15:37:26-04:00",
+      "attendees": [
+        "lchu@halberd.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": "Courtroom 12, in person"
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d04d01",
+      "path": "/Matters/M-1003 Ruiz v Bellhaven/Mediation Statement - Bellhaven.docx",
+      "title": "Mediation Statement - Bellhaven.docx",
+      "start": "2026-03-11T08:39:14-04:00",
+      "end": "2026-03-11T10:08:14-04:00",
+      "active_seconds": 4913
+    },
+    {
+      "id": "d04d02",
+      "path": "/Matters/M-1001 Kestrel v Calder/Productions/CAL_PROD_003.pdf",
+      "title": "CAL_PROD_003.pdf",
+      "start": "2026-03-11T11:49:14-04:00",
+      "end": "2026-03-11T13:13:14-04:00",
+      "active_seconds": 4742
+    },
+    {
+      "id": "d04d03",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Motion for Expedited Discovery.docx",
+      "title": "Motion for Expedited Discovery.docx",
+      "start": "2026-03-11T15:51:26-04:00",
+      "end": "2026-03-11T16:52:26-04:00",
+      "active_seconds": 3481
+    }
+  ],
+  "calls": [
+    {
+      "id": "d04p01",
+      "direction": "out",
+      "number": "+1-917-555-0128",
+      "start": "2026-03-11T13:26:14-04:00",
+      "duration_seconds": 1512
+    }
+  ]
+}

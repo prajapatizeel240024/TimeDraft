@@ -1,0 +1,123 @@
+{
+  "day_id": "day-05",
+  "date": "2026-03-12",
+  "emails": [
+    {
+      "id": "d05e05",
+      "thread_id": "d05t04",
+      "direction": "received",
+      "from": "digest@lawdigest.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "This week in litigation",
+      "body": "Top stories: appellate roundup, new e-discovery rules, and a profile of the year in trade secret verdicts.",
+      "at": "2026-03-12T06:00:00-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d05e01",
+      "thread_id": "d05t01",
+      "direction": "received",
+      "from": "jmoss@kestrel.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Dispatch logs from the Newark terminal",
+      "body": "Dana,\n\nHere are the dispatch logs from the Newark terminal for March through June 2025. Let me know if you need the driver assignments too.\n\nJanet",
+      "at": "2026-03-12T09:17:00-04:00",
+      "opened_at": "2026-03-12T10:04:00-04:00",
+      "attachments": [
+        "Newark dispatch logs Mar-Jun 2025.xlsx"
+      ]
+    },
+    {
+      "id": "d05e02",
+      "thread_id": "d05t02",
+      "direction": "received",
+      "from": "gvance@pryorvance.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Calder 30(b)(6) dates",
+      "body": "Dana,\n\nOur designee is available April 14 or April 16. Please let us know which works and whether you will notice it in person.\n\nGrant",
+      "at": "2026-03-12T11:43:00-04:00",
+      "opened_at": "2026-03-12T12:04:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d05e03",
+      "thread_id": "d05t02",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "gvance@pryorvance.example"
+      ],
+      "cc": [],
+      "subject": "Re: Calder 30(b)(6) dates",
+      "body": "Grant,\n\nApril 16 works for us. We will serve an amended notice this week and plan to proceed in person at your offices.\n\nDana",
+      "at": "2026-03-12T12:06:39-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d05e04",
+      "thread_id": "d05t03",
+      "direction": "received",
+      "from": "it-help@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ticket #4471: VPN password reset",
+      "body": "Your VPN password reset request is open. A technician will call you shortly.",
+      "at": "2026-03-12T16:55:39-04:00",
+      "opened_at": "2026-03-12T17:00:39-04:00",
+      "attachments": []
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d05c01",
+      "title": "Dentist",
+      "start": "2026-03-12T10:55:00-04:00",
+      "end": "2026-03-12T11:55:00-04:00",
+      "attendees": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d05d01",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Motion for Expedited Discovery.docx",
+      "title": "Motion for Expedited Discovery.docx",
+      "start": "2026-03-12T08:37:00-04:00",
+      "end": "2026-03-12T09:56:00-04:00",
+      "active_seconds": 4490
+    },
+    {
+      "id": "d05d02",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Reply ISO Motion for Preliminary Injunction.docx",
+      "title": "Reply ISO Motion for Preliminary Injunction.docx",
+      "start": "2026-03-12T12:17:39-04:00",
+      "end": "2026-03-12T16:47:39-04:00",
+      "active_seconds": 15397
+    }
+  ],
+  "calls": [
+    {
+      "id": "d05p01",
+      "direction": "in",
+      "number": "+1-212-555-0100",
+      "start": "2026-03-12T17:03:39-04:00",
+      "duration_seconds": 600
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "day_id": "day-11",
+  "date": "2026-03-20",
+  "emails": [
+    {
+      "id": "d11e06",
+      "thread_id": "d11t04",
+      "direction": "received",
+      "from": "digest@lawdigest.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "This week in litigation",
+      "body": "Top stories: appellate roundup, new e-discovery rules, and a profile of the year in trade secret verdicts.",
+      "at": "2026-03-20T06:00:00-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d11e01",
+      "thread_id": "d11t01",
+      "direction": "received",
+      "from": "lchu@halberd.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Access log export",
+      "body": "Dana, IT can export the access logs for January through March. Do you want them as CSV or PDF? Lauren",
+      "at": "2026-03-20T11:26:00-04:00",
+      "opened_at": "2026-03-20T13:23:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d11e05",
+      "thread_id": "d11t03",
+      "direction": "received",
+      "from": "cle@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Registration confirmed: CLE Webinar",
+      "body": "You're registered for Ethics in E-Discovery (1.0 ethics credit). The link is in your calendar invite.",
+      "at": "2026-03-20T11:40:50-04:00",
+      "opened_at": "2026-03-20T13:14:50-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d11e03",
+      "thread_id": "d11t02",
+      "direction": "received",
+      "from": "namaro@amarolutz.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ruiz settlement demand",
+      "body": "Dana, ahead of mediation, Mr. Ruiz's demand is $185,000 inclusive of fees. Nina",
+      "at": "2026-03-20T11:49:28-04:00",
+      "opened_at": "2026-03-20T13:34:28-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d11e02",
+      "thread_id": "d11t01",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Re: Access log export",
+      "body": "Lauren, CSV is best, with the user IDs included. Thank you. Dana",
+      "at": "2026-03-20T13:25:28-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d11e04",
+      "thread_id": "d11t02",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "namaro@amarolutz.example"
+      ],
+      "cc": [],
+      "subject": "Re: Ruiz settlement demand",
+      "body": "Nina, received. We'll respond through Judge Strand before the session. Dana",
+      "at": "2026-03-20T13:37:50-04:00",
+      "opened_at": "",
+      "attachments": []
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d11c02",
+      "title": "Vendor webinar: AI in legal ops",
+      "start": "2026-03-20T12:00:00-04:00",
+      "end": "2026-03-20T12:45:00-04:00",
+      "attendees": [
+        "events@legaltechvendor.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "declined",
+      "description": ""
+    },
+    {
+      "id": "d11c01",
+      "title": "CLE Webinar: Ethics in E-Discovery",
+      "start": "2026-03-20T13:44:50-04:00",
+      "end": "2026-03-20T14:44:50-04:00",
+      "attendees": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d11d01",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Reply ISO Motion for Preliminary Injunction.docx",
+      "title": "Reply ISO Motion for Preliminary Injunction.docx",
+      "start": "2026-03-20T08:48:00-04:00",
+      "end": "2026-03-20T13:18:00-04:00",
+      "active_seconds": 15111
+    },
+    {
+      "id": "d11d02",
+      "path": "/Matters/M-1001 Kestrel v Calder/Calder 30(b)(6) Deposition Outline.docx",
+      "title": "Calder 30(b)(6) Deposition Outline.docx",
+      "start": "2026-03-20T15:27:09-04:00",
+      "end": "2026-03-20T17:10:09-04:00",
+      "active_seconds": 5543
+    }
+  ],
+  "calls": [
+    {
+      "id": "d11p01",
+      "direction": "out",
+      "number": "+1-917-555-0128",
+      "start": "2026-03-20T14:51:50-04:00",
+      "duration_seconds": 1639
+    }
+  ]
+}

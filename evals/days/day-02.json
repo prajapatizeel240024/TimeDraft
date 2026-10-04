@@ -1,0 +1,111 @@
+{
+  "day_id": "day-02",
+  "date": "2026-03-06",
+  "emails": [
+    {
+      "id": "d02e02",
+      "thread_id": "d02t02",
+      "direction": "received",
+      "from": "namaro@amarolutz.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ruiz - EEOC charge",
+      "body": "Counsel,\n\nAs discussed, attached are Mr. Ruiz's EEOC charge and right-to-sue letter.\n\nNina Amaro\nAmaro & Lutz PC",
+      "at": "2026-03-06T08:38:00-05:00",
+      "opened_at": "2026-03-06T09:32:00-05:00",
+      "attachments": [
+        "Ruiz EEOC Charge.pdf",
+        "Right to Sue.pdf"
+      ]
+    },
+    {
+      "id": "d02e01",
+      "thread_id": "d02t01",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lchu@halberd.example"
+      ],
+      "cc": [],
+      "subject": "Supplemental declaration for your review",
+      "body": "Lauren,\n\nAttached is a draft supplemental declaration describing the server access logs. Please confirm paragraphs 4-9 match what your IT team found.\n\nDana",
+      "at": "2026-03-06T09:22:00-05:00",
+      "opened_at": "",
+      "attachments": [
+        "Supplemental Declaration of L. Chu.docx"
+      ]
+    },
+    {
+      "id": "d02e03",
+      "thread_id": "d02t03",
+      "direction": "received",
+      "from": "treyes@ashgrove.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "custodian list",
+      "body": "Dana, should I add the two dispatch supervisors to the custodian list before it goes out tomorrow? -Tom",
+      "at": "2026-03-06T09:27:00-05:00",
+      "opened_at": "2026-03-06T10:20:00-05:00",
+      "attachments": []
+    },
+    {
+      "id": "d02e04",
+      "thread_id": "d02t03",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "treyes@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Re: custodian list",
+      "body": "Yes, add both and flag the warehouse manager as well. Thanks.",
+      "at": "2026-03-06T10:21:50-05:00",
+      "opened_at": "",
+      "attachments": []
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d02c01",
+      "title": "Dentist",
+      "start": "2026-03-06T11:26:50-05:00",
+      "end": "2026-03-06T12:26:50-05:00",
+      "attendees": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d02d01",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Supplemental Declaration of L. Chu.docx",
+      "title": "Supplemental Declaration of L. Chu.docx",
+      "start": "2026-03-06T08:35:00-05:00",
+      "end": "2026-03-06T09:17:00-05:00",
+      "active_seconds": 2215
+    },
+    {
+      "id": "d02d02",
+      "path": "/Matters/M-1001 Kestrel v Calder/Calder 30(b)(6) Deposition Outline.docx",
+      "title": "Calder 30(b)(6) Deposition Outline.docx",
+      "start": "2026-03-06T10:26:50-05:00",
+      "end": "2026-03-06T11:15:50-05:00",
+      "active_seconds": 2810
+    },
+    {
+      "id": "d02d03",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Reply ISO Motion for Preliminary Injunction.docx",
+      "title": "Reply ISO Motion for Preliminary Injunction.docx",
+      "start": "2026-03-06T12:36:50-05:00",
+      "end": "2026-03-06T17:06:50-05:00",
+      "active_seconds": 15215
+    }
+  ],
+  "calls": []
+}

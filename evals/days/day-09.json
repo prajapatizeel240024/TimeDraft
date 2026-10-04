@@ -1,0 +1,217 @@
+{
+  "day_id": "day-09",
+  "date": "2026-03-18",
+  "emails": [
+    {
+      "id": "d09e08",
+      "thread_id": "d09t06",
+      "direction": "received",
+      "from": "digest@lawdigest.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "This week in litigation",
+      "body": "Top stories: appellate roundup, new e-discovery rules, and a profile of the year in trade secret verdicts.",
+      "at": "2026-03-18T08:00:00-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d09e01",
+      "thread_id": "d09t01",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "jmoss@kestrel.example"
+      ],
+      "cc": [],
+      "subject": "Draft interrogatory responses for your review",
+      "body": "Janet,\n\nAttached are our draft responses and objections to Calder's First Set of Interrogatories. Could you confirm the dispatch dates we give in Nos. 4-7 before Friday?\n\nThanks,\nDana",
+      "at": "2026-03-18T11:59:00-04:00",
+      "opened_at": "",
+      "attachments": [
+        "Responses to Calder First Set of Interrogatories.docx"
+      ]
+    },
+    {
+      "id": "d09e02",
+      "thread_id": "d09t02",
+      "direction": "received",
+      "from": "namaro@amarolutz.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Ruiz settlement demand",
+      "body": "Dana, ahead of mediation, Mr. Ruiz's demand is $185,000 inclusive of fees. Nina",
+      "at": "2026-03-18T12:13:00-04:00",
+      "opened_at": "2026-03-18T13:06:00-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d09e06",
+      "thread_id": "d09t04",
+      "direction": "received",
+      "from": "lpark@brightline.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Preliminary imaging report",
+      "body": "Dana,\n\nAttached is our preliminary report. Short version: three USB transfers in the week before her resignation.\n\nLena",
+      "at": "2026-03-18T12:34:09-04:00",
+      "opened_at": "2026-03-18T15:15:09-04:00",
+      "attachments": [
+        "Brightline Preliminary Imaging Report.pdf"
+      ]
+    },
+    {
+      "id": "d09e03",
+      "thread_id": "d09t02",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "namaro@amarolutz.example"
+      ],
+      "cc": [],
+      "subject": "Re: Ruiz settlement demand",
+      "body": "Nina, received. We'll respond through Judge Strand before the session. Dana",
+      "at": "2026-03-18T13:07:25-04:00",
+      "opened_at": "",
+      "attachments": []
+    },
+    {
+      "id": "d09e07",
+      "thread_id": "d09t05",
+      "direction": "received",
+      "from": "gvance@pryorvance.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Calder production volume 3",
+      "body": "Counsel,\n\nPlease find attached Calder Freight Lines' third production, Bates CAL-0451 through CAL-1290, consisting of bills of lading and driver logs.\n\nRegards,\nGrant Vance\nPryor Vance LLP",
+      "at": "2026-03-18T14:27:09-04:00",
+      "opened_at": "2026-03-18T16:17:09-04:00",
+      "attachments": [
+        "CAL_PROD_003.pdf"
+      ]
+    },
+    {
+      "id": "d09e04",
+      "thread_id": "d09t03",
+      "direction": "received",
+      "from": "lpark@brightline.example",
+      "to": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "cc": [],
+      "subject": "Data request",
+      "body": "Dana,\n\nTo finish the damages model I need lane-level freight volumes for 2024 and the rate sheets you mentioned. Can you send them by Wednesday?\n\nLena",
+      "at": "2026-03-18T14:42:25-04:00",
+      "opened_at": "2026-03-18T14:56:25-04:00",
+      "attachments": []
+    },
+    {
+      "id": "d09e05",
+      "thread_id": "d09t03",
+      "direction": "sent",
+      "from": "dwhitfield@ashgrove.example",
+      "to": [
+        "lpark@brightline.example"
+      ],
+      "cc": [],
+      "subject": "Re: Data request",
+      "body": "Lena,\n\nI've asked the client for the lane-level volumes and rate sheets and will send them as soon as they arrive.\n\nDana",
+      "at": "2026-03-18T15:00:09-04:00",
+      "opened_at": "",
+      "attachments": []
+    }
+  ],
+  "calendar": [
+    {
+      "id": "d09c01",
+      "title": "Dentist",
+      "start": "2026-03-18T08:36:00-04:00",
+      "end": "2026-03-18T09:36:00-04:00",
+      "attendees": [
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d09c02",
+      "title": "Call w/ Janet Moss re interrogatory responses",
+      "start": "2026-03-18T12:12:00-04:00",
+      "end": "2026-03-18T12:42:00-04:00",
+      "attendees": [
+        "jmoss@kestrel.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": "Dial +1-212-555-0141"
+    },
+    {
+      "id": "d09c03",
+      "title": "Meet and confer - Calder interrogatory responses",
+      "start": "2026-03-18T13:22:25-04:00",
+      "end": "2026-03-18T13:53:25-04:00",
+      "attendees": [
+        "gvance@pryorvance.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    },
+    {
+      "id": "d09c04",
+      "title": "Litigation practice group meeting",
+      "start": "2026-03-18T14:05:25-04:00",
+      "end": "2026-03-18T14:50:25-04:00",
+      "attendees": [
+        "rcalloway@ashgrove.example",
+        "treyes@ashgrove.example",
+        "dwhitfield@ashgrove.example"
+      ],
+      "response": "accepted",
+      "description": ""
+    }
+  ],
+  "doc_sessions": [
+    {
+      "id": "d09d01",
+      "path": "/Matters/M-1001 Kestrel v Calder/Responses to Calder First Set of Interrogatories.docx",
+      "title": "Responses to Calder First Set of Interrogatories.docx",
+      "start": "2026-03-18T09:46:00-04:00",
+      "end": "2026-03-18T11:54:00-04:00",
+      "active_seconds": 6885
+    },
+    {
+      "id": "d09d02",
+      "path": "/Matters/M-1002 Halberd v Ostrander/Brightline Preliminary Imaging Report.pdf",
+      "title": "Brightline Preliminary Imaging Report.pdf",
+      "start": "2026-03-18T15:17:09-04:00",
+      "end": "2026-03-18T16:05:09-04:00",
+      "active_seconds": 2714
+    },
+    {
+      "id": "d09d03",
+      "path": "/Matters/M-1001 Kestrel v Calder/Productions/CAL_PROD_003.pdf",
+      "title": "CAL_PROD_003.pdf",
+      "start": "2026-03-18T16:19:09-04:00",
+      "end": "2026-03-18T17:05:09-04:00",
+      "active_seconds": 2452
+    }
+  ],
+  "calls": [
+    {
+      "id": "d09p01",
+      "direction": "out",
+      "number": "+1-212-555-0141",
+      "start": "2026-03-18T12:13:00-04:00",
+      "duration_seconds": 2520
+    }
+  ]
+}
