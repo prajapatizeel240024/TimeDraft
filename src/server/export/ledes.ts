@@ -3,7 +3,7 @@
 import type { Pool } from 'pg';
 import { loadFirm } from '@/lib/config';
 import { withTx } from '@/server/db';
-import { HttpError } from '@/server/entries/service';
+import { audit, HttpError } from '@/server/entries/service';
 import { formatHours } from '@/server/time/rounding';
 
 export const LEDES_FIELDS = [
@@ -98,7 +98,7 @@ export async function exportMatterDay(pool: Pool, matterId: string, dayId: strin
       `insert into exports (matter_id, invoice_number, period_start, period_end, entry_ids, total_cents, file_text) values ($1,$2,$3,$4,$5,$6,$7) returning id`,
       [matterId, invoiceNumber, date, date, entries.rows.map((e) => e.id), totalCents, text],
     );
-    await c.query(`insert into audit_events (subject_type, subject_id, actor, action, after) values ('export', $1, $2, 'exported', $3)`, [ins.rows[0].id, actor, JSON.stringify({ invoice_number: invoiceNumber, matter_id: matterId, entries: entries.rowCount, total_cents: totalCents })]);
+    await audit(c, { subject_type: 'export', subject_id: ins.rows[0].id, actor, action: 'exported', after: { invoice_number: invoiceNumber, matter_id: matterId, entries: entries.rowCount, total_cents: totalCents } });
   });
   return { filename: `${invoiceNumber}.txt`, text, invoiceNumber };
 }

@@ -46,7 +46,8 @@ function snapshot(e: Pick<EntryRow, Editable | 'status'>, keys: readonly string[
   return Object.fromEntries(keys.map((k) => [k, (e as Record<string, unknown>)[k]]));
 }
 
-async function audit(c: Queryable, a: { subject_type: 'entry' | 'activity' | 'day' | 'export'; subject_id: string; version?: number | null; actor: string; action: string; before?: unknown; after?: unknown; reason?: string | null }): Promise<void> {
+/** Writes one audit row. Ingest, matching and LEDES export call this inside their own transactions, so this file stays the only writer of audit_events. */
+export async function audit(c: Queryable, a: { subject_type: 'entry' | 'activity' | 'day' | 'export'; subject_id: string; version?: number | null; actor: string; action: string; before?: unknown; after?: unknown; reason?: string | null }): Promise<void> {
   await c.query(
     `insert into audit_events (subject_type, subject_id, version, actor, action, before, after, reason) values ($1,$2,$3,$4,$5,$6,$7,$8)`,
     [a.subject_type, a.subject_id, a.version ?? null, a.actor, a.action, a.before === undefined ? null : JSON.stringify(a.before), a.after === undefined ? null : JSON.stringify(a.after), a.reason ?? null],

@@ -4,6 +4,7 @@ import type { Pool } from 'pg';
 import type { Activity, DurationBasis, Source } from '@/lib/types';
 import type { DayFixture } from '@/lib/schemas';
 import { withTx, type Queryable } from '@/server/db';
+import { audit } from '@/server/entries/service';
 import { estimateReadEmail, estimateSentEmail } from './estimate';
 
 export interface NormalizedActivity {
@@ -92,7 +93,7 @@ export async function ingestFixture(pool: Pool, fx: DayFixture, attorneyId: stri
         [dayId, a.source, a.external_id, a.started_at, a.ended_at, a.est_seconds, a.duration_basis, a.participants, a.body, a.meta],
       );
     }
-    await c.query(`insert into audit_events (subject_type, subject_id, actor, action, after) values ('day', $1, 'system', 'created', $2)`, [dayId, { fixture_id: fx.day_id, work_date: fx.date }]);
+    await audit(c, { subject_type: 'day', subject_id: dayId, actor: 'system', action: 'created', after: { fixture_id: fx.day_id, work_date: fx.date } });
     return { dayId, created: true };
   });
 }

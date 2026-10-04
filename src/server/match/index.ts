@@ -4,6 +4,7 @@ import type { Pool } from 'pg';
 import type { FirmConfig } from '@/lib/config';
 import type { Activity, Category, LLM, MatchAnswer, MatchItem, MatchStatus } from '@/lib/types';
 import { withTx } from '@/server/db';
+import { audit } from '@/server/entries/service';
 import { loadActivities } from '@/server/ingest/normalize';
 import { buildMatchItems, quoteIsReal } from './llm';
 import { CONFLICT_SCORE, ruleDecision, scoreActivity, type RuleResult } from './rules';
@@ -79,7 +80,7 @@ export async function runMatching(pool: Pool, dayId: string, firm: FirmConfig, l
     }
     const counts = { auto: 0, needs_review: 0, ignored: 0 } as Record<string, number>;
     for (const d of decisions.values()) counts[d.status] = (counts[d.status] ?? 0) + 1;
-    await c.query(`insert into audit_events (subject_type, subject_id, actor, action, after) values ('day', $1, $2, 'matched', $3)`, [dayId, itemList.length ? `system+${llm.name}:match.v1` : 'system', counts]);
+    await audit(c, { subject_type: 'day', subject_id: dayId, actor: itemList.length ? `system+${llm.name}:match.v1` : 'system', action: 'matched', after: counts });
     await c.query(`update days set status = 'matched' where id = $1 and status in ('ingested','reconciled')`, [dayId]);
   });
   return { activities, rules, items, answers, decisions };
