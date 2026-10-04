@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/* A billing ledger: pale ledger-green desk, near-white sheet, navy ink, one column rule for hours.
+   Narratives are set in Century Schoolbook, the face Supreme Court briefs use, because they go to the client.
+   Red is reserved for flags and deletions, like a redline. */
+@theme {
+  --color-desk: #e6ebe3;
+  --color-sheet: #fbfcf9;
+  --color-ink: #1c2b39;
+  --color-ink-soft: #4d5d6b;
+  --color-rule: #b4c4ae;
+  --color-rule-soft: #dbe3d7;
+  --color-redline: #b3261e;
+  --color-redline-tint: #fbeae8;
+  --color-amber: #7a4f00;
+  --color-amber-tint: #fbf1dc;
+  --color-approve: #2f6b3f;
+  --color-approve-tint: #e6f1e8;
+  --font-brief: "Century Schoolbook", "New Century Schoolbook", "TeX Gyre Schola", "C059", Georgia, serif;
+  --font-ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  background: var(--color-desk);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+.figures {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Ledger convention: a total sits on a double rule. */
+.total-rule {
+  border-bottom: 3px double var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .arrive {
+    animation: arrive 420ms ease-out both;
+  }
+  @keyframes arrive {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+}
