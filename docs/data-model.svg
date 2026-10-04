@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 744" width="760" height="744" role="img" aria-labelledby="title desc">
+<title id="title">Each activity gets one match and feeds at most one entry, ever</title>
+<desc id="desc">Follow one activity: its single activity_matches row may place it on a matter, and entry_sources lets it feed one entry, which hangs off a day, a matter and two UTBMS codes. audit_events and llm_calls hold no foreign keys; an audit row names its subject by type and id instead.</desc>
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  .bg { fill: #ffffff; } .ink { fill: #1f1f1d; } .quiet { fill: #5f5e59; }
+  .line { fill: none; stroke: #9b9a94; stroke-width: 1.25; } .guide { fill: none; stroke: #d9d8d3; stroke-width: 1.25; }
+  .dash { stroke-dasharray: 4 4; } .box { fill: none; stroke: #9b9a94; stroke-width: 1.25; }
+  .main { fill: #2c6ecb; fill-opacity: 0.12; stroke: #2c6ecb; stroke-width: 2; }
+  .tint { fill: #f2f1ed; stroke: #9b9a94; stroke-width: 1.25; } .head { fill: #9b9a94; }
+  .span { fill: #9b9a94; fill-opacity: 0.18; stroke: #9b9a94; stroke-width: 1.25; }
+  .span-main { fill: #2c6ecb; fill-opacity: 0.18; stroke: #2c6ecb; stroke-width: 1.25; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1c1c1b; } .ink { fill: #ecebe6; } .quiet { fill: #a9a8a2; }
+    .line, .box { stroke: #74736d; } .guide { stroke: #3a3936; }
+    .main { fill: #6fa2ff; fill-opacity: 0.16; stroke: #6fa2ff; }
+    .tint { fill: #262624; stroke: #74736d; } .head { fill: #74736d; }
+    .span { fill: #74736d; stroke: #74736d; } .span-main { fill: #6fa2ff; stroke: #6fa2ff; }
+  }
+</style>
+<defs><marker id="data-model-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="head"/></marker></defs>
+<rect x="0" y="0" width="760" height="744" class="bg"/>
+<text x="24" y="34" class="ink" font-size="15" font-weight="600">Each activity gets one match and feeds at most one entry, ever</text>
+<text x="24" y="54" class="quiet" font-size="11.5">Arrows run from child to parent along a foreign key. Accent: the two one-per-activity tables.</text>
+<rect x="264" y="176" width="472" height="240" rx="8" class="tint"/>
+<text x="280" y="198" class="ink" font-size="13" font-weight="600">Entry tables, one writer: service.ts</text>
+<rect x="24" y="568" width="712" height="152" rx="8" class="tint"/>
+<text x="40" y="590" class="ink" font-size="13" font-weight="600">Stand-alone logs: no foreign keys</text>
+<path d="M124 208V144" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M124 328V280" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M224 340H240V308H200V328" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M124 448V416" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M224 484H360" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M280 244H224" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M512 280V448" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M576 208V144" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M384 328V280" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M280 364H224" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M632 328V280" class="line" marker-end="url(#data-model-arrow)"/>
+<path d="M568 484H536" class="line" marker-end="url(#data-model-arrow)"/>
+<text x="240" y="300" class="quiet" font-size="11.5" text-anchor="end">merged_into</text>
+<text x="568" y="164" class="quiet" font-size="11.5" text-anchor="end">task_code, activity_code</text>
+<text x="292" y="476" class="quiet" font-size="11.5" text-anchor="middle">may be null</text>
+<rect x="24" y="72" width="200" height="72" rx="8" class="box"/>
+<text x="36" y="96" class="ink" font-size="13" font-weight="600">attorneys</text>
+<text x="36" y="112" class="ink" font-size="11.5">The timekeeper, seeded</text>
+<text x="36" y="128" class="quiet" font-size="11.5">id, rate_cents</text>
+<rect x="480" y="72" width="192" height="72" rx="8" class="box"/>
+<text x="492" y="96" class="ink" font-size="13" font-weight="600">utbms_codes</text>
+<text x="492" y="112" class="ink" font-size="11.5">29 task, 11 activity codes</text>
+<text x="492" y="128" class="quiet" font-size="11.5">code, kind, label</text>
+<rect x="24" y="208" width="200" height="72" rx="8" class="box"/>
+<text x="36" y="232" class="ink" font-size="13" font-weight="600">days</text>
+<text x="36" y="248" class="ink" font-size="11.5">One loaded day</text>
+<text x="36" y="264" class="quiet" font-size="11.5">fixture_id unique, status</text>
+<rect x="280" y="208" width="440" height="72" rx="8" class="box"/>
+<text x="292" y="232" class="ink" font-size="13" font-weight="600">time_entries</text>
+<text x="292" y="248" class="ink" font-size="11.5">Drafted and reviewed entries</text>
+<text x="292" y="264" class="quiet" font-size="11.5">units_tenths 1 to 240, status, version</text>
+<rect x="24" y="328" width="200" height="88" rx="8" class="box"/>
+<text x="36" y="352" class="ink" font-size="13" font-weight="600">activities</text>
+<text x="36" y="368" class="ink" font-size="11.5">An email, event, doc or call</text>
+<text x="36" y="384" class="quiet" font-size="11.5">est_seconds, duration_basis</text>
+<text x="36" y="400" class="ink" font-size="11.5">merged_into: a call's event</text>
+<rect x="280" y="328" width="208" height="72" rx="8" class="main"/>
+<text x="292" y="352" class="ink" font-size="13" font-weight="600">entry_sources</text>
+<text x="292" y="368" class="ink" font-size="11.5">Which activities fed an entry</text>
+<text x="292" y="384" class="ink" font-size="11.5">activity_id unique: one entry</text>
+<rect x="544" y="328" width="176" height="72" rx="8" class="box"/>
+<text x="556" y="352" class="ink" font-size="13" font-weight="600">entry_flags</text>
+<text x="556" y="368" class="ink" font-size="11.5">Current flags per entry</text>
+<text x="556" y="384" class="quiet" font-size="11.5">code, severity, checker</text>
+<rect x="24" y="448" width="200" height="88" rx="8" class="main"/>
+<text x="36" y="472" class="ink" font-size="13" font-weight="600">activity_matches</text>
+<text x="36" y="488" class="ink" font-size="11.5">One match per activity</text>
+<text x="36" y="504" class="quiet" font-size="11.5">status, matter_id, evidence</text>
+<text x="36" y="520" class="ink" font-size="11.5">needs_review rows: the queue</text>
+<rect x="360" y="448" width="176" height="72" rx="8" class="box"/>
+<text x="372" y="472" class="ink" font-size="13" font-weight="600">matters</text>
+<text x="372" y="488" class="ink" font-size="11.5">Client matters, seeded</text>
+<text x="372" y="504" class="quiet" font-size="11.5">id, profile, card</text>
+<rect x="568" y="448" width="168" height="88" rx="8" class="box"/>
+<text x="580" y="472" class="ink" font-size="13" font-weight="600">exports</text>
+<text x="580" y="488" class="ink" font-size="11.5">LEDES invoices</text>
+<text x="580" y="504" class="quiet" font-size="11.5">invoice_number unique</text>
+<text x="580" y="520" class="ink" font-size="11.5">entry_ids array, no FK</text>
+<rect x="40" y="600" width="324" height="104" rx="8" class="box"/>
+<text x="52" y="624" class="ink" font-size="13" font-weight="600">audit_events</text>
+<text x="52" y="640" class="ink" font-size="11.5">Append-only change log</text>
+<text x="52" y="656" class="ink" font-size="11.5">Subject: entry, activity, day or export</text>
+<text x="52" y="672" class="quiet" font-size="11.5">subject_id is text, not a foreign key</text>
+<text x="52" y="688" class="ink" font-size="11.5">Only audit() in service.ts writes it</text>
+<rect x="396" y="600" width="324" height="104" rx="8" class="box"/>
+<text x="408" y="624" class="ink" font-size="13" font-weight="600">llm_calls</text>
+<text x="408" y="640" class="ink" font-size="11.5">One row per Claude API response</text>
+<text x="408" y="656" class="ink" font-size="11.5">Doubles as the response cache</text>
+<text x="408" y="672" class="quiet" font-size="11.5">cache_key, purpose, model, tokens</text>
+<text x="408" y="688" class="quiet" font-size="11.5">db:reset keeps it unless --all</text>
+</svg>

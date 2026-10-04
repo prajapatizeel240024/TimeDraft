@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 728" width="760" height="728" role="img" aria-labelledby="title desc">
+<title id="title">Each day is scored twice: Auto, then After review once the key clears the queue</title>
+<desc id="desc">npm run eval resets the eval database once, then runs the real pipeline on each day and scores it as Auto. The answer key then resolves the queue like a perfect attorney, the new work is drafted and the day is scored again as After review. After the last day, the sweep re-decides the stored match answers at four thresholds without calling Claude, and the report goes to evals/reports.</desc>
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  .bg { fill: #ffffff; } .ink { fill: #1f1f1d; } .quiet { fill: #5f5e59; }
+  .line { fill: none; stroke: #9b9a94; stroke-width: 1.25; } .guide { fill: none; stroke: #d9d8d3; stroke-width: 1.25; }
+  .dash { stroke-dasharray: 4 4; } .box { fill: none; stroke: #9b9a94; stroke-width: 1.25; }
+  .main { fill: #2c6ecb; fill-opacity: 0.12; stroke: #2c6ecb; stroke-width: 2; }
+  .tint { fill: #f2f1ed; stroke: #9b9a94; stroke-width: 1.25; } .head { fill: #9b9a94; }
+  .span { fill: #9b9a94; fill-opacity: 0.18; stroke: #9b9a94; stroke-width: 1.25; }
+  .span-main { fill: #2c6ecb; fill-opacity: 0.18; stroke: #2c6ecb; stroke-width: 1.25; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1c1c1b; } .ink { fill: #ecebe6; } .quiet { fill: #a9a8a2; }
+    .line, .box { stroke: #74736d; } .guide { stroke: #3a3936; }
+    .main { fill: #6fa2ff; fill-opacity: 0.16; stroke: #6fa2ff; }
+    .tint { fill: #262624; stroke: #74736d; } .head { fill: #74736d; }
+    .span { fill: #74736d; stroke: #74736d; } .span-main { fill: #6fa2ff; stroke: #6fa2ff; }
+  }
+</style>
+<defs><marker id="eval-run-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="head"/></marker></defs>
+<rect x="0" y="0" width="760" height="728" class="bg"/>
+<text x="24" y="34" class="ink" font-size="15" font-weight="600">Each day is scored twice: Auto, then After review once the key clears the queue</text>
+<text x="24" y="54" class="quiet" font-size="11.5">Accent marks the two scores. Dashed arrows carry files; the answer key plays both attorney and judge.</text>
+<rect x="24" y="216" width="712" height="360" rx="8" class="tint"/>
+<text x="40" y="238" class="ink" font-size="13" font-weight="600">For each day of the split</text>
+<path d="M168 160V216" class="line" marker-end="url(#eval-run-arrow)"/>
+<path d="M592 176V216" class="line dash" marker-end="url(#eval-run-arrow)"/>
+<path d="M296 292H464" class="line" marker-end="url(#eval-run-arrow)"/>
+<path d="M168 336V376" class="line" marker-end="url(#eval-run-arrow)"/>
+<path d="M592 376V336" class="line dash" marker-end="url(#eval-run-arrow)"/>
+<path d="M464 412H296" class="line dash" marker-end="url(#eval-run-arrow)"/>
+<path d="M168 448V488" class="line" marker-end="url(#eval-run-arrow)"/>
+<path d="M592 448V488" class="line dash" marker-end="url(#eval-run-arrow)"/>
+<path d="M296 524H464" class="line" marker-end="url(#eval-run-arrow)"/>
+<path d="M168 576V616" class="line" marker-end="url(#eval-run-arrow)"/>
+<path d="M296 660H464" class="line" marker-end="url(#eval-run-arrow)"/>
+<text x="176" y="192" class="quiet" font-size="11.5">then, day by day</text>
+<text x="600" y="200" class="quiet" font-size="11.5">day files and keys</text>
+<text x="380" y="402" class="quiet" font-size="11.5" text-anchor="middle">matter or category</text>
+<text x="176" y="600" class="quiet" font-size="11.5">after the last day</text>
+<rect x="40" y="72" width="256" height="88" rx="8" class="box"/>
+<text x="52" y="96" class="ink" font-size="13" font-weight="600">Reset eval database</text>
+<text x="52" y="112" class="ink" font-size="11.5">Once per run, not per day</text>
+<text x="52" y="128" class="ink" font-size="11.5">Keeps llm_calls, so a rerun replays</text>
+<text x="52" y="144" class="ink" font-size="11.5">Claude's answers unless --no-cache</text>
+<rect x="464" y="72" width="256" height="104" rx="8" class="box"/>
+<text x="476" y="96" class="ink" font-size="13" font-weight="600">Generate the days</text>
+<text x="476" y="112" class="ink" font-size="11.5">npm run fixtures, not part of eval</text>
+<text x="476" y="128" class="ink" font-size="11.5">Plans the true work first, then</text>
+<text x="476" y="144" class="ink" font-size="11.5">renders it from 40 templates</text>
+<text x="476" y="160" class="ink" font-size="11.5">No model calls; key from the plan</text>
+<rect x="40" y="248" width="256" height="88" rx="8" class="box"/>
+<text x="52" y="272" class="ink" font-size="13" font-weight="600">Run the real pipeline</text>
+<text x="52" y="288" class="ink" font-size="11.5">Ingest the day file, reconcile,</text>
+<text x="52" y="304" class="ink" font-size="11.5">match, then draft the entries</text>
+<text x="52" y="320" class="ink" font-size="11.5">Keeps match answers for the sweep</text>
+<rect x="464" y="248" width="256" height="88" rx="8" class="main"/>
+<text x="476" y="272" class="ink" font-size="13" font-weight="600">Score: Auto</text>
+<text x="476" y="288" class="ink" font-size="11.5">Snapshot scored against the key</text>
+<text x="476" y="304" class="ink" font-size="11.5">Before any human click</text>
+<text x="476" y="320" class="quiet" font-size="11.5">Precision, coverage, review rate</text>
+<rect x="40" y="376" width="256" height="72" rx="8" class="box"/>
+<text x="52" y="400" class="ink" font-size="13" font-weight="600">Perfect attorney</text>
+<text x="52" y="416" class="ink" font-size="11.5">Resolves every queued activity</text>
+<text x="52" y="432" class="ink" font-size="11.5">the way the answer key says</text>
+<rect x="464" y="376" width="256" height="72" rx="8" class="box"/>
+<text x="476" y="400" class="ink" font-size="13" font-weight="600">Answer key</text>
+<text x="476" y="416" class="quiet" font-size="11.5">evals/keys/day-NN.key.json</text>
+<text x="476" y="432" class="ink" font-size="11.5">True work, activity map, traps</text>
+<rect x="40" y="488" width="256" height="72" rx="8" class="box"/>
+<text x="52" y="512" class="ink" font-size="13" font-weight="600">Draft again</text>
+<text x="52" y="528" class="ink" font-size="11.5">Only if something was queued</text>
+<text x="52" y="544" class="ink" font-size="11.5">Drafts the newly placed work</text>
+<rect x="464" y="488" width="256" height="72" rx="8" class="main"/>
+<text x="476" y="512" class="ink" font-size="13" font-weight="600">Score: After review</text>
+<text x="476" y="528" class="ink" font-size="11.5">Same scoring, after the review</text>
+<text x="476" y="544" class="quiet" font-size="11.5">Adds code, draft and trap checks</text>
+<rect x="40" y="616" width="256" height="88" rx="8" class="box"/>
+<text x="52" y="640" class="ink" font-size="13" font-weight="600">Threshold sweep</text>
+<text x="52" y="656" class="ink" font-size="11.5">Re-decides each day's kept answers</text>
+<text x="52" y="672" class="ink" font-size="11.5">at 0.6, 0.7, 0.8 and 0.9</text>
+<text x="52" y="688" class="ink" font-size="11.5">No new Claude calls; matching only</text>
+<rect x="464" y="616" width="256" height="88" rx="8" class="box"/>
+<text x="476" y="640" class="ink" font-size="13" font-weight="600">Write the report</text>
+<text x="476" y="656" class="ink" font-size="11.5">Headline: Auto and After review</text>
+<text x="476" y="672" class="ink" font-size="11.5">plus sweep and model call totals</text>
+<text x="476" y="688" class="ink" font-size="11.5">evals/reports: Markdown and JSON</text>
+</svg>

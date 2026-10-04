@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 800" width="760" height="800" role="img" aria-labelledby="title desc">
+<title id="title">Every Claude answer is logged before it is checked; only end_turn is returned</title>
+<desc id="desc">A cache hit is parsed and returned without writing a row. On a miss, every reply from Claude is logged to llm_calls before its stop_reason is checked, and only an end_turn reply is parsed and returned.</desc>
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+  .bg { fill: #ffffff; } .ink { fill: #1f1f1d; } .quiet { fill: #5f5e59; }
+  .line { fill: none; stroke: #9b9a94; stroke-width: 1.25; } .guide { fill: none; stroke: #d9d8d3; stroke-width: 1.25; }
+  .dash { stroke-dasharray: 4 4; } .box { fill: none; stroke: #9b9a94; stroke-width: 1.25; }
+  .main { fill: #2c6ecb; fill-opacity: 0.12; stroke: #2c6ecb; stroke-width: 2; }
+  .tint { fill: #f2f1ed; stroke: #9b9a94; stroke-width: 1.25; } .head { fill: #9b9a94; }
+  .span { fill: #9b9a94; fill-opacity: 0.18; stroke: #9b9a94; stroke-width: 1.25; }
+  .span-main { fill: #2c6ecb; fill-opacity: 0.18; stroke: #2c6ecb; stroke-width: 1.25; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1c1c1b; } .ink { fill: #ecebe6; } .quiet { fill: #a9a8a2; }
+    .line, .box { stroke: #74736d; } .guide { stroke: #3a3936; }
+    .main { fill: #6fa2ff; fill-opacity: 0.16; stroke: #6fa2ff; }
+    .tint { fill: #262624; stroke: #74736d; } .head { fill: #74736d; }
+    .span { fill: #74736d; stroke: #74736d; } .span-main { fill: #6fa2ff; stroke: #6fa2ff; }
+  }
+</style>
+<defs><marker id="claude-call-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="head"/></marker></defs>
+<rect x="0" y="0" width="760" height="800" class="bg"/>
+<text x="24" y="34" class="ink" font-size="15" font-weight="600">Every Claude answer is logged before it is checked; only end_turn is returned</text>
+<text x="24" y="54" class="quiet" font-size="11.5">One call through callStructured (src/server/llm/client.ts). Accent: the log row and the end_turn return.</text>
+<path d="M352 144V176" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M416 208H512" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M352 240V272" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M416 304H512" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M352 336V368" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M352 456V488" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M352 576V608" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M416 640H512" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M288 640H184" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M104 604V412H208" class="line" marker-end="url(#claude-call-arrow)"/>
+<path d="M352 672V704" class="line" marker-end="url(#claude-call-arrow)"/>
+<text x="464" y="202" class="quiet" font-size="11.5" text-anchor="middle">yes</text>
+<text x="360" y="260" class="quiet" font-size="11.5">no, or LLM_CACHE=off</text>
+<text x="464" y="298" class="quiet" font-size="11.5" text-anchor="middle">no</text>
+<text x="360" y="356" class="quiet" font-size="11.5">yes</text>
+<text x="464" y="634" class="quiet" font-size="11.5" text-anchor="middle">anything else</text>
+<text x="236" y="634" class="quiet" font-size="11.5" text-anchor="middle">1st max_tokens</text>
+<text x="156" y="406" class="quiet" font-size="11.5" text-anchor="middle">retry</text>
+<text x="360" y="692" class="quiet" font-size="11.5">end_turn</text>
+<rect x="208" y="72" width="288" height="72" rx="8" class="box"/>
+<text x="220" y="96" class="ink" font-size="13" font-weight="600">Build the cache key</text>
+<text x="220" y="112" class="ink" font-size="11.5">SHA-256 of model, prompt version,</text>
+<text x="220" y="128" class="ink" font-size="11.5">system prompt, user message, schema</text>
+<rect x="512" y="164" width="224" height="88" rx="8" class="box"/>
+<text x="524" y="188" class="ink" font-size="13" font-weight="600">Return cached answer</text>
+<text x="524" y="204" class="ink" font-size="11.5">Newest end_turn row for the key</text>
+<text x="524" y="220" class="ink" font-size="11.5">Checked by zod.parse</text>
+<text x="524" y="236" class="ink" font-size="11.5">Writes no llm_calls row</text>
+<rect x="512" y="268" width="224" height="72" rx="8" class="box"/>
+<text x="524" y="292" class="ink" font-size="13" font-weight="600">LLMUnavailableError</text>
+<text x="524" y="308" class="ink" font-size="11.5">ANTHROPIC_API_KEY is unset</text>
+<text x="524" y="324" class="quiet" font-size="11.5">Fully cached runs need no key</text>
+<rect x="208" y="368" width="288" height="88" rx="8" class="box"/>
+<text x="220" y="392" class="ink" font-size="13" font-weight="600">messages.create</text>
+<text x="220" y="408" class="ink" font-size="11.5">output_config.format: the JSON schema</text>
+<text x="220" y="424" class="ink" font-size="11.5">System prompt marked for prompt caching</text>
+<text x="220" y="440" class="quiet" font-size="11.5">SDK retries transient errors 3 times</text>
+<rect x="208" y="488" width="288" height="88" rx="8" class="main"/>
+<text x="220" y="512" class="ink" font-size="13" font-weight="600">Log one llm_calls row</text>
+<text x="220" y="528" class="ink" font-size="11.5">JSON.parse the text, null if invalid</text>
+<text x="220" y="544" class="ink" font-size="11.5">Written before stop_reason is checked</text>
+<text x="220" y="560" class="ink" font-size="11.5">This table doubles as the cache</text>
+<rect x="24" y="604" width="160" height="72" rx="8" class="box"/>
+<text x="36" y="628" class="ink" font-size="13" font-weight="600">Double max_tokens</text>
+<text x="36" y="644" class="ink" font-size="11.5">Call Claude once more</text>
+<text x="36" y="660" class="ink" font-size="11.5">Each try logs a row</text>
+<rect x="512" y="596" width="224" height="88" rx="8" class="box"/>
+<text x="524" y="620" class="ink" font-size="13" font-weight="600">Throw an error</text>
+<text x="524" y="636" class="ink" font-size="11.5">refusal: RefusalError</text>
+<text x="524" y="652" class="ink" font-size="11.5">2nd max_tokens: Error</text>
+<text x="524" y="668" class="ink" font-size="11.5">Any other stop: Error</text>
+<rect x="208" y="704" width="288" height="72" rx="8" class="main"/>
+<text x="220" y="728" class="ink" font-size="13" font-weight="600">Return the answer</text>
+<text x="220" y="744" class="ink" font-size="11.5">zod adds limits the API can't enforce</text>
+<text x="220" y="760" class="ink" font-size="11.5">Null or mismatched JSON throws</text>
+<polygon points="288,208 352,176 416,208 352,240" class="box"/>
+<text x="352" y="212" class="ink" font-size="13" text-anchor="middle">Cache hit?</text>
+<polygon points="288,304 352,272 416,304 352,336" class="box"/>
+<text x="352" y="308" class="ink" font-size="13" text-anchor="middle">API key set?</text>
+<polygon points="288,640 352,608 416,640 352,672" class="box"/>
+<text x="352" y="644" class="ink" font-size="13" text-anchor="middle">stop_reason?</text>
+</svg>
