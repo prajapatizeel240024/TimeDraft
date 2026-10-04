@@ -620,7 +620,9 @@ function checkContacts(): void {
 }
 
 function main() {
-  const seed = Number(process.argv[process.argv.indexOf('--seed') + 1] || 42);
+  const at = process.argv.indexOf('--seed');
+  const seed = at === -1 ? 42 : Number(process.argv[at + 1]);
+  if (!Number.isInteger(seed)) throw new Error('--seed needs a whole number, such as --seed 42.');
   checkContacts();
   const rows: string[] = [];
   for (let i = 0; i < DATES.length; i++) {
