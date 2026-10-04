@@ -1,0 +1,1338 @@
+{
+  "version": 1,
+  "profiles": {
+    "default": {
+      "max_entry_tenths": 30,
+      "min_words": 6,
+      "block_billing": "warn",
+      "comm_max_tenths": 10,
+      "daily_max_tenths": 100
+    },
+    "strict": {
+      "max_entry_tenths": 20,
+      "min_words": 8,
+      "block_billing": "block",
+      "comm_max_tenths": 6,
+      "daily_max_tenths": 100
+    }
+  },
+  "words": {
+    "task_verbs": [
+      "draft",
+      "revise",
+      "review",
+      "analyze",
+      "research",
+      "prepare",
+      "attend",
+      "confer",
+      "telephone",
+      "call",
+      "email",
+      "correspond",
+      "meet",
+      "outline",
+      "edit",
+      "finalize",
+      "file",
+      "serve",
+      "summarize"
+    ],
+    "same_task_pairs": [
+      [
+        "draft",
+        "revise"
+      ],
+      [
+        "review",
+        "analyze"
+      ],
+      [
+        "prepare",
+        "finalize"
+      ],
+      [
+        "prepare",
+        "file"
+      ],
+      [
+        "finalize",
+        "file"
+      ],
+      [
+        "draft",
+        "finalize"
+      ],
+      [
+        "revise",
+        "finalize"
+      ],
+      [
+        "meet",
+        "confer"
+      ]
+    ],
+    "vague_phrases": [
+      "review file",
+      "reviewed file",
+      "attention to",
+      "work on",
+      "worked on",
+      "various",
+      "misc",
+      "miscellaneous",
+      "follow up",
+      "follow-up",
+      "prepare for"
+    ],
+    "generic_objects": [
+      "file",
+      "files",
+      "document",
+      "documents",
+      "matter",
+      "case",
+      "notes",
+      "draft",
+      "drafts",
+      "folder",
+      "issues",
+      "items",
+      "materials"
+    ],
+    "role_words": [
+      "client",
+      "opposing counsel",
+      "mediator",
+      "court",
+      "paralegal",
+      "partner",
+      "expert",
+      "co-counsel",
+      "colleague"
+    ],
+    "admin": [
+      "timesheet",
+      "time entry",
+      "time entries",
+      "billing",
+      "invoice",
+      "CLE",
+      "webinar",
+      "IT ticket",
+      "password",
+      "VPN",
+      "conflicts check",
+      "firm meeting",
+      "practice group",
+      "business development",
+      "pitch",
+      "newsletter"
+    ],
+    "personal": [
+      "lunch",
+      "dentist",
+      "gym",
+      "doctor",
+      "school pickup",
+      "haircut"
+    ],
+    "generic_caps": [
+      "Rule",
+      "Motion",
+      "Set",
+      "First",
+      "Second",
+      "Third",
+      "Fourth",
+      "Request",
+      "Requests",
+      "Production",
+      "Interrogatories",
+      "Deposition",
+      "Brief",
+      "Reply",
+      "Opposition",
+      "Declaration",
+      "Statement",
+      "Memorandum",
+      "Court",
+      "Hearing",
+      "Mediation",
+      "Preliminary",
+      "Injunction",
+      "Plaintiff",
+      "Defendant",
+      "Order",
+      "Notice",
+      "Complaint",
+      "Answer",
+      "Exhibit",
+      "Agreement",
+      "Settlement",
+      "Report",
+      "Draft",
+      "Supplemental",
+      "Expedited",
+      "Discovery",
+      "Early",
+      "Case",
+      "Assessment",
+      "Confidential",
+      "Responses",
+      "Objections",
+      "Outline",
+      "Notes",
+      "Logs",
+      "Records"
+    ]
+  },
+  "daily_max_tenths": 100,
+  "cases": [
+    {
+      "name": "vague: \"reviewed file\"",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Reviewed file."
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE",
+          "severity": "block"
+        }
+      ]
+    },
+    {
+      "name": "vague: \"work on\"",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Work on discovery."
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE"
+        }
+      ]
+    },
+    {
+      "name": "vague: drafter said the sources are thin",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L330",
+          "activity_code": "A101",
+          "thin_context": true,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Revise working notes on Calder deposition topics for the corporate designee outline"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE"
+        }
+      ]
+    },
+    {
+      "name": "vague: ends on a generic object",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Revise the draft circulated earlier this week for the case"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE"
+        }
+      ]
+    },
+    {
+      "name": "vague: a file name and nothing else",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Revise Notes.docx."
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE"
+        }
+      ]
+    },
+    {
+      "name": "vague: a call with nobody named",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L320",
+          "activity_code": "A106",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Telephone conference regarding production deadlines and next steps"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE"
+        }
+      ]
+    },
+    {
+      "name": "vague: \"attention to\" and \"various\"",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Attention to various discovery issues raised this week by everyone"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE"
+        }
+      ]
+    },
+    {
+      "name": "vague: too short for the strict client",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "strict",
+          "units_tenths": 5,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE"
+        }
+      ]
+    },
+    {
+      "name": "clean: the same narrative is long enough for the default client",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "block billing: tasks joined by a semicolon",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 12,
+          "task_code": "L350",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft motion to compel; telephone conference with J. Moss regarding custodians"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "BLOCK_BILLING",
+          "severity": "warn"
+        }
+      ]
+    },
+    {
+      "name": "block billing: the strict client blocks it",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "strict",
+          "units_tenths": 12,
+          "task_code": "L350",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft motion to compel; telephone conference with J. Moss regarding custodians"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "BLOCK_BILLING",
+          "severity": "block"
+        }
+      ]
+    },
+    {
+      "name": "block billing: tasks joined by \"and\"",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L320",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Review Calder production volume three and draft deficiency letter to G. Vance"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "BLOCK_BILLING"
+        }
+      ]
+    },
+    {
+      "name": "block billing: tasks joined by commas",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 15,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft opposition brief, review client documents, call J. Moss"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "BLOCK_BILLING"
+        }
+      ]
+    },
+    {
+      "name": "block billing and vague together, past tense",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Reviewed file; call client."
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "BLOCK_BILLING"
+        },
+        {
+          "entry_id": "e1",
+          "code": "VAGUE_NARRATIVE"
+        }
+      ]
+    },
+    {
+      "name": "long: over the default limit",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 31,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion for preliminary injunction against Dr. Ostrander"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "LONG_ENTRY",
+          "severity": "warn"
+        }
+      ]
+    },
+    {
+      "name": "long: the strict limit is lower",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "strict",
+          "units_tenths": 21,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion for preliminary injunction against Dr. Ostrander"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "LONG_ENTRY"
+        }
+      ]
+    },
+    {
+      "name": "long: communication over its own limit",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 11,
+          "task_code": "L320",
+          "activity_code": "A106",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Telephone conference with J. Moss (Kestrel) regarding custodians for document collection"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "LONG_ENTRY"
+        }
+      ]
+    },
+    {
+      "name": "clean: exactly at the default limit",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 30,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion for preliminary injunction against Dr. Ostrander"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: exactly at the strict limit",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "strict",
+          "units_tenths": 20,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion for preliminary injunction against Dr. Ostrander"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: communication exactly at its limit",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 10,
+          "task_code": "L320",
+          "activity_code": "A106",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Telephone conference with J. Moss (Kestrel) regarding custodians for document collection"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "admin: CLE in a billable narrative",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A109",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Attend CLE webinar on ethics in electronic discovery for continuing education credit"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "NON_BILLABLE_ADMIN",
+          "severity": "block"
+        }
+      ]
+    },
+    {
+      "name": "admin: built from an administrative activity",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A101",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "admin"
+          ],
+          "intervals": [],
+          "narrative": "Prepare monthly submission for the accounting department deadline"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "NON_BILLABLE_ADMIN"
+        }
+      ]
+    },
+    {
+      "name": "clean: admin work already marked non-billable",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A109",
+          "thin_context": false,
+          "billable": false,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Attend CLE webinar on ethics in electronic discovery for continuing education credit"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: \"timekeeping\" is not \"timesheet\"",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Review Ruiz payroll and timekeeping records produced by Bellhaven"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: \"bill of lading\" is not \"billing\"",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Analyze bill of lading discrepancies in Calder production for the damages model"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: \"draft and revise\" is one task",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L350",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft and revise opposition to motion to compel production of dispatch logs"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: \"review and analyze\" is one task",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L110",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Review and analyze Brightline forensic report on Ostrander laptop imaging"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: \"meet and confer\" is one task",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L310",
+          "activity_code": "A107",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Meet and confer with G. Vance regarding Calder's deficient interrogatory responses"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: \"prepare and file\" is one task",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L210",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Prepare and file notice of appearance in the Ruiz action"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: a call with a named client contact",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L320",
+          "activity_code": "A106",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Telephone conference with J. Moss (Kestrel) regarding custodians for document collection"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: a role word names the counterparty",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A106",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Telephone conference with client regarding custodians for production"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: a specific production review",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L320",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Review Calder Freight's third document production (CAL-0451 to CAL-1290) for bill-of-lading discrepancies"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: \"outline for\" is not \"prepare for\"",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L330",
+          "activity_code": "A101",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Prepare outline for Rule 30(b)(6) deposition of Calder Freight Lines' corporate designee"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: three-hour mediation at the default limit",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 30,
+          "task_code": "L160",
+          "activity_code": "A109",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Attend mediation session at Strand ADR with D. Holt and mediator E. Strand"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: long enough for the strict client",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "strict",
+          "units_tenths": 5,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft supplemental declaration of L. Chu regarding server access logs"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "overlap: two entries share 30 minutes",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [
+            {
+              "start": "2026-03-10T14:00:00Z",
+              "end": "2026-03-10T15:00:00Z"
+            }
+          ],
+          "narrative": "Draft supplemental declaration of L. Chu regarding server access logs"
+        },
+        {
+          "id": "e2",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A106",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [
+            {
+              "start": "2026-03-10T14:30:00Z",
+              "end": "2026-03-10T15:30:00Z"
+            }
+          ],
+          "narrative": "Telephone conference with J. Moss (Kestrel) regarding custodians for document collection"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "OVERLAP",
+          "severity": "warn"
+        },
+        {
+          "entry_id": "e2",
+          "code": "OVERLAP",
+          "severity": "warn"
+        }
+      ]
+    },
+    {
+      "name": "clean: an overlap under 15 minutes",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [
+            {
+              "start": "2026-03-10T14:00:00Z",
+              "end": "2026-03-10T15:00:00Z"
+            }
+          ],
+          "narrative": "Draft supplemental declaration of L. Chu regarding server access logs"
+        },
+        {
+          "id": "e2",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A106",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [
+            {
+              "start": "2026-03-10T14:50:00Z",
+              "end": "2026-03-10T15:30:00Z"
+            }
+          ],
+          "narrative": "Telephone conference with J. Moss (Kestrel) regarding custodians for document collection"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: email-only entries have no intervals to overlap",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft supplemental declaration of L. Chu regarding server access logs"
+        },
+        {
+          "id": "e2",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A106",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Telephone conference with J. Moss (Kestrel) regarding custodians for document collection"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "clean: overlap with a non-billable entry is ignored",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [
+            {
+              "start": "2026-03-10T14:00:00Z",
+              "end": "2026-03-10T15:00:00Z"
+            }
+          ],
+          "narrative": "Draft supplemental declaration of L. Chu regarding server access logs"
+        },
+        {
+          "id": "e2",
+          "profile": "default",
+          "units_tenths": 5,
+          "task_code": "L120",
+          "activity_code": "A109",
+          "thin_context": false,
+          "billable": false,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [
+            {
+              "start": "2026-03-10T14:30:00Z",
+              "end": "2026-03-10T15:30:00Z"
+            }
+          ],
+          "narrative": "Attend CLE webinar on ethics in electronic discovery for continuing education credit"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "daily total: over 10 hours",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 30,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion for preliminary injunction against Dr. Ostrander"
+        },
+        {
+          "id": "e2",
+          "profile": "default",
+          "units_tenths": 30,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft supplemental declaration of L. Chu regarding server access logs"
+        },
+        {
+          "id": "e3",
+          "profile": "default",
+          "units_tenths": 25,
+          "task_code": "L120",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Review Calder Freight's third document production (CAL-0451 to CAL-1290) for bill-of-lading discrepancies"
+        },
+        {
+          "id": "e4",
+          "profile": "default",
+          "units_tenths": 20,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft confidential mediation statement for submission to mediator E. Strand"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": null,
+          "code": "DAILY_TOTAL",
+          "severity": "warn"
+        }
+      ]
+    },
+    {
+      "name": "clean: daily total exactly 10 hours",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "default",
+          "units_tenths": 30,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion for preliminary injunction against Dr. Ostrander"
+        },
+        {
+          "id": "e2",
+          "profile": "default",
+          "units_tenths": 30,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft supplemental declaration of L. Chu regarding server access logs"
+        },
+        {
+          "id": "e3",
+          "profile": "default",
+          "units_tenths": 25,
+          "task_code": "L120",
+          "activity_code": "A104",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Review Calder Freight's third document production (CAL-0451 to CAL-1290) for bill-of-lading discrepancies"
+        },
+        {
+          "id": "e4",
+          "profile": "default",
+          "units_tenths": 15,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft confidential mediation statement for submission to mediator E. Strand"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "mixed profiles in one day",
+      "entries": [
+        {
+          "id": "e1",
+          "profile": "strict",
+          "units_tenths": 25,
+          "task_code": "L220",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft reply brief in support of motion for preliminary injunction against Dr. Ostrander"
+        },
+        {
+          "id": "e2",
+          "profile": "default",
+          "units_tenths": 25,
+          "task_code": "L120",
+          "activity_code": "A103",
+          "thin_context": false,
+          "billable": true,
+          "source_categories": [
+            "billable"
+          ],
+          "intervals": [],
+          "narrative": "Draft supplemental declaration of L. Chu regarding server access logs"
+        }
+      ],
+      "expect": [
+        {
+          "entry_id": "e1",
+          "code": "LONG_ENTRY"
+        }
+      ]
+    }
+  ]
+}
