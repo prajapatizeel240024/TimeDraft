@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://timedraft.example/contracts/checker.schema.json",
+  "title": "TimeDraft checker contract (TypeScript rules and checker-go)",
+  "$defs": {
+    "Profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_entry_tenths", "min_words", "block_billing", "comm_max_tenths", "daily_max_tenths"],
+      "properties": {
+        "max_entry_tenths": { "type": "integer", "minimum": 1 },
+        "min_words": { "type": "integer", "minimum": 1 },
+        "block_billing": { "enum": ["warn", "block"] },
+        "comm_max_tenths": { "type": "integer", "minimum": 1 },
+        "daily_max_tenths": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "Words": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_verbs", "same_task_pairs", "vague_phrases", "generic_objects", "role_words", "admin", "personal", "generic_caps"],
+      "properties": {
+        "task_verbs": { "type": "array", "items": { "type": "string" } },
+        "same_task_pairs": { "type": "array", "items": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 } },
+        "vague_phrases": { "type": "array", "items": { "type": "string" } },
+        "generic_objects": { "type": "array", "items": { "type": "string" } },
+        "role_words": { "type": "array", "items": { "type": "string" } },
+        "admin": { "type": "array", "items": { "type": "string" } },
+        "personal": { "type": "array", "items": { "type": "string" } },
+        "generic_caps": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "Interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": { "start": { "type": "string", "format": "date-time" }, "end": { "type": "string", "format": "date-time" } }
+    },
+    "CheckEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "profile", "units_tenths", "task_code", "activity_code", "narrative", "thin_context", "billable", "source_categories", "intervals"],
+      "properties": {
+        "id": { "type": "string" },
+        "profile": { "type": "string" },
+        "units_tenths": { "type": "integer", "minimum": 1, "maximum": 240 },
+        "task_code": { "type": "string" },
+        "activity_code": { "type": "string" },
+        "narrative": { "type": "string" },
+        "thin_context": { "type": "boolean" },
+        "billable": { "type": "boolean" },
+        "source_categories": { "type": "array", "items": { "enum": ["billable", "admin", "personal", "unknown"] } },
+        "intervals": { "type": "array", "items": { "$ref": "#/$defs/Interval" } }
+      }
+    },
+    "Flag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entry_id", "code", "severity", "message", "evidence"],
+      "properties": {
+        "entry_id": { "type": ["string", "null"] },
+        "code": { "enum": ["BLOCK_BILLING", "VAGUE_NARRATIVE", "LONG_ENTRY", "NON_BILLABLE_ADMIN", "OVERLAP", "DAILY_TOTAL"] },
+        "severity": { "enum": ["block", "warn"] },
+        "message": { "type": "string" },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "CheckRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profiles", "words", "daily_max_tenths", "entries"],
+      "properties": {
+        "profiles": { "type": "object", "additionalProperties": { "$ref": "#/$defs/Profile" } },
+        "words": { "$ref": "#/$defs/Words" },
+        "daily_max_tenths": { "type": "integer", "minimum": 1 },
+        "entries": { "type": "array", "items": { "$ref": "#/$defs/CheckEntry" } }
+      }
+    },
+    "CheckResponse": {
+      "type": "object",
+      "required": ["flags", "checker"],
+      "properties": { "flags": { "type": "array", "items": { "$ref": "#/$defs/Flag" } }, "checker": { "type": "string" } }
+    },
+    "RoundRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["items"],
+      "properties": { "items": { "type": "array", "items": { "type": "object", "required": ["id", "seconds"], "properties": { "id": { "type": "string" }, "seconds": { "type": "integer", "minimum": 1 } } } } }
+    },
+    "RoundResponse": {
+      "type": "object",
+      "required": ["items"],
+      "properties": { "items": { "type": "array", "items": { "type": "object", "required": ["id", "tenths", "hours"], "properties": { "id": { "type": "string" }, "tenths": { "type": "integer" }, "hours": { "type": "string" } } } } }
+    }
+  }
+}
