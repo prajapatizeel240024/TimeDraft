@@ -118,24 +118,28 @@ function adminTime(e: CheckEntry, words: Words): Flag | null {
   return { entry_id: e.id, code: 'NON_BILLABLE_ADMIN', severity: 'block', message: 'Administrative work is not billable. Mark it non-billable or rewrite it.', evidence: hits };
 }
 
-// RFC 3339 the way checker-go reads interval times with time.Parse(time.RFC3339, ...): a T, an hour below 24, an offset.
+// Interval times are RFC 3339 date-times (contracts/checker.schema.json). Go's time.Parse also rejects a space for
+// the T, a missing offset, a day the month lacks and hour 24, but lets a few odd forms through, such as a one-digit
+// hour, a comma before the fraction or a +24:00 offset.
 const RFC3339 = /^(\d{4})-(\d{2})-(\d{2})T([01]\d|2[0-3]):[0-5]\d:[0-5]\d(\.\d+)?(Z|[+-]([01]\d|2[0-3]):[0-5]\d)$/;
 
-/** Milliseconds for an interval time. Any other format, or a day the month doesn't have, throws, as it does in Go. */
-function instant(s: string): number {
+/** Milliseconds for an interval time. Anything that isn't a strict RFC 3339 date-time throws. */
+function parseIntervalTime(s: string): number {
+  const bad = () => new Error(`bad interval time: ${JSON.stringify(s)}`);
   const m = RFC3339.exec(s);
-  const [y, mo, d] = m ? [Number(m[1]), Number(m[2]), Number(m[3])] : [0, 0, 0];
-  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
-  const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][mo - 1];
-  if (!m || !days || d < 1 || d > days) throw new Error(`bad interval time: ${JSON.stringify(s)}`);
-  return Date.parse(s);
+  if (!m) throw bad();
+  const ms = Date.parse(s);
+  // Date.parse rolls April 31 over to May 1, so also check that the day exists.
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  if (Number.isNaN(ms) || new Date(Date.UTC(y, mo - 1, d)).getUTCDate() !== d) throw bad();
+  return ms;
 }
 
 function overlapSeconds(a: CheckEntry, b: CheckEntry): number {
   let total = 0;
   for (const x of a.intervals) {
     for (const y of b.intervals) {
-      const [xs, xe, ys, ye] = [x.start, x.end, y.start, y.end].map(instant);
+      const [xs, xe, ys, ye] = [x.start, x.end, y.start, y.end].map(parseIntervalTime);
       const start = Math.max(xs, ys);
       const end = Math.min(xe, ye);
       if (end > start) total += (end - start) / 1000;
