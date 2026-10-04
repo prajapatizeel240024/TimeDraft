@@ -29,4 +29,17 @@ describe('reconcile', () => {
     call.participants = ['+1-212-555-0199'];
     expect(findCallMerges(list, phones)).toHaveLength(0);
   });
+  it('skips what it already merged, so a second run changes nothing', () => {
+    const list = acts('day-03');
+    const call = list.find((a) => a.id === 'd03p01')!;
+    // A callback from the same number 8 minutes later: the first call is closer to the meeting, so it stays unmerged.
+    list.push({ ...call, id: 'callback', external_id: 'callback', started_at: new Date(Date.parse(call.started_at) + 8 * 60_000).toISOString() });
+    const [m] = findCallMerges(list, phones);
+    expect(m).toEqual({ calendarId: 'd03c01', callId: 'd03p01' });
+    // Apply the merge the way reconcileDay does, then run again.
+    const ev = list.find((a) => a.id === m.calendarId)!;
+    Object.assign(ev, { started_at: call.started_at, meta: { ...ev.meta, merged_call: call.external_id } });
+    call.merged_into = ev.id;
+    expect(findCallMerges(list, phones)).toEqual([]);
+  });
 });

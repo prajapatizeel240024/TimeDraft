@@ -81,7 +81,7 @@ export async function runMatching(pool: Pool, dayId: string, firm: FirmConfig, l
     const counts = { auto: 0, needs_review: 0, ignored: 0 } as Record<string, number>;
     for (const d of decisions.values()) counts[d.status] = (counts[d.status] ?? 0) + 1;
     await audit(c, { subject_type: 'day', subject_id: dayId, actor: itemList.length ? `system+${llm.name}:match.v1` : 'system', action: 'matched', after: counts });
-    await c.query(`update days set status = 'matched' where id = $1 and status in ('ingested','reconciled')`, [dayId]);
+    await c.query(`update days set status = 'matched' where id = $1 and status in ('ingested','reconciled','failed')`, [dayId]);
   });
   return { activities, rules, items, answers, decisions };
 }

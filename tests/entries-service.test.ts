@@ -6,7 +6,7 @@ import { approveEntry, checkContext, editEntry, getEntryHistory, getEntryViews, 
 import { exportMatterDay, parseLedes } from '@/server/export/ledes';
 import { tsChecker } from '@/server/guidelines/index';
 import { ingestFixture } from '@/server/ingest/normalize';
-import { runDay } from '@/server/pipeline';
+import { runDay, type PipelineEvent } from '@/server/pipeline';
 import { loadFixture, oracleLLM } from '../evals/score';
 
 const url = dbUrl('eval');
@@ -95,5 +95,22 @@ describe('entries service', () => {
     for (const n of numbers) expect(n).toMatch(/^TD-M1002-20260310-\d$/);
     const audited = await pool.query<{ n: number }>(`select count(*)::int as n from audit_events where subject_type = 'export' and action = 'exported'`);
     expect(audited.rows[0].n).toBe(4);
+  });
+
+  it('re-runs the stages a failed run missed', async () => {
+    const deps = { llm: oracleLLM(), checker: tsChecker, threshold: 0.8 };
+    const { dayId: id } = await ingestFixture(pool, loadFixture('day-06'), loadFirm().attorney.id);
+    const stopAtReconcile = (e: PipelineEvent) => {
+      if (e.type === 'stage' && e.stage === 'reconcile') throw new Error('stopped before reconcile');
+    };
+    const status = async () => (await pool.query<{ status: string }>('select status from days where id = $1', [id])).rows[0].status;
+    await expect(runDay(pool, id, stopAtReconcile, deps)).rejects.toThrow('stopped before reconcile');
+    expect(await status()).toBe('failed');
+    await runDay(pool, id, () => undefined, deps);
+    expect(await status()).toBe('drafted');
+    const merged = await pool.query<{ n: number }>('select count(*)::int as n from activities where day_id = $1 and merged_into is not null', [id]);
+    expect(merged.rows[0].n).toBe(1);
+    const actions = await pool.query<{ action: string }>(`select action from audit_events where subject_type = 'day' and subject_id = $1 order by id`, [id]);
+    expect(actions.rows.map((r) => r.action)).toEqual(['created', 'matched']);
   });
 });
