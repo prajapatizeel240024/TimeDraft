@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "seconds": 1,
+      "tenths": 1
+    },
+    {
+      "seconds": 359,
+      "tenths": 1
+    },
+    {
+      "seconds": 360,
+      "tenths": 1
+    },
+    {
+      "seconds": 361,
+      "tenths": 2
+    },
+    {
+      "seconds": 719,
+      "tenths": 2
+    },
+    {
+      "seconds": 720,
+      "tenths": 2
+    },
+    {
+      "seconds": 721,
+      "tenths": 3
+    },
+    {
+      "seconds": 3600,
+      "tenths": 10
+    },
+    {
+      "seconds": 3601,
+      "tenths": 11
+    },
+    {
+      "seconds": 5399,
+      "tenths": 15
+    },
+    {
+      "seconds": 86400,
+      "tenths": 240
+    }
+  ],
+  "invalid": [
+    0,
+    -5
+  ]
+}
