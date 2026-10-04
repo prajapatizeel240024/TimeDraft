@@ -1,0 +1,106 @@
+# TimeDraft firm configuration: the single source of truth for the firm, the matters, the
+# contacts, the guideline profiles and the word lists. It feeds the seed, the matcher, the
+# prompts and the checker. Everything is synthetic: .example domains are reserved and
+# 555-01xx phone numbers are fictional.
+
+firm:
+  name: Ashgrove LLP
+  domain: ashgrove.example
+  ledes_firm_id: "00-0000000"   # LEDES wants the firm's taxpayer ID; this is a placeholder
+  admin_senders: [billing@ashgrove.example, it-help@ashgrove.example, cle@ashgrove.example]
+  admin_phones: ["+1-212-555-0100"]
+  colleagues:
+    - { name: Ruth Calloway, role: partner, email: rcalloway@ashgrove.example }
+    - { name: Tom Reyes, role: paralegal, email: treyes@ashgrove.example }
+
+attorney:
+  id: DW
+  name: "Whitfield, Dana"
+  display_name: Dana Whitfield
+  email: dwhitfield@ashgrove.example
+  classification: AS
+  rate_cents: 45000
+
+timezone: America/New_York
+
+profiles:
+  default: { max_entry_tenths: 30, min_words: 6, block_billing: warn, comm_max_tenths: 10, daily_max_tenths: 100 }
+  strict: { max_entry_tenths: 20, min_words: 8, block_billing: block, comm_max_tenths: 6, daily_max_tenths: 100 }
+
+matters:
+  - id: M-1001
+    name: Kestrel Logistics v. Calder Freight Lines
+    short_name: Kestrel v. Calder
+    stage: discovery
+    profile: default
+    client:
+      name: Kestrel Logistics Inc.
+      aliases: [Kestrel]
+      domains: [kestrel.example]
+      ledes_client_id: KESTREL
+      client_matter_id: KL-2026-014
+    parties:
+      - { name: Calder Freight Lines, role: opposing_party, aliases: [Calder] }
+      - { name: Pryor Vance LLP, role: opposing_counsel, domains: [pryorvance.example] }
+      - { name: Grant Vance, role: opposing_counsel, email: gvance@pryorvance.example, phone: "+1-212-555-0162" }
+      - { name: Janet Moss, role: client_contact, email: jmoss@kestrel.example, phone: "+1-212-555-0141" }
+    keywords: [bill of lading, interrogatories, "30(b)(6)", custodian, dispatch logs]
+    doc_folders: ["/Matters/M-1001 Kestrel v Calder/"]
+
+  - id: M-1002
+    name: Halberd Therapeutics v. Ostrander
+    short_name: Halberd v. Ostrander
+    stage: preliminary injunction
+    profile: strict
+    client:
+      name: Halberd Therapeutics Inc.
+      aliases: [Halberd]
+      domains: [halberd.example]
+      ledes_client_id: HALBERD
+      client_matter_id: HT-LIT-0392
+    parties:
+      - { name: Dr. Mira Ostrander, role: opposing_party, aliases: [Ostrander] }
+      - { name: Gray Kessler LLP, role: opposing_counsel, domains: [graykessler.example] }
+      - { name: Evan Kessler, role: opposing_counsel, email: ekessler@graykessler.example, phone: "+1-917-555-0128" }
+      - { name: Lauren Chu, role: client_contact, email: lchu@halberd.example, phone: "+1-617-555-0133" }
+    keywords: [preliminary injunction, trade secret, TRO, laptop, access logs]
+    doc_folders: ["/Matters/M-1002 Halberd v Ostrander/"]
+
+  - id: M-1003
+    name: Ruiz v. Bellhaven Hotel Group
+    short_name: Ruiz v. Bellhaven
+    stage: early case assessment and mediation
+    profile: default
+    client:
+      name: Bellhaven Hotel Group LLC
+      aliases: [Bellhaven]
+      domains: [bellhaven.example]
+      ledes_client_id: BELLHAVEN
+      client_matter_id: BHG-EMP-2207
+    parties:
+      - { name: Carlos Ruiz, role: opposing_party, aliases: [Ruiz] }
+      - { name: Amaro & Lutz PC, role: opposing_counsel, domains: [amarolutz.example] }
+      - { name: Nina Amaro, role: opposing_counsel, email: namaro@amarolutz.example, phone: "+1-718-555-0119" }
+      - { name: Strand ADR, role: mediator, domains: [strandadr.example] }
+      - { name: Ellen Strand, role: mediator, email: estrand@strandadr.example, phone: "+1-212-555-0175" }
+      - { name: Derek Holt, role: client_contact, email: dholt@bellhaven.example, phone: "+1-646-555-0150" }
+    keywords: [mediation, wage-and-hour, EEOC, overtime]
+    doc_folders: ["/Matters/M-1003 Ruiz v Bellhaven/"]
+
+shared_contacts:
+  - name: Lena Park
+    org: Brightline Forensics
+    email: lpark@brightline.example
+    phone: "+1-646-555-0187"
+    matters: [M-1001, M-1002]
+    note: damages expert on M-1001; forensic imaging of the laptop on M-1002
+
+words:
+  task_verbs: [draft, revise, review, analyze, research, prepare, attend, confer, telephone, call, email, correspond, meet, outline, edit, finalize, file, serve, summarize]
+  same_task_pairs: [[draft, revise], [review, analyze], [prepare, finalize], [prepare, file], [finalize, file], [draft, finalize], [revise, finalize], [meet, confer]]
+  vague_phrases: [review file, reviewed file, attention to, work on, worked on, various, misc, miscellaneous, follow up, follow-up, prepare for]
+  generic_objects: [file, files, document, documents, matter, case, notes, draft, drafts, folder, issues, items, materials]
+  role_words: [client, opposing counsel, mediator, court, paralegal, partner, expert, co-counsel, colleague]
+  admin: [timesheet, time entry, time entries, billing, invoice, CLE, webinar, IT ticket, password, VPN, conflicts check, firm meeting, practice group, business development, pitch, newsletter]
+  personal: [lunch, dentist, gym, doctor, school pickup, haircut]
+  generic_caps: [Rule, Motion, Set, First, Second, Third, Fourth, Request, Requests, Production, Interrogatories, Deposition, Brief, Reply, Opposition, Declaration, Statement, Memorandum, Court, Hearing, Mediation, Preliminary, Injunction, Plaintiff, Defendant, Order, Notice, Complaint, Answer, Exhibit, Agreement, Settlement, Report, Draft, Supplemental, Expedited, Discovery, Early, Case, Assessment, Confidential, Responses, Objections, Outline, Notes, Logs, Records]
