@@ -20,7 +20,7 @@ export function phoneDirectory(firm: FirmConfig): Map<string, string[]> {
 
 export function findCallMerges(activities: Activity[], phones: Map<string, string[]>): { calendarId: string; callId: string }[] {
   // An event that already took a call's time is done, so running reconcile again changes nothing.
-  const events = activities.filter((a) => a.source === 'calendar' && a.est_seconds > 0 && !a.merged_into && !a.meta.merged_call);
+  const events = activities.filter((a) => a.source === 'calendar' && a.est_seconds > 0 && !a.merged_into && a.meta.merged_call === undefined);
   const calls = activities.filter((a) => a.source === 'call' && !a.merged_into);
   const merges: { calendarId: string; callId: string }[] = [];
   const used = new Set<string>();

@@ -113,4 +113,21 @@ describe('entries service', () => {
     const actions = await pool.query<{ action: string }>(`select action from audit_events where subject_type = 'day' and subject_id = $1 order by id`, [id]);
     expect(actions.rows.map((r) => r.action)).toEqual(['created', 'matched']);
   });
+
+  it('reconciles a day again without merging anything twice', async () => {
+    const deps = { llm: oracleLLM(), checker: tsChecker, threshold: 0.8 };
+    const { dayId: id } = await ingestFixture(pool, loadFixture('day-09'), loadFirm().attorney.id);
+    const stopAtMatch = (e: PipelineEvent) => {
+      if (e.type === 'stage' && e.stage === 'match') throw new Error('stopped before match');
+    };
+    const mergedEvents = async () => (await pool.query(`select id, est_seconds, meta from activities where day_id = $1 and meta ? 'merged_call'`, [id])).rows;
+    await expect(runDay(pool, id, stopAtMatch, deps)).rejects.toThrow('stopped before match');
+    const first = await mergedEvents();
+    expect(first).toHaveLength(1);
+    await runDay(pool, id, () => undefined, deps);
+    expect(await mergedEvents()).toEqual(first);
+    const calls = await pool.query<{ n: number }>('select count(*)::int as n from activities where day_id = $1 and merged_into is not null', [id]);
+    expect(calls.rows[0].n).toBe(1);
+    expect((await pool.query<{ status: string }>('select status from days where id = $1', [id])).rows[0].status).toBe('drafted');
+  });
 });
