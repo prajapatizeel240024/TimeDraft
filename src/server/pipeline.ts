@@ -35,12 +35,12 @@ export async function runDay(pool: Pool, dayId: string, emit: (e: PipelineEvent)
   const status = async () => (await pool.query<{ status: string }>('select status from days where id = $1', [dayId])).rows[0]?.status;
   try {
     if ((await status()) === undefined) throw new HttpError(404, 'That day has not been loaded.');
-    if ((await status()) === 'ingested') {
+    const matched = await pool.query('select 1 from activity_matches am join activities a on a.id = am.activity_id where a.day_id = $1 limit 1', [dayId]);
+    // Until the day has matches, reconcile and match both run. A failed run leaves the status at 'failed' whatever
+    // stage it stopped in, so reconcile can't be skipped by status; it skips what it already merged instead.
+    if (!matched.rowCount) {
       await emit({ type: 'stage', stage: 'reconcile', message: 'Merging calendar events with their call logs' });
       await reconcileDay(pool, dayId, firm);
-    }
-    const matched = await pool.query('select 1 from activity_matches am join activities a on a.id = am.activity_id where a.day_id = $1 limit 1', [dayId]);
-    if (!matched.rowCount) {
       await emit({ type: 'stage', stage: 'match', message: 'Matching activities to matters' });
       const run = await runMatching(pool, dayId, firm, deps.llm, deps.threshold);
       const ds = [...run.decisions.values()];

@@ -3,7 +3,7 @@
 import type { Pool } from 'pg';
 import { loadFirm } from '@/lib/config';
 import { withTx } from '@/server/db';
-import { HttpError } from '@/server/entries/service';
+import { audit, HttpError } from '@/server/entries/service';
 import { formatHours } from '@/server/time/rounding';
 
 export const LEDES_FIELDS = [
@@ -78,27 +78,29 @@ export async function exportMatterDay(pool: Pool, matterId: string, dayId: strin
   if (!entries.rowCount) throw new HttpError(422, 'Approve at least one billable entry for this matter before exporting.');
   const date = day.rows[0].work_date;
   const base = `TD-${matterId.replace('-', '')}-${ymd(date)}`;
-  const taken = await pool.query<{ n: number }>(`select count(*)::int as n from exports where invoice_number like $1`, [`${base}%`]);
-  const invoiceNumber = taken.rows[0].n ? `${base}-${taken.rows[0].n + 1}` : base;
-  const { text, totalCents } = buildLedes({
-    invoiceDate: date,
-    invoiceNumber,
-    clientId: matter.rows[0].ledes_client_id,
-    lawFirmMatterId: matterId,
-    periodStart: date,
-    periodEnd: date,
-    description: 'Professional services',
-    lawFirmId: firm.firm.ledes_firm_id,
-    clientMatterId: matter.rows[0].client_matter_id,
-    timekeeper: { id: firm.attorney.id, name: firm.attorney.name, classification: firm.attorney.classification, rateCents: firm.attorney.rate_cents },
-    lines: entries.rows.map((e) => ({ date: e.work_date, unitsTenths: e.units_tenths, taskCode: e.task_code, activityCode: e.activity_code, narrative: e.narrative })),
-  });
-  await withTx(pool, async (c) => {
+  return withTx(pool, async (c) => {
+    // One export per matter and day at a time, so two exports can't both take the next invoice number.
+    await c.query('select pg_advisory_xact_lock(hashtext($1))', [base]);
+    const taken = await c.query<{ n: number }>(`select count(*)::int as n from exports where invoice_number like $1`, [`${base}%`]);
+    const invoiceNumber = taken.rows[0].n ? `${base}-${taken.rows[0].n + 1}` : base;
+    const { text, totalCents } = buildLedes({
+      invoiceDate: date,
+      invoiceNumber,
+      clientId: matter.rows[0].ledes_client_id,
+      lawFirmMatterId: matterId,
+      periodStart: date,
+      periodEnd: date,
+      description: 'Professional services',
+      lawFirmId: firm.firm.ledes_firm_id,
+      clientMatterId: matter.rows[0].client_matter_id,
+      timekeeper: { id: firm.attorney.id, name: firm.attorney.name, classification: firm.attorney.classification, rateCents: firm.attorney.rate_cents },
+      lines: entries.rows.map((e) => ({ date: e.work_date, unitsTenths: e.units_tenths, taskCode: e.task_code, activityCode: e.activity_code, narrative: e.narrative })),
+    });
     const ins = await c.query<{ id: string }>(
       `insert into exports (matter_id, invoice_number, period_start, period_end, entry_ids, total_cents, file_text) values ($1,$2,$3,$4,$5,$6,$7) returning id`,
       [matterId, invoiceNumber, date, date, entries.rows.map((e) => e.id), totalCents, text],
     );
-    await c.query(`insert into audit_events (subject_type, subject_id, actor, action, after) values ('export', $1, $2, 'exported', $3)`, [ins.rows[0].id, actor, JSON.stringify({ invoice_number: invoiceNumber, matter_id: matterId, entries: entries.rowCount, total_cents: totalCents })]);
+    await audit(c, { subject_type: 'export', subject_id: ins.rows[0].id, actor, action: 'exported', after: { invoice_number: invoiceNumber, matter_id: matterId, entries: entries.rowCount, total_cents: totalCents } });
+    return { filename: `${invoiceNumber}.txt`, text, invoiceNumber };
   });
-  return { filename: `${invoiceNumber}.txt`, text, invoiceNumber };
 }

@@ -451,7 +451,7 @@ const T: Template[] = [
     summary: 'Business development pitch for a prospective client (non-billable).',
     render: (ctx, block, start, minutes) => {
       const end = start + minutes * MIN;
-      return { end, trueSeconds: end - start, ids: [doc(ctx, block, { path: '/BD/Pitch - Northgate Foods (prospect).pptx', start, end })] };
+      return { end, trueSeconds: end - start, ids: [doc(ctx, block, { path: '/BD/Pitch - Wrenmoor Foods (prospect).pptx', start, end })] };
     },
   },
 
@@ -620,7 +620,10 @@ function checkContacts(): void {
 }
 
 function main() {
-  const seed = Number(process.argv[process.argv.indexOf('--seed') + 1] || 42);
+  const at = process.argv.findIndex((a) => a === '--seed' || a.startsWith('--seed='));
+  const raw = at === -1 ? '42' : process.argv[at] === '--seed' ? process.argv[at + 1] : process.argv[at].slice('--seed='.length);
+  if (!/^\d+$/.test(raw ?? '')) throw new Error('--seed needs a whole number, such as --seed 42.');
+  const seed = Number(raw);
   checkContacts();
   const rows: string[] = [];
   for (let i = 0; i < DATES.length; i++) {

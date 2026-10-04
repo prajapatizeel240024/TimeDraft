@@ -19,7 +19,8 @@ export function phoneDirectory(firm: FirmConfig): Map<string, string[]> {
 }
 
 export function findCallMerges(activities: Activity[], phones: Map<string, string[]>): { calendarId: string; callId: string }[] {
-  const events = activities.filter((a) => a.source === 'calendar' && a.est_seconds > 0 && !a.merged_into);
+  // An event that already took a call's time is done, so running reconcile again changes nothing.
+  const events = activities.filter((a) => a.source === 'calendar' && a.est_seconds > 0 && !a.merged_into && a.meta.merged_call === undefined);
   const calls = activities.filter((a) => a.source === 'call' && !a.merged_into);
   const merges: { calendarId: string; callId: string }[] = [];
   const used = new Set<string>();
@@ -55,7 +56,7 @@ export async function reconcileDay(pool: Pool, dayId: string, firm: FirmConfig):
       );
       await c.query('update activities set merged_into = $2 where id = $1', [call.id, ev.id]);
     }
-    await c.query(`update days set status = 'reconciled' where id = $1 and status = 'ingested'`, [dayId]);
+    await c.query(`update days set status = 'reconciled' where id = $1 and status in ('ingested','failed')`, [dayId]);
   });
   return { merged: merges.length };
 }

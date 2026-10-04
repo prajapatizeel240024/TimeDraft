@@ -41,7 +41,7 @@ describe('rule matching on all 12 synthetic days', () => {
   });
   it('matches terms on word boundaries', () => {
     expect(hasTerm('Call w/ Janet Moss', 'Moss')).toBe(true);
-    expect(hasTerm('Mossberg filings', 'Moss')).toBe(false);
+    expect(hasTerm('Mosswick filings', 'Moss')).toBe(false);
     expect(hasTerm('Rule 30(b)(6) notice', '30(b)(6)')).toBe(true);
   });
 });

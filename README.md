@@ -26,7 +26,7 @@ No API key yet? Set `LLM_MODE=oracle` in `.env.local` to use the answer-key stan
 | --- | --- |
 | `npm run dev` | The review screen at localhost:3000 |
 | `npm run day:load -- day-03` | Drafts one day from the command line (add `--llm oracle` to skip Claude) |
-| `npm run test` | 111 tests, including the shared guideline fixtures and the database-backed entries service |
+| `npm run test` | 119 tests, including the shared guideline fixtures and the database-backed entries service |
 | `npm run typecheck` | TypeScript, strict |
 | `npm run eval -- --split dev` | Scores the 8 dev days and writes `evals/reports/<time>-dev.md` |
 | `npm run eval -- --split holdout` | The 4 holdout days. Run it once, at the end |
