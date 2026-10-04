@@ -39,3 +39,17 @@ describe('checker helpers', () => {
     expect(lastWord('Attend hearing (Part 12).')).toBe('12');
   });
 });
+
+describe('interval times', () => {
+  const [e1, e2] = fx.cases.find((c) => c.name === 'overlap: two entries share 30 minutes')!.entries;
+  const check = (start: string) =>
+    checkEntries({ profiles: fx.profiles, words: fx.words, daily_max_tenths: fx.daily_max_tenths, entries: [e1, { ...e2, intervals: [{ start, end: '2026-03-10T15:30:00Z' }] }] });
+  it('reads RFC 3339 times with an offset and fractional seconds', () => {
+    expect(check('2026-03-10T10:30:00.000-04:00').map((f) => f.code)).toEqual(['OVERLAP', 'OVERLAP']);
+  });
+  it('rejects any other time, as checker-go does', () => {
+    for (const bad of ['2026-03-10 14:30:00Z', '2026-03-10T14:30:00', '2026-04-31T14:30:00Z', '2026-03-10T24:00:00Z', 'not a time', '']) {
+      expect(() => check(bad), bad).toThrow(/bad interval time/);
+    }
+  });
+});
