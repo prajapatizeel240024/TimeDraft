@@ -198,7 +198,11 @@ export async function editEntry(pool: Pool, id: string, patch: EntryPatch, actor
     const sets = keys.map((k, i) => `${k} = $${i + 2}`).join(', ');
     await c.query(`update time_entries set ${sets}, version = version + 1, updated_at = now() where id = $1`, [id, ...keys.map((k) => next[k])]);
     if (next.narrative !== undefined) await c.query(`delete from entry_flags where entry_id = $1 and code = 'UNGROUNDED_TERM'`, [id]);
-    const rewrite = patch.via === 'rewrite';
+    // A changed entry needs a fresh reason, so overrides are cleared before the flags are recomputed.
+    await c.query(`update entry_flags set override_reason = null where entry_id = $1 and override_reason is not null`, [id]);
+    // Credited to Claude only when Claude's narrative is the only change: a save that also touches hours, codes or
+    // billable is the attorney's edit, so the audit row never says Claude changed something it didn't.
+    const rewrite = patch.via === 'rewrite' && next.narrative !== undefined && keys.every((k) => k === 'narrative' || k === 'thin_context');
     await audit(c, { subject_type: 'entry', subject_id: id, version: e.version + 1, actor: rewrite ? `${actor} via claude:rewrite.v1` : actor, action: rewrite ? 'rewritten' : 'edited', before: snapshot(e, keys), after: next });
     await recomputeDayFlags(c, e.day_id, ctx);
   });
@@ -208,12 +212,13 @@ export async function approveEntry(pool: Pool, id: string, body: { version: numb
   await withTx(pool, async (c) => {
     const e = await lockEntry(c, id, body.version);
     if (e.status !== 'draft') throw new HttpError(409, `This entry is already ${e.status}.`);
-    const blocking = await c.query<{ code: string; message: string }>(`select code, message from entry_flags where entry_id = $1 and severity = 'block'`, [id]);
+    // Only block flags without a saved override need a reason; Reopen keeps earlier overrides, an edit clears them.
+    const blocking = await c.query<{ code: string; message: string }>(`select code, message from entry_flags where entry_id = $1 and severity = 'block' and override_reason is null`, [id]);
     const reason = body.override_reason?.trim();
     if (blocking.rowCount && !reason) {
       throw new HttpError(422, `Fix ${blocking.rows.map((f) => f.code.replace(/_/g, ' ').toLowerCase()).join(' and ')} first, or give a reason to approve anyway.`);
     }
-    if (blocking.rowCount) await c.query(`update entry_flags set override_reason = $2 where entry_id = $1 and severity = 'block'`, [id, reason]);
+    if (blocking.rowCount) await c.query(`update entry_flags set override_reason = $2 where entry_id = $1 and severity = 'block' and override_reason is null`, [id, reason]);
     await c.query(`update time_entries set status = 'approved', version = version + 1, updated_at = now() where id = $1`, [id]);
     await audit(c, { subject_type: 'entry', subject_id: id, version: e.version + 1, actor, action: 'approved', before: { status: e.status }, after: { status: 'approved', overridden: blocking.rows.map((f) => f.code) }, reason: reason ?? null });
   });
@@ -454,7 +459,9 @@ export async function getDayView(db: Queryable, dayId: string, checker: Guidelin
     profiles: input.profiles,
     daily_max_tenths: input.daily_max_tenths,
     checker: checker.name,
-    llm: process.env.LLM_MODE ?? 'anthropic',
+    llm: process.env.LLM_MODE ?? 'anthropic', // the server's mode now; the CLI prints it
+    // How the entries on screen were drafted ('oracle' marks the answer-key stand-in). The footer uses this, not llm.
+    drafted_by: [...new Set(entries.flatMap((e) => (e.prompt_version ? [e.prompt_version] : [])))].sort(),
   };
 }
 

@@ -157,6 +157,9 @@ export interface RewriteOutput {
   facts_used: { activity_ref: string; fact: string }[];
 }
 
+/** What the rewrite route returns: Claude's answer plus a token that proves a saved narrative is this suggestion ("" when Claude asks a question). */
+export type RewriteSuggestion = RewriteOutput & { token: string };
+
 export interface LLMCallMeta {
   promptVersion: string;
   model: string;

@@ -1,12 +1,15 @@
 // Runs against the local eval database (reset here), with the answer-key stand-in instead of Claude.
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { loadFirm } from '@/lib/config';
+import { loadEnv, loadFirm } from '@/lib/config';
+import { MatchOutputZ } from '@/lib/schemas';
 import { closePools, dbUrl, getPool, migrate, resetDb } from '@/server/db';
 import { approveEntry, checkContext, editEntry, getEntryHistory, getEntryViews, rejectEntry, reopenEntry } from '@/server/entries/service';
 import { exportMatterDay, parseLedes } from '@/server/export/ledes';
 import { tsChecker } from '@/server/guidelines/index';
 import { ingestFixture } from '@/server/ingest/normalize';
-import { runDay, type PipelineEvent } from '@/server/pipeline';
+import { cacheKey, logCall } from '@/server/llm/cache';
+import { callStructured, LLMUnavailableError, ModelOutputError, RefusalError } from '@/server/llm/client';
+import { jsonError, runDay, suggestRewrite, verifyRewriteToken, type PipelineEvent } from '@/server/pipeline';
 import { loadFixture, oracleLLM } from '../evals/score';
 
 const url = dbUrl('eval');
@@ -116,7 +119,8 @@ describe('entries service', () => {
 
   it('reconciles a day again without merging anything twice', async () => {
     const deps = { llm: oracleLLM(), checker: tsChecker, threshold: 0.8 };
-    const { dayId: id } = await ingestFixture(pool, loadFixture('day-09'), loadFirm().attorney.id);
+    // A second copy of dev day 06 under its own id, because the oracle never runs on a holdout day.
+    const { dayId: id } = await ingestFixture(pool, { ...loadFixture('day-06'), day_id: 'day-96' }, loadFirm().attorney.id);
     const stopAtMatch = (e: PipelineEvent) => {
       if (e.type === 'stage' && e.stage === 'match') throw new Error('stopped before match');
     };
@@ -129,5 +133,91 @@ describe('entries service', () => {
     const calls = await pool.query<{ n: number }>('select count(*)::int as n from activities where day_id = $1 and merged_into is not null', [id]);
     expect(calls.rows[0].n).toBe(1);
     expect((await pool.query<{ status: string }>('select status from days where id = $1', [id])).rows[0].status).toBe('drafted');
+  });
+
+  it('approves a reopened entry again without a new reason, because Reopen keeps the overrides', async () => {
+    const e = await entryWhere((x) => x.status === 'draft');
+    await editEntry(pool, e.id, { version: e.version, narrative: 'Reviewed file.' }, 'attorney:DW', ctx);
+    const vague = await entryWhere((x) => x.id === e.id);
+    expect(vague.flags.some((f) => f.severity === 'block' && !f.override_reason)).toBe(true);
+    await approveEntry(pool, e.id, { version: vague.version, override_reason: 'Client agreed to short narratives for this task.' }, 'attorney:DW');
+    await reopenEntry(pool, e.id, { version: vague.version + 1 }, 'attorney:DW', ctx);
+    const reopened = await entryWhere((x) => x.id === e.id);
+    expect(reopened.flags.filter((f) => f.severity === 'block').every((f) => f.override_reason)).toBe(true);
+    await approveEntry(pool, e.id, { version: reopened.version }, 'attorney:DW');
+    expect((await entryWhere((x) => x.id === e.id)).status).toBe('approved');
+  });
+
+  it('asks for a fresh reason after an edit, because an edit clears the overrides', async () => {
+    const e = await entryWhere((x) => x.status === 'draft');
+    await editEntry(pool, e.id, { version: e.version, narrative: 'Reviewed file.' }, 'attorney:DW', ctx);
+    let cur = await entryWhere((x) => x.id === e.id);
+    await approveEntry(pool, e.id, { version: cur.version, override_reason: 'Client agreed to short narratives for this task.' }, 'attorney:DW');
+    await reopenEntry(pool, e.id, { version: cur.version + 1 }, 'attorney:DW', ctx);
+    cur = await entryWhere((x) => x.id === e.id);
+    await editEntry(pool, e.id, { version: cur.version, narrative: 'Reviewed the file again.' }, 'attorney:DW', ctx);
+    cur = await entryWhere((x) => x.id === e.id);
+    expect(cur.flags.some((f) => f.severity === 'block')).toBe(true);
+    expect(cur.flags.every((f) => f.override_reason === null)).toBe(true);
+    await expect(approveEntry(pool, e.id, { version: cur.version }, 'attorney:DW')).rejects.toMatchObject({ status: 422 });
+  });
+
+  it('skips a cached answer that fails the match schema and calls Claude as on a miss', async () => {
+    loadEnv();
+    const saved = { ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY, LLM_CACHE: process.env.LLM_CACHE };
+    process.env.ANTHROPIC_API_KEY = '';
+    process.env.LLM_CACHE = 'on';
+    const call = { purpose: 'match' as const, model: 'claude-haiku-4-5-20251001', promptVersion: 'match.v1', system: 'Place each activity on a matter.', user: '[]', schema: { type: 'object' }, zod: MatchOutputZ, maxTokens: 600 };
+    const key = cacheKey({ model: call.model, prompt: call.promptVersion, system: call.system, user: call.user, schema: call.schema });
+    try {
+      await logCall(pool, { purpose: 'match', model: call.model, promptVersion: call.promptVersion, cacheKey: key, request: {}, response: { matches: [{ activity_ref: 'a1', confidence: 7 }] }, stopReason: 'end_turn', inputTokens: null, outputTokens: null, latencyMs: null });
+      // With the bad row skipped, callStructured needs Claude, and there is no key.
+      await expect(callStructured(pool, call)).rejects.toBeInstanceOf(LLMUnavailableError);
+    } finally {
+      await pool.query('delete from llm_calls where cache_key = $1', [key]);
+      for (const [name, value] of Object.entries(saved)) {
+        if (value === undefined) delete process.env[name];
+        else process.env[name] = value;
+      }
+    }
+  });
+
+  it('maps bad Claude output and refusals to 502, a missing API key to 503 and an invalid id to 400', async () => {
+    expect(jsonError(new ModelOutputError()).status).toBe(502);
+    expect(jsonError(new RefusalError('Claude declined the rewrite request.')).status).toBe(502);
+    expect(jsonError(new LLMUnavailableError('ANTHROPIC_API_KEY is not set.')).status).toBe(503);
+    const invalidId = await pool.query('select id from time_entries where id = $1', ['not-a-uuid']).catch((err: unknown) => err);
+    expect(invalidId).toMatchObject({ code: '22P02' });
+    const res = jsonError(invalidId);
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: "That id isn't valid." });
+  });
+
+  it('accepts a rewrite token only for the same entry, version and narrative, and credits Claude only for a narrative-only change', async () => {
+    const e = await entryWhere((x) => x.status === 'draft');
+    const s = await suggestRewrite(pool, e.id, 'Calder 30(b)(6) depo outline', oracleLLM());
+    expect(s.status).toBe('rewritten');
+    expect(s.token).toMatch(/^[0-9a-f]{64}$/);
+    expect(verifyRewriteToken(e.id, e.version, s.narrative, s.token)).toBe(true);
+    const other = await entryWhere((x) => x.id !== e.id);
+    expect(verifyRewriteToken(other.id, e.version, s.narrative, s.token)).toBe(false);
+    expect(verifyRewriteToken(e.id, e.version + 1, s.narrative, s.token)).toBe(false);
+    expect(verifyRewriteToken(e.id, e.version, `${s.narrative} Edited by hand.`, s.token)).toBe(false);
+    // Claude is credited only when its narrative is the only change. A new narrative saved with an hours change is the
+    // attorney's edit, and so is an hours change that keeps the stored narrative.
+    const moreHours = (u: number) => (u === 240 ? 239 : u + 1);
+    await editEntry(pool, e.id, { version: e.version, narrative: `${e.narrative} Reviewed with the client.`, units_tenths: moreHours(e.units_tenths), via: 'rewrite' }, 'attorney:DW', ctx);
+    expect((await getEntryHistory(pool, e.id))[0]).toMatchObject({ action: 'edited', actor: 'attorney:DW' });
+    const cur = await entryWhere((x) => x.id === e.id);
+    await editEntry(pool, e.id, { version: cur.version, narrative: cur.narrative, units_tenths: moreHours(cur.units_tenths), via: 'rewrite' }, 'attorney:DW', ctx);
+    expect((await getEntryHistory(pool, e.id))[0]).toMatchObject({ action: 'edited', actor: 'attorney:DW' });
+  });
+
+  it('never runs the oracle on a holdout day', async () => {
+    // The check keys on the day's fixture id, so dev day 03's activities under the id day-09 are enough.
+    const { dayId: id } = await ingestFixture(pool, { ...loadFixture('day-03'), day_id: 'day-09' }, loadFirm().attorney.id);
+    await expect(runDay(pool, id, () => undefined, { llm: oracleLLM(), checker: tsChecker, threshold: 0.8 })).rejects.toMatchObject({ status: 422 });
+    const drafted = await pool.query<{ n: number }>('select count(*)::int as n from time_entries where day_id = $1', [id]);
+    expect(drafted.rows[0].n).toBe(0);
   });
 });
