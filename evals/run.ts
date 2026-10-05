@@ -1,7 +1,8 @@
 // npm run eval -- [--split dev|holdout|all] [--threshold 0.8] [--checker ts|go] [--llm anthropic|oracle] [--no-cache]
 // Runs the real pipeline on each synthetic day against a fresh local eval database, scores it against the
 // answer keys twice ("auto" = before any human click, "after review" = queue resolved from the key, like a
-// perfect attorney), sweeps the match threshold, and writes evals/reports/<timestamp>.md and .json.
+// perfect attorney), sweeps the match threshold, and writes evals/reports/<timestamp>-<split>-<llm>.md and .json.
+// The oracle answers from the keys, so it runs on the dev split only.
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Pool } from 'pg';
@@ -14,6 +15,7 @@ import { ingestFixture } from '@/server/ingest/normalize';
 import { reconcileDay } from '@/server/ingest/reconcile';
 import { getLLM } from '@/server/llm/client';
 import { decide, runMatching, type MatchRun } from '@/server/match/index';
+import { parseThreshold } from '@/server/pipeline';
 import { listDays, loadFixture, loadKey, scoreDay, type DayScore, type Snapshot } from './score';
 
 const arg = (name: string) => {
@@ -90,9 +92,13 @@ function headline(auto: DayScore[], after: DayScore[]) {
 async function main() {
   loadEnv();
   const split = (arg('--split') ?? 'dev') as 'dev' | 'holdout' | 'all';
-  const threshold = Number(arg('--threshold') ?? process.env.MATCH_THRESHOLD ?? '0.8');
+  const flag = arg('--threshold');
+  const threshold = flag === undefined ? parseThreshold(process.env.MATCH_THRESHOLD) : parseThreshold(flag, '--threshold');
   if (arg('--llm')) process.env.LLM_MODE = arg('--llm');
   if (process.argv.includes('--no-cache')) process.env.LLM_CACHE = 'off';
+  if (process.env.LLM_MODE === 'oracle' && (split === 'holdout' || split === 'all')) {
+    throw new Error('The oracle answers from the keys, so running it on holdout would show you the answers. Use --split dev.');
+  }
   const url = dbUrl('eval');
   await migrate(url);
   await resetDb(url); // keeps llm_calls, so repeated runs replay Claude's answers unless --no-cache
@@ -191,10 +197,11 @@ async function main() {
 
   const outDir = path.join('evals', 'reports');
   fs.mkdirSync(outDir, { recursive: true });
-  fs.writeFileSync(path.join(outDir, `${stamp}-${split}.md`), md);
-  fs.writeFileSync(path.join(outDir, `${stamp}-${split}.json`), JSON.stringify({ split, threshold, llm: llm.name, checker: checker.name, headline: rows, sweep, auto, after, calls: calls.rows }, null, 2));
+  const name = `${stamp}-${split}-${llm.name}`; // the LLM in the name keeps an oracle report from passing for a Claude one
+  fs.writeFileSync(path.join(outDir, `${name}.md`), md);
+  fs.writeFileSync(path.join(outDir, `${name}.json`), JSON.stringify({ split, threshold, llm: llm.name, checker: checker.name, headline: rows, sweep, auto, after, calls: calls.rows }, null, 2));
   console.log(md.split('## Per day')[0]);
-  console.log(`Report: evals/reports/${stamp}-${split}.md`);
+  console.log(`Report: evals/reports/${name}.md`);
 }
 
 main()

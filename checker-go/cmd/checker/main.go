@@ -17,7 +17,7 @@ import (
 func main() {
 	addr := os.Getenv("ADDR")
 	if addr == "" {
-		addr = ":8081"
+		addr = "127.0.0.1:8081"
 	}
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	srv := &http.Server{

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 800" width="760" height="800" role="img" aria-labelledby="title desc">
 <title id="title">Every Claude answer is logged before it is checked; only end_turn is returned</title>
-<desc id="desc">A cache hit is parsed and returned without writing a row. On a miss, every reply from Claude is logged to llm_calls before its stop_reason is checked, and only an end_turn reply is parsed and returned.</desc>
+<desc id="desc">A cached answer is re-checked with zod: a valid one is returned without writing a row, and one that fails is skipped as if there were no hit. On a miss, every reply from Claude is logged to llm_calls before its stop_reason is checked, and only an end_turn reply that passes zod is returned. Bad output throws ModelOutputError, which the routes answer with 502.</desc>
 <style>
   text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
   .bg { fill: #ffffff; } .ink { fill: #1f1f1d; } .quiet { fill: #5f5e59; }
@@ -48,10 +48,10 @@
 <rect x="512" y="164" width="224" height="88" rx="8" class="box"/>
 <text x="524" y="188" class="ink" font-size="13" font-weight="600">Return cached answer</text>
 <text x="524" y="204" class="ink" font-size="11.5">Newest end_turn row for the key</text>
-<text x="524" y="220" class="ink" font-size="11.5">Checked by zod.parse</text>
+<text x="524" y="220" class="ink" font-size="11.5">Checked by zod; bad rows skipped</text>
 <text x="524" y="236" class="ink" font-size="11.5">Writes no llm_calls row</text>
 <rect x="512" y="268" width="224" height="72" rx="8" class="box"/>
-<text x="524" y="292" class="ink" font-size="13" font-weight="600">LLMUnavailableError</text>
+<text x="524" y="292" class="ink" font-size="13" font-weight="600">LLMUnavailableError (503)</text>
 <text x="524" y="308" class="ink" font-size="11.5">ANTHROPIC_API_KEY is unset</text>
 <text x="524" y="324" class="quiet" font-size="11.5">Fully cached runs need no key</text>
 <rect x="208" y="368" width="288" height="88" rx="8" class="box"/>
@@ -70,15 +70,15 @@
 <text x="36" y="660" class="ink" font-size="11.5">Each try logs a row</text>
 <rect x="512" y="596" width="224" height="88" rx="8" class="box"/>
 <text x="524" y="620" class="ink" font-size="13" font-weight="600">Throw an error</text>
-<text x="524" y="636" class="ink" font-size="11.5">refusal: RefusalError</text>
+<text x="524" y="636" class="ink" font-size="11.5">refusal: RefusalError (502)</text>
 <text x="524" y="652" class="ink" font-size="11.5">2nd max_tokens: Error</text>
 <text x="524" y="668" class="ink" font-size="11.5">Any other stop: Error</text>
 <rect x="208" y="704" width="288" height="72" rx="8" class="main"/>
 <text x="220" y="728" class="ink" font-size="13" font-weight="600">Return the answer</text>
 <text x="220" y="744" class="ink" font-size="11.5">zod adds limits the API can't enforce</text>
-<text x="220" y="760" class="ink" font-size="11.5">Null or mismatched JSON throws</text>
+<text x="220" y="760" class="ink" font-size="11.5">Bad JSON throws ModelOutputError (502)</text>
 <polygon points="288,208 352,176 416,208 352,240" class="box"/>
-<text x="352" y="212" class="ink" font-size="13" text-anchor="middle">Cache hit?</text>
+<text x="352" y="212" class="ink" font-size="13" text-anchor="middle">Valid hit?</text>
 <polygon points="288,304 352,272 416,304 352,336" class="box"/>
 <text x="352" y="308" class="ink" font-size="13" text-anchor="middle">API key set?</text>
 <polygon points="288,640 352,608 416,640 352,672" class="box"/>

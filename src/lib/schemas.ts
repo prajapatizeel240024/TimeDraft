@@ -140,9 +140,10 @@ export const PatchEntryBody = z.object({
   activity_code: z.string().optional(),
   narrative: z.string().trim().min(1).max(400).optional(),
   billable: z.boolean().optional(),
-  via: z.enum(['edit', 'rewrite']).optional(),
+  rewrite_token: z.string().regex(/^[0-9a-f]{64}$/i, '64 hex characters').optional(),
 });
 export const ApproveBody = z.object({ version: z.number().int().positive(), override_reason: z.string().trim().max(300).optional() });
 export const RejectBody = z.object({ version: z.number().int().positive(), reason: z.string().trim().min(1).max(300) });
 export const ReopenBody = z.object({ version: z.number().int().positive() });
 export const RewriteBody = z.object({ hint: z.string().trim().max(300).default('') });
+export const LedesExportBody = z.object({ day_id: z.uuid() });

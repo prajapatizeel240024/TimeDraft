@@ -19,6 +19,11 @@ Read README.md, then docs/ARCHITECTURE.md if it exists (export the design doc th
 - Below MATCH_THRESHOLD, or when Claude's quotes aren't in the text, an activity goes to the review queue. Never auto-assign it.
 - src/server/guidelines/rules.ts and checker-go/internal/guidelines/rules.go change together, and both must pass contracts/fixtures/guidelines.json.
 - LLM_MODE=oracle is for tests only. Its numbers are never reported as results.
+- Everything binds to 127.0.0.1. Nothing is deployed, published or exposed.
+- A narrative counts as Claude's rewrite only with a valid rewrite_token.
+- MATCH_THRESHOLD must parse to a number above 0 and at most 1.
+- The oracle never runs on holdout.
+- CHECKER_URL must be a loopback address.
 
 ## Commands
 npm run db:up | db:migrate | db:seed | db:reset

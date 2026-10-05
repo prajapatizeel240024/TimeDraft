@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 616" width="760" height="616" role="img" aria-labelledby="title desc">
 <title id="title">Every change locks the entry, checks its version and writes one audit row</title>
-<desc id="desc">An entry is born a draft and changes only along the arrows: approve and reject move its status, reopen sends it back to draft, and an edit or saved rewrite keeps it a draft. Each of those attorney actions runs the same steps in one transaction, so a stale page gets a 409 and every real change leaves exactly one audit row.</desc>
+<desc id="desc">An entry is born a draft and changes only along the arrows: approve and reject move its status, reopen sends it back to draft, and an edit or saved rewrite keeps it a draft. Approve asks for a reason only for block flags without a saved override: reopen keeps overrides, and an edit clears them. Each of those attorney actions runs the same steps in one transaction, so a stale page gets a 409 and every real change leaves exactly one audit row.</desc>
 <style>
   text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
   .bg { fill: #ffffff; } .ink { fill: #1f1f1d; } .quiet { fill: #5f5e59; }
@@ -55,7 +55,7 @@
 <rect x="40" y="336" width="272" height="72" rx="8" class="box"/>
 <text x="52" y="360" class="ink" font-size="13" font-weight="600">approved</text>
 <text x="52" y="376" class="ink" font-size="11.5">LEDES export takes it if billable</text>
-<text x="52" y="392" class="ink" font-size="11.5">Block flags keep the override reason</text>
+<text x="52" y="392" class="ink" font-size="11.5">Reopen keeps overrides; edits clear them</text>
 <rect x="448" y="336" width="272" height="72" rx="8" class="box"/>
 <text x="460" y="360" class="ink" font-size="13" font-weight="600">rejected</text>
 <text x="460" y="376" class="ink" font-size="11.5">Keeps its sources: never redrafted</text>

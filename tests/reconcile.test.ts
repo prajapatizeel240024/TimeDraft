@@ -4,16 +4,19 @@ import { loadFirm } from '@/lib/config';
 import type { Activity } from '@/lib/types';
 import { normalizeFixture } from '@/server/ingest/normalize';
 import { findCallMerges, phoneDirectory } from '@/server/ingest/reconcile';
+import { listDays, loadKey } from '../evals/score';
 
 const acts = (day: string): Activity[] =>
   normalizeFixture(JSON.parse(fs.readFileSync(`evals/days/${day}.json`, 'utf8'))).map((a) => ({ ...a, id: a.external_id, day_id: day, merged_into: null }));
 const phones = phoneDirectory(loadFirm());
 
 describe('reconcile', () => {
-  it('merges the planted calendar + call duplicate on every day that has one', () => {
-    for (const day of ['day-03', 'day-06', 'day-09', 'day-12']) {
-      const key = JSON.parse(fs.readFileSync(`evals/keys/${day}.key.json`, 'utf8'));
-      const trap = key.traps.find((t: { kind: string }) => t.kind === 'duplicate_call');
+  it('merges the planted calendar + call duplicate on every dev day that has one', () => {
+    // Dev days only, so the holdout stays unseen.
+    const days = listDays('dev').filter((d) => loadKey(d).traps.some((t) => t.kind === 'duplicate_call'));
+    expect(days).toEqual(['day-03', 'day-06']);
+    for (const day of days) {
+      const trap = loadKey(day).traps.find((t) => t.kind === 'duplicate_call')!;
       const merges = findCallMerges(acts(day), phones);
       expect(merges).toHaveLength(1);
       expect(trap.activity_ids.sort()).toEqual([merges[0].calendarId, merges[0].callId].sort());

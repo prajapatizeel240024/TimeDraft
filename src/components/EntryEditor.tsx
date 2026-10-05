@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { Profile, RewriteOutput, Words } from '@/lib/types';
+import type { Profile, RewriteSuggestion, Words } from '@/lib/types';
 import { ACTIVITY_CODES, TASK_CODES } from '@/lib/utbms';
 import type { EntryView } from '@/server/entries/service';
 import { checkEntries } from '@/server/guidelines/rules';
@@ -13,7 +13,7 @@ export interface EntrySave {
   activity_code: string;
   narrative: string;
   billable: boolean;
-  via: 'edit' | 'rewrite';
+  rewrite_token?: string; // sent only while the narrative is still exactly Claude's suggestion
 }
 
 const hours = (t: number) => `${Math.floor(t / 10)}.${t % 10}`;
@@ -25,14 +25,14 @@ export function EntryEditor({ entry, profile, words, startWithRewrite, onSave, o
   startWithRewrite: boolean;
   onSave: (s: EntrySave) => Promise<void>;
   onCancel: () => void;
-  onRewrite: (hint: string) => Promise<RewriteOutput>;
+  onRewrite: (hint: string) => Promise<RewriteSuggestion>;
 }) {
   const [units, setUnits] = useState(entry.units_tenths);
   const [task, setTask] = useState(entry.task_code);
   const [act, setAct] = useState(entry.activity_code);
   const [narrative, setNarrative] = useState(entry.narrative);
   const [billable, setBillable] = useState(entry.billable);
-  const [via, setVia] = useState<'edit' | 'rewrite'>('edit');
+  const [suggestion, setSuggestion] = useState<{ narrative: string; token: string } | null>(null);
   const [question, setQuestion] = useState<string | null>(null);
   const [hint, setHint] = useState('');
   const [rewriting, setRewriting] = useState(false);
@@ -62,7 +62,7 @@ export function EntryEditor({ entry, profile, words, startWithRewrite, onSave, o
         setNote(null);
       } else {
         setNarrative(out.narrative);
-        setVia('rewrite');
+        setSuggestion({ narrative: out.narrative, token: out.token });
         setQuestion(null);
         setNote(`Suggested by Claude from ${out.facts_used.length === 1 ? '1 fact' : `${out.facts_used.length} facts`} in the sources${hint ? ' and your answer' : ''}. Check it before saving.`);
       }
@@ -77,7 +77,10 @@ export function EntryEditor({ entry, profile, words, startWithRewrite, onSave, o
     setSaving(true);
     setError(null);
     try {
-      await onSave({ units_tenths: units, task_code: task, activity_code: act, narrative: narrative.trim(), billable, via: narrative.trim() === entry.narrative ? 'edit' : via });
+      const text = narrative.trim();
+      // Claude's token goes only with Claude's exact text: once the attorney changes it, the save is their own edit.
+      const token = suggestion && text === suggestion.narrative.trim() ? suggestion.token : '';
+      await onSave({ units_tenths: units, task_code: task, activity_code: act, narrative: text, billable, ...(token ? { rewrite_token: token } : {}) });
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
       setSaving(false);

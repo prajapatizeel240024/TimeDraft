@@ -14,6 +14,12 @@ import * as rewritePrompt from './prompts/rewrite.v1';
 
 export class RefusalError extends Error {}
 export class LLMUnavailableError extends Error {}
+/** Claude's reply wasn't JSON or failed its zod schema. The reply is still logged; nothing is saved from it. */
+export class ModelOutputError extends Error {
+  constructor(options?: ErrorOptions) {
+    super("Claude's answer didn't match the expected format, so nothing was saved. Try again.", options);
+  }
+}
 
 export interface StructuredCall<T> {
   purpose: CallLog['purpose'];
@@ -33,7 +39,9 @@ export async function callStructured<T>(db: Pool, call: StructuredCall<T>): Prom
   const key = cacheKey({ model: call.model, prompt: call.promptVersion, system: call.system, user: call.user, schema: call.schema });
   if ((process.env.LLM_CACHE ?? 'on') !== 'off') {
     const hit = await getCached(db, key);
-    if (hit) return call.zod.parse(hit);
+    // A cached answer that fails zod is skipped, and Claude is called as on a miss.
+    const cached = hit === null ? null : call.zod.safeParse(hit);
+    if (cached?.success) return cached.data;
   }
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new LLMUnavailableError('ANTHROPIC_API_KEY is not set. Add it to .env.local, or set LLM_MODE=oracle to test without Claude.');
@@ -75,19 +83,22 @@ export async function callStructured<T>(db: Pool, call: StructuredCall<T>): Prom
       continue;
     }
     if (res.stop_reason !== 'end_turn') throw new Error(`Claude stopped with "${res.stop_reason}" on the ${call.purpose} request.`);
-    return call.zod.parse(parsed);
+    const out = call.zod.safeParse(parsed);
+    if (!out.success) throw new ModelOutputError({ cause: out.error });
+    return out.data;
   }
   throw new Error(`Claude ran out of tokens twice on the ${call.purpose} request.`);
 }
 
 export function anthropicLLM(db: Pool): LLM {
   loadEnv();
-  const firm = loadFirm();
+  // Each method reads the firm config itself, so a broken config/firm.yaml fails inside runDay, which marks the day failed.
   const models = { match: process.env.MODEL_MATCH ?? 'claude-haiku-4-5-20251001', draft: process.env.MODEL_DRAFT ?? 'claude-sonnet-5-5' };
   return {
     name: 'anthropic',
     async match(items: MatchItem[]): Promise<MatchAnswer[]> {
       if (!items.length) return [];
+      const firm = loadFirm();
       const out = await callStructured(db, {
         purpose: 'match',
         model: models.match,
@@ -101,6 +112,7 @@ export function anthropicLLM(db: Pool): LLM {
       return out.matches.map((m) => ({ ...m, matter_id: m.matter_id.toUpperCase() === 'NONE' ? 'NONE' : normalizeCode(m.matter_id) }));
     },
     async draft(req: DraftRequest, repair?: { errors: string[]; previous: DraftOutput }) {
+      const firm = loadFirm();
       const matter = matterById(firm, req.matter_id);
       const out = await callStructured(db, {
         purpose: repair ? 'repair' : 'draft',
@@ -115,6 +127,7 @@ export function anthropicLLM(db: Pool): LLM {
       return { ...out, meta: { promptVersion: draftPrompt.VERSION, model: models.draft } };
     },
     async rewrite(req: RewriteRequest): Promise<RewriteOutput & { meta: { promptVersion: string; model: string } }> {
+      const firm = loadFirm();
       const matter = matterById(firm, req.matter_id);
       const out = await callStructured(db, {
         purpose: 'rewrite',

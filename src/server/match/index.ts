@@ -21,6 +21,8 @@ export interface Decision {
 
 /** Pure: the same inputs always give the same decision, which is what lets the eval sweep thresholds. */
 export function decide(rule: RuleResult, answer: MatchAnswer | null, item: MatchItem | null, threshold: number): Decision {
+  // NaN or 0 would switch the confidence check off, so a bad threshold is an error, not a pass.
+  if (!Number.isFinite(threshold) || threshold <= 0 || threshold > 1) throw new Error(`The match threshold must be a number above 0 and at most 1, not ${threshold}.`);
   const d = ruleDecision(rule);
   const ruleEvidence = rule.signals.map((s) => ({ signal: s.signal, value: s.value, weight: s.weight, matter_id: s.matter_id }));
   if (d.kind === 'excluded') return { status: 'ignored', category: 'unknown', matter_id: null, method: 'rule', confidence: null, evidence: [{ signal: d.reason }], suggestion: null };

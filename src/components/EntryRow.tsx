@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Profile, RewriteOutput, Words } from '@/lib/types';
+import type { Profile, RewriteSuggestion, Words } from '@/lib/types';
 import { codeLabel } from '@/lib/utbms';
 import type { EntryView } from '@/server/entries/service';
 import { EntryEditor, type EntrySave } from './EntryEditor';
@@ -14,7 +14,7 @@ export interface RowActions {
   reject: (reason: string) => Promise<void>;
   reopen: () => Promise<void>;
   save: (s: EntrySave) => Promise<void>;
-  rewrite: (hint: string) => Promise<RewriteOutput>;
+  rewrite: (hint: string) => Promise<RewriteSuggestion>;
   showSources: () => void;
   showHistory: () => void;
 }
@@ -65,7 +65,7 @@ export function EntryRow({ entry, profile, words, actions }: { entry: EntryView;
                   <button onClick={() => setMode('rewrite')} className="text-sm font-medium underline underline-offset-2">Rewrite</button>
                 )}
                 {draft && f.code === 'NON_BILLABLE_ADMIN' && entry.billable && mode === 'view' && (
-                  <button onClick={() => run(() => actions.save({ units_tenths: entry.units_tenths, task_code: entry.task_code, activity_code: entry.activity_code, narrative: entry.narrative, billable: false, via: 'edit' }))} className="text-sm font-medium underline underline-offset-2">Mark not billed</button>
+                  <button onClick={() => run(() => actions.save({ units_tenths: entry.units_tenths, task_code: entry.task_code, activity_code: entry.activity_code, narrative: entry.narrative, billable: false }))} className="text-sm font-medium underline underline-offset-2">Mark not billed</button>
                 )}
               </li>
             ))}

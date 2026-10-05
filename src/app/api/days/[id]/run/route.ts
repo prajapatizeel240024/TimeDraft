@@ -8,11 +8,14 @@ const running = new Set<string>();
 /** Runs the pipeline for a day and streams its progress as server-sent events. */
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const pool = getPool();
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
-      const send = (e: PipelineEvent) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(e)}\n\n`));
+      let reported = false;
+      const send = (e: PipelineEvent) => {
+        if (e.type === 'error') reported = true;
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(e)}\n\n`));
+      };
       if (running.has(id)) {
         send({ type: 'error', message: 'This day is already being drafted. Wait for that run to finish.' });
         controller.close();
@@ -20,11 +23,14 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       }
       running.add(id);
       try {
+        const pool = getPool();
         const deps = await defaultDeps(pool);
         await runDay(pool, id, send, deps);
       } catch (err) {
-        // runDay reports its own errors as events; this catches setup errors such as a bad LLM_MODE.
+        // runDay sends its own error event before rethrowing; setup errors such as a missing DATABASE_URL or a bad
+        // LLM_MODE or CHECKER_IMPL never reach it, so they are sent here.
         if (err instanceof Error && !err.message.includes('ANTHROPIC_API_KEY')) console.error(err);
+        if (!reported) send({ type: 'error', message: err instanceof Error ? err.message : String(err) });
       } finally {
         running.delete(id);
         controller.close();

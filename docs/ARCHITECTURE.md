@@ -1,6 +1,6 @@
 # TimeDraft — Architecture & How It Works
 
-As of 2026-10-04. Exported from the shared design doc; the 13 diagrams are the SVG files next to this one in `docs/`.
+As of 2026-10-05. Exported from the shared design doc on 2026-10-04 and edited here since; the 13 diagrams are the SVG files next to this one in `docs/`.
 
 ## Overview
 
@@ -52,7 +52,7 @@ TimeDraft is one TypeScript repo (Next.js app, server code, scripts and evals) p
 | `contracts/` | `checker.schema.json` and the golden fixtures shared by TypeScript and Go |
 | `checker-go/` | The Go checker service and its tests |
 | `evals/` | The generator, 12 days, 12 answer keys, the runner and the scorer; reports go to `evals/reports/` |
-| `tests/` | 10 Vitest files with 119 test cases |
+| `tests/` | 10 Vitest files with 128 test cases |
 
 The stack is Next.js 16, React 19, strict TypeScript 5.9, zod 4, `pg`, `@anthropic-ai/sdk`, Tailwind 4 and Vitest, on Postgres 16. The Go checker targets Go 1.22 with no third-party modules.
 
@@ -169,17 +169,17 @@ Every Claude call goes through one function, `callStructured` in `src/server/llm
 
 ![One Claude call: 3 decisions, 2 returns, 1 retry](claude-call.svg)
 
-A cache hit is parsed and returned without writing a row. On a miss, every reply is logged to `llm_calls` before its stop reason is checked, and only an `end_turn` reply is parsed and returned.
+A valid cache hit is returned without writing a row, and a cached answer that fails zod is skipped. On a miss, every reply is logged to `llm_calls` before its stop reason is checked, and only an `end_turn` reply that passes zod is returned.
 
 ### One call, step by step
 
 1. Hash the request: `cache_key` is the SHA-256 of model, prompt version, system prompt, user message and JSON schema (`src/server/llm/cache.ts`).
-2. Unless `LLM_CACHE=off`, return the newest cached response for that key that ended with `end_turn`, after `zod.parse`. A fully cached run needs no API key.
-3. On a miss with no `ANTHROPIC_API_KEY`, throw `LLMUnavailableError`.
+2. Unless `LLM_CACHE=off`, take the newest cached response for that key that ended with `end_turn` and check it with zod. A valid one is returned, so a fully cached run needs no API key. One that fails zod is skipped, and Claude is called as on a miss.
+3. On a miss with no `ANTHROPIC_API_KEY`, throw `LLMUnavailableError`. The resolve and rewrite routes answer it with 503; the run route sends it as an `error` event.
 4. Call `messages.create` with the system prompt marked for prompt caching and `output_config: { format: { type: 'json_schema', schema } }`. The SDK retries connection errors and 408, 409, 429 and 5xx responses up to 3 times.
 5. Parse the text as JSON and insert one `llm_calls` row.
-6. Check `stop_reason`: `refusal` throws `RefusalError`, a first `max_tokens` doubles the budget and retries once, and any other stop except `end_turn` throws.
-7. Return `zod.parse(parsed)`.
+6. Check `stop_reason`: `refusal` throws `RefusalError` (502 on the resolve and rewrite routes), a first `max_tokens` doubles the budget and retries once, and any other stop except `end_turn` throws.
+7. Check the parsed reply with zod and return it. A reply that isn't JSON or fails zod is already logged, and throws `ModelOutputError`: "Claude's answer didn't match the expected format, so nothing was saved. Try again." The resolve and rewrite routes answer it with 502; the run route sends it as an `error` event.
 
 ### Tasks, models and budgets
 
@@ -212,7 +212,7 @@ Separately, the system block carries `cache_control: { type: 'ephemeral' }`, so 
 
 ### Oracle mode
 
-`LLM_MODE=oracle` swaps in `oracleLLM` from `evals/score.ts`, which answers match, draft and rewrite from the answer keys. It never calls Claude and writes no `llm_calls` rows. Its output is labelled in the eval report header, the CLI output, the page footer and `prompt_version = 'oracle'` on entries, but nothing stops an oracle run on the holdout split.
+`LLM_MODE=oracle` swaps in `oracleLLM` from `evals/score.ts`, which answers match, draft and rewrite from the answer keys. It never calls Claude and writes no `llm_calls` rows. Its output is labelled in the eval report's header and file name (`<time>-<split>-oracle`), the CLI output and `prompt_version = 'oracle'` on entries. The page footer reads those prompt versions (`drafted_by` from `getDayView`), so it shows how the drafts on screen were made, not the server's mode now. `npm run eval` refuses the oracle with `--split holdout` or `all`, and `runDay`, `resolveAndDraft` and `suggestRewrite` refuse it on a holdout day with a 422, so neither the screen nor `npm run day:load` can show a holdout answer key.
 
 ## Matching and the review queue
 
@@ -262,7 +262,7 @@ Claude returns a `matter_id` or `NONE`, a category, a confidence, verbatim quote
 
 | Check | Passes when |
 | --- | --- |
-| Confidence | At least `MATCH_THRESHOLD` (default 0.8) |
+| Confidence | At least `MATCH_THRESHOLD` (default 0.8). `parseThreshold` refuses anything but a number above 0 and at most 1, and `decide` throws on a threshold outside that range |
 | Quotes | At least one quote, and every quote passes `quoteIsReal` |
 | No rival rule | No other matter has a rule score of 0.6 or more |
 | Category fits | `billable` names a matter; `admin` or `personal` uses `NONE` |
@@ -276,7 +276,7 @@ The "Needs a matter" panel in `src/components/ReviewQueue.tsx` lists queued acti
 1. The page posts `{ matter_id }` or `{ category }` to `POST /api/activities/[id]/resolve`.
 2. `resolveActivity` locks the row, returning 404 if it is gone and 409 if it was already placed. It places the activity and any queued emails in the same thread.
 3. Each placed activity gets one `resolved` audit row.
-4. If a matter was chosen, `draftDay` drafts the new work at once, and the page reloads. Admin, Personal or Not work drafts nothing.
+4. If a matter was chosen, `draftDay` drafts the new work at once, and the page reloads. Admin, Personal or Not work drafts nothing. If drafting fails, the placement stays saved and `resolveAndDraft` marks the day `failed`, so the page, which reloads after the error too, offers Try again. With the oracle, a holdout day is refused before anything is saved.
 
 ### Contacts on several matters
 
@@ -327,9 +327,9 @@ Claude either asks one question or returns a narrative built only from the sourc
 
 1. The attorney clicks Rewrite on the Vague flag, which opens the editor. Its "Rewrite with Claude" button posts `{ hint }`, empty at first, to `POST /api/entries/[id]/rewrite`.
 2. `suggestRewrite` in `src/server/pipeline.ts` sends the narrative, codes, flag messages, sources and hint to Claude with `rewrite.v1`.
-3. Claude returns `needs_detail` with one question, or `rewritten` with a narrative and the facts it used. The prompt allows facts only from the sources, the matter card and the hint; code does not check this.
+3. Claude returns `needs_detail` with one question, or `rewritten` with a narrative and the facts it used. The prompt allows facts only from the sources, the matter card and the hint; code does not check this. A `rewritten` answer comes back with a `token`: HMAC-SHA256 over the entry id, its version and the trimmed narrative, keyed by `REWRITE_SIGNING_KEY` or, when that is unset, a random 32-byte key made once per process. A question gets the token "".
 4. A question shows as "Claude asks: …", and the attorney's answer goes back as the hint.
-5. Nothing is saved until "Save changes" sends `PATCH /api/entries/[id]` with `via: "rewrite"`. `editEntry` clears `thin_context`, deletes the entry's `UNGROUNDED_TERM` flags, writes one `rewritten` audit row and reruns the checker. `VAGUE_NARRATIVE` clears if the new narrative also passes the other vague checks.
+5. Nothing is saved until "Save changes" sends `PATCH /api/entries/[id]`. While the narrative still equals the suggestion, the request carries `rewrite_token`. The route passes `via: "rewrite"` to `editEntry` only when `verifyRewriteToken` accepts the token for that entry, version and narrative (compared with `timingSafeEqual`); anything else is an ordinary edit. `editEntry` clears `thin_context` and the entry's override reasons, deletes its `UNGROUNDED_TERM` flags, writes one audit row (`rewritten` when the token verified and the narrative is the only change, `edited` by the attorney otherwise) and reruns the checker. `VAGUE_NARRATIVE` clears if the new narrative also passes the other vague checks.
 
 In the demo, the Notes.docx entry on day 03 is flagged Vague, and the scripted answer is "Calder 30(b)(6) depo outline". Only oracle mode has run this path so far, and there any non-empty answer returns the answer key's narrative.
 
@@ -402,10 +402,10 @@ Go's `Tenths` in `checker-go/internal/rounding/rounding.go` computes `(seconds +
 | Function | What it changes | Audit `action` |
 | --- | --- | --- |
 | `createDraftEntry` | Inserts a `draft` entry with its time, its `entry_sources` rows and any `UNGROUNDED_TERM` warnings | `created` |
-| `editEntry` | Only the fields that changed, on a draft. A new narrative clears `thin_context` and deletes the entry's `UNGROUNDED_TERM` flags | `edited`, or `rewritten` when `via` is `rewrite` |
-| `approveEntry` | Status to `approved`. Stores the override reason on blocking flags | `approved` |
+| `editEntry` | Only the fields that changed, on a draft. A new narrative clears `thin_context` and deletes the entry's `UNGROUNDED_TERM` flags. Any change clears the entry's override reasons, because a changed entry needs a fresh reason | `edited`, or `rewritten` when the PATCH route verified a rewrite token, passed `via: "rewrite"`, and the narrative is the only field that changed |
+| `approveEntry` | Status to `approved`. Asks for a reason only for block flags with no saved override, and stores it on them | `approved` |
 | `rejectEntry` | Status to `rejected`, with a reason | `rejected` |
-| `reopenEntry` | Status back to `draft` | `reopened` |
+| `reopenEntry` | Status back to `draft`. Saved overrides stay | `reopened` |
 | `resolveActivity` | Places a queued activity, and queued emails in the same thread, on a matter, or marks them admin, personal or ignored | `resolved`, one per activity |
 | `recomputeDayFlags` | Replaces the day's checker flags | none |
 | `audit` | Inserts one audit row; ingest, matching and LEDES export call it inside their own transactions | the caller's |
@@ -423,7 +423,7 @@ An entry is born a draft and changes only along the arrows. Each attorney action
 | Action | Allowed from | Result | Refused with |
 | --- | --- | --- | --- |
 | Edit, or save a rewrite | `draft` | stays `draft` | 409 "Only drafts can be edited. Reopen the entry first." |
-| Approve | `draft` | `approved` | 409 if not a draft. 422 if a `block` flag exists and no override reason is given |
+| Approve | `draft` | `approved` | 409 if not a draft. 422 if a `block` flag has no saved override and no reason is given |
 | Reject, with a reason | `draft` or `approved` | `rejected` | 409 "This entry is already rejected." |
 | Reopen | `approved` or `rejected` | `draft` | 409 "This entry is already a draft." |
 
@@ -435,7 +435,7 @@ Every action sends the `version` the page loaded. `lockEntry` reads the row with
 
 ### Flags after a change
 
-`recomputeDayFlags` runs the configured checker over the day's non-rejected entries. It deletes their old flags except `UNGROUNDED_TERM`, inserts the new ones, and carries saved override reasons across. A rejected entry drops out of the check and keeps the flags it had. Day-level flags such as `DAILY_TOTAL` are never stored: `getDayView` reruns the checker on every read.
+`recomputeDayFlags` runs the configured checker over the day's non-rejected entries. It deletes their old flags except `UNGROUNDED_TERM`, inserts the new ones, and carries saved override reasons across. So Reopen keeps overrides, and a reopened entry approves again without a new reason; `editEntry` clears the entry's overrides before this runs, so an edited entry needs a fresh one. A rejected entry drops out of the check and keeps the flags it had. Day-level flags such as `DAILY_TOTAL` are never stored: `getDayView` reruns the checker on every read.
 
 Edits never rerun time math. The attorney's `units_tenths` (1 to 240) is stored as sent, and `raw_seconds` keeps the drafted value.
 
@@ -511,7 +511,7 @@ The review screen is two client-side pages backed by 13 API routes under `src/ap
 
 ![Review screen: 8 regions top to bottom, 2 places the attorney decides](review-screen.svg)
 
-Activities TimeDraft could not place wait under Needs a matter; picking a matter drafts them at once. Drafts wait for Approve, which asks for a reason when a chip is red, and Export LEDES takes only approved, billable entries.
+Activities TimeDraft could not place wait under Needs a matter; picking a matter drafts them at once. Drafts wait for Approve, which asks for a reason when a red chip has none saved, and Export LEDES takes only approved, billable entries.
 
 ### Pages
 
@@ -520,7 +520,7 @@ Activities TimeDraft could not place wait under Needs a matter; picking a matter
 | `/` | `src/app/page.tsx` | One row per synthetic day: date, source counts, a status ("X.Y h drafted", "Loaded" or "Not drafted yet") and an Open or "Draft this day" button |
 | `/days/[dayId]` | `src/app/days/[dayId]/page.tsx` | The review screen for one day |
 
-The day page runs top to bottom: header, live status line, error banner, totals (`TotalsBar`), "Needs a matter" (`ReviewQueue`), then one section per matter with its entry rows and an Export LEDES button. "Left out of the bill" and a footer naming the checker and LLM mode close the page.
+The day page runs top to bottom: header, live status line, error banner, totals (`TotalsBar`), "Needs a matter" (`ReviewQueue`), then one section per matter with its entry rows and an Export LEDES button. "Left out of the bill" and a footer close the page. The footer names the checker, and says "Drafts by Claude" unless some entry on the page was drafted by the answer-key stand-in (`drafted_by` from `getDayView` includes `oracle`).
 
 ### Entry rows and flags
 
@@ -536,7 +536,7 @@ Each row in `src/components/EntryRow.tsx` shows hours, the narrative, both codes
 | `UNGROUNDED_TERM` | Name not in sources | none |
 | `DAILY_TOTAL` | No chip; the totals bar shows its message as an amber line | none |
 
-Red chips (`block`) stop approval until the attorney answers "Why approve it anyway?"; amber chips (`warn`) only warn. The editor reruns the TypeScript rules in the browser as the attorney types, and the server checks the whole day again on save.
+Red chips (`block`) stop approval until the attorney answers "Why approve it anyway?", unless the chip already shows a saved reason (Reopen keeps it; an edit clears it); amber chips (`warn`) only warn. The editor reruns the TypeScript rules in the browser as the attorney types, and the server checks the whole day again on save.
 
 ### Routes
 
@@ -547,16 +547,16 @@ Red chips (`block`) stop approval until the attorney answers "Why approve it any
 | Open a day; reload after every action | `GET /api/days/[id]` | `getDayView` |
 | Draft the day, streamed | `POST /api/days/[id]/run` | `runDay` |
 | Pick a matter for a queued item | `POST /api/activities/[id]/resolve` | `resolveAndDraft` |
-| Edit, or save a rewrite | `PATCH /api/entries/[id]` | `editEntry` |
+| Edit, or save a rewrite | `PATCH /api/entries/[id]` | `verifyRewriteToken`, then `editEntry` |
 | Approve | `POST /api/entries/[id]/approve` | `approveEntry` |
 | Reject | `POST /api/entries/[id]/reject` | `rejectEntry` |
 | Reopen | `POST /api/entries/[id]/reopen` | `reopenEntry` |
 | Ask for a rewrite | `POST /api/entries/[id]/rewrite` | `suggestRewrite` |
 | Why this entry | `GET /api/entries/[id]/sources` | `getEntrySources` |
 | History | `GET /api/entries/[id]/history` | `getEntryHistory` |
-| Export LEDES | `GET /api/matters/[id]/ledes?day=` | `exportMatterDay` |
+| Export LEDES | `POST /api/matters/[id]/ledes` with `{ day_id }` | `exportMatterDay` |
 
-Request bodies are checked with zod: a JSON body that fails its schema returns 400, and a body that is not JSON returns 500 (the rewrite route treats it as empty). Other errors map to 404 (not found), 409 (stale version or wrong status), 422 (unknown code, block flag without a reason, nothing to export) and 500. The run route always answers 200 and reports errors as `error` events in the stream.
+Request bodies are checked with zod: a JSON body that fails its schema returns 400 "The request body is not valid.", including a LEDES export whose `day_id` is missing or isn't a UUID. A Postgres invalid-id error (code 22P02) returns 400 "That id isn't valid.", so that is the answer for a day, activity or entry id that isn't a UUID; History is the exception, and answers 200 with no events for any unknown id. A body that is not JSON returns 500, except on the rewrite route, which treats it as empty. Expected failures keep their status: 404 (not found, including a LEDES export for a day that isn't loaded), 409 (stale version or wrong status) and 422 (unknown code, block flag without a reason, nothing to export, the oracle on a holdout day). When Claude's answer doesn't match its schema (`ModelOutputError`) or Claude refuses (`RefusalError`), the route answers 502; with no `ANTHROPIC_API_KEY` on a cache miss (`LLMUnavailableError`), it answers 503. A `config/firm.yaml` that isn't valid YAML or fails validation returns 500 with a message that names the file, and anything else returns 500 with the raw message. GET on the LEDES route answers 405. The run route always answers 200 and reports every error as an `error` event in the stream, including setup and config errors such as a missing `DATABASE_URL`, an unknown `LLM_MODE` or `CHECKER_IMPL`, and a broken `config/firm.yaml`.
 
 No route checks who is calling. Attorney actions are recorded as `attorney:DW`, and rows written while loading, matching or drafting a day carry `system` or the model's actor, such as `anthropic:draft.v1`.
 
@@ -567,7 +567,7 @@ No route checks who is calling. Attorney actions are recorded as `attorney:DW`, 
 
 ### LEDES export
 
-"Export LEDES" downloads one LEDES 1998B invoice for one matter on one day, built from that day's approved, billable entries.
+"Export LEDES" downloads one LEDES 1998B invoice for one matter on one day, built from that day's approved, billable entries. The page sends `POST /api/matters/[id]/ledes` with `{ day_id }`, which zod checks is a UUID; the route exports only POST, because every export takes a new invoice number and writes an audit row, so a GET answers 405.
 
 1. `exportMatterDay` in `src/server/export/ledes.ts` selects the entries; finding none returns 422.
 2. Inside one transaction, it takes an advisory lock for the matter and day, so concurrent exports get distinct invoice numbers.
@@ -617,7 +617,7 @@ Day 03 (Tuesday, March 10, 2026) is the demo day. Its 16 activities hold four tr
 3. Clear the review queue from the key, as a perfect attorney would, draft again, and score as **After review**.
 4. Re-decide the stored match answers at thresholds 0.6, 0.7, 0.8 and 0.9, with no new Claude calls.
 5. Count this run's live Claude calls by purpose from `llm_calls`, with input and output tokens and p50 and p95 latency. Cache hits write no row, so they are not counted.
-6. Write `evals/reports/<time>-<split>.md` and a matching `.json`.
+6. Write `evals/reports/<time>-<split>-<llm>.md` and a matching `.json`, where `<llm>` is `anthropic` or `oracle`.
 
 Flags: `--split dev|holdout|all`, `--threshold`, `--checker ts|go`, `--llm anthropic|oracle` and `--no-cache`.
 
@@ -635,11 +635,11 @@ The report shows 17 headline rows in Auto and After review columns. Five have ta
 
 The other 12 are reported without a target: coverage, review rate, admin caught, leakage, over-capture, billed against true tenths, task and activity code accuracy, blocks drafted as one entry, names not in the sources, traps caught, and block flags on clean entries.
 
-An oracle run (`--llm oracle`) answers from the keys, holdout included, so it tests only the machinery. Its report says "NOT a Claude result" in the run line.
+An oracle run (`--llm oracle`, or `LLM_MODE=oracle`) answers from the keys, so it tests only the machinery. It runs on the dev split only: with `--split holdout` or `all`, `npm run eval` refuses with "The oracle answers from the keys, so running it on holdout would show you the answers. Use --split dev." Its report says "NOT a Claude result" in the run line, and its file name ends in `-oracle`.
 
 ## Configuration and synthetic data
 
-Configuration is 10 environment variables plus one firm file, `config/firm.yaml`, both loaded by `src/lib/config.ts`. `loadEnv()` reads `.env.local`, then `.env`, and a variable that is already set wins.
+Configuration is 11 environment variables plus one firm file, `config/firm.yaml`, both loaded by `src/lib/config.ts`. `loadEnv()` reads `.env.local`, then `.env`, and a variable that is already set wins.
 
 ### Environment variables
 
@@ -652,11 +652,12 @@ Configuration is 10 environment variables plus one firm file, `config/firm.yaml`
 | `MODEL_DRAFT` | `claude-sonnet-5-5` | The model for drafting, repair and rewrite |
 | `LLM_MODE` | `anthropic` | `oracle` answers from the eval keys, for tests only; any other value throws |
 | `LLM_CACHE` | `on` | `off` skips the `llm_calls` replay; calls are logged either way |
-| `MATCH_THRESHOLD` | `0.8` | The minimum confidence for Claude's match |
+| `MATCH_THRESHOLD` | `0.8` | The minimum confidence for Claude's match. `parseThreshold` throws on anything but a number above 0 and at most 1 |
 | `CHECKER_IMPL` | `ts` | `go` sends guideline checks to the Go service; any other value throws |
-| `CHECKER_URL` | `http://localhost:8081` | The Go service's address |
+| `CHECKER_URL` | `http://127.0.0.1:8081` | The Go service's address. `getChecker` refuses a host other than 127.0.0.1, localhost or ::1 |
+| `REWRITE_SIGNING_KEY` | none: a random 32-byte key per process | Signs rewrite tokens. Set it so tokens stay valid across restarts |
 
-The Go checker reads one more, `ADDR`, which defaults to `:8081`. On the command line, `npm run eval` and `npm run day:load` take `--llm`, which sets `LLM_MODE`. Only `npm run eval` takes `--no-cache`, which sets `LLM_CACHE=off`.
+The Go checker reads one more, `ADDR`, which defaults to `127.0.0.1:8081`; `docker-compose.yml` sets it to `0.0.0.0:8081` inside the container. On the command line, `npm run eval` and `npm run day:load` take `--llm`, which sets `LLM_MODE`. Only `npm run eval` takes `--no-cache`, which sets `LLM_CACHE=off`, and `--threshold`, which `parseThreshold` checks like `MATCH_THRESHOLD`.
 
 Of the matching thresholds, only `MATCH_THRESHOLD` is runtime config. The rule weights, `AUTO_SCORE`, `AUTO_LEAD` and `CONFLICT_SCORE` are constants in `src/server/match/rules.ts`.
 
@@ -689,26 +690,26 @@ Every name, `.example` domain and 555-01xx phone number is fictional. The projec
 
 ## Running locally
 
-You need Node 20.12 or newer and Docker for Postgres 16. Go 1.22 or newer is optional, for the Go checker. Everything runs against two local databases: `time_draft_dev` for the app and `time_draft_eval` for tests and evals.
+You need Node 20.12 or newer and Postgres 16, from Docker or a local install. Go 1.22 or newer is optional, for the Go checker. Everything runs against two local databases: `time_draft_dev` for the app and `time_draft_eval` for tests and evals.
 
 ### First run
 
 1. `cp .env.example .env.local`, then set `ANTHROPIC_API_KEY`. Or set `LLM_MODE=oracle` to test the plumbing without Claude.
 2. `npm install`
-3. `npm run db:up` starts Postgres 16 on `localhost:5432`.
+3. `npm run db:up` starts Postgres 16 on `127.0.0.1:5432`.
 4. `npm run db:migrate && npm run db:seed` builds the schema and seeds the attorney, 3 matters and 40 UTBMS codes.
-5. `npm run dev` serves the review screen at `http://localhost:3000`.
+5. `npm run dev` serves the review screen at `http://127.0.0.1:3000`.
 
-The Postgres container has no healthcheck, so if step 4 fails while it is still starting, run it again. The eval database needs no setup: `migrate` creates it on first use.
+The Postgres container has no healthcheck, so if step 4 fails while it is still starting, run it again. The eval database needs no setup: `migrate` creates it on first use. Without Docker, any local Postgres 16 on 127.0.0.1:5432 works: create a `timedraft` login role with `createdb` once. Then `npm run db:migrate` creates `time_draft_dev`, and `npm run db:migrate -- --eval` or the first `npm test` creates `time_draft_eval`.
 
 ### Commands
 
 | Command | Database | What it does |
 | --- | --- | --- |
-| `npm run dev` | dev | The review screen on port 3000 |
+| `npm run dev` | dev | The review screen at `http://127.0.0.1:3000` |
 | `npm run day:load -- day-03` | dev; `--eval` for eval | Drafts one day in the terminal; `--llm oracle` skips Claude |
 | `npm run db:reset` | dev; `-- --eval` for eval | Empties the app tables and reseeds; `-- --all` also clears the Claude cache |
-| `npm run test` | eval | 119 Vitest cases; only the entries-service test touches Postgres, using the oracle |
+| `npm run test` | eval | 128 Vitest cases; only the entries-service test touches Postgres, using the oracle on dev days |
 | `npm run typecheck` | none | Strict TypeScript over every file outside `checker-go` |
 | `npm run eval -- --split dev` | eval | Drafts and scores the 8 dev days |
 | `npm run fixtures` | none | Regenerates the 12 days and keys from seed 42 |
@@ -718,11 +719,17 @@ The Postgres container has no healthcheck, so if step 4 fails while it is still 
 
 ### Services and ports
 
-| Service | Port | Start with |
+Every service binds to 127.0.0.1, so nothing is reachable from another machine, and nothing is deployed or published.
+
+| Service | Address | Start with |
 | --- | --- | --- |
-| Postgres 16 | 5432 | `npm run db:up` |
-| Next.js | 3000 | `npm run dev` |
-| Go checker | 8081 | `docker compose --profile go up -d checker`, or `cd checker-go && go run ./cmd/checker` |
+| Postgres 16 | `127.0.0.1:5432` | `npm run db:up` |
+| Next.js | `127.0.0.1:3000` | `npm run dev`, or `npm run build` then `npm start` |
+| Go checker | `127.0.0.1:8081` | `docker compose --profile go up -d checker`, or `cd checker-go && go run ./cmd/checker` |
+
+Next.js listens on 0.0.0.0 unless told otherwise, so the `dev` and `start` scripts pass `-H 127.0.0.1`. `docker-compose.yml` publishes both containers' ports on 127.0.0.1 only. Inside its container the checker listens on `0.0.0.0:8081`, but Docker publishes it to the host only on `127.0.0.1:8081`; run directly, its `ADDR` defaults to `127.0.0.1:8081`.
+
+TimeDraft's own code makes one outside call, to the Claude API, and only when `LLM_MODE=anthropic` and the answer isn't cached; `LLM_MODE=oracle` makes none. Next.js makes two calls of its own: anonymous usage telemetry, which `npx next telemetry disable` or `NEXT_TELEMETRY_DISABLED=1` turns off, and, in `npm run dev` only, a version check against registry.npmjs.org when the first browser connects, which those settings don't stop.
 
 To use the Go checker, start it and run `CHECKER_IMPL=go npm run dev`. The page footer then shows `go@1`.
 
@@ -762,18 +769,18 @@ Add a new numbered file in `db/migrations`; never edit `001_init.sql`, which exi
 
 ### Errors and retries
 
-- Expected failures throw `HttpError(status, message)` from `src/server/entries/service.ts`. Routes return `jsonError(err)`, which keeps that status, turns a zod error into 400 and anything else into 500 with the raw message shown on screen.
-- Only three things retry: SDK API errors, a first `max_tokens` stop and one draft repair. Refusals, zod failures and checker errors fail at once.
+- Expected failures throw `HttpError(status, message)` from `src/server/entries/service.ts`. Routes return `jsonError(err)` in `src/server/pipeline.ts`: an `HttpError` keeps its status, `ModelOutputError` and `RefusalError` become 502, `LLMUnavailableError` 503, a Postgres invalid-id error (22P02) 400 "That id isn't valid.", a zod error 400, a `config/firm.yaml` that isn't valid YAML or fails validation 500 naming the file, and anything else 500 with the raw message shown on screen.
+- Only three things retry: SDK API errors, a first `max_tokens` stop and one draft repair. Refusals, bad Claude output (`ModelOutputError`) and checker errors fail at once. A cached answer that fails zod is not an error: it is skipped, and Claude is called again.
 
 ### What the tests do not cover
 
-- `runDay` takes its dependencies (LLM, checker, threshold), so database tests inject `oracleLLM` and the TypeScript checker against the eval database.
-- No test runs `callStructured`, the cache, the Go client, the routes or the server-sent events.
+- `runDay` takes its dependencies (LLM, checker, threshold), so database tests inject `oracleLLM` and the TypeScript checker against the eval database, on dev days only.
+- Tests run `callStructured` only on a cached answer that fails zod, with no API key, and call `jsonError` directly. No test calls Claude, the Go client, the routes or the server-sent events.
 - The golden fixtures carry their own word lists, not those in `config/firm.yaml`.
 
 ## Invariants and guardrails
 
-Nine rules in the project's `CLAUDE.md` must never break. The table shows what enforces each one in the code today; the known gaps below show where enforcement is only partial.
+Fourteen rules in the project's `CLAUDE.md` must never break. The table shows what enforces each one in the code today; the known gaps below show where enforcement is only partial.
 
 | Rule | Enforced by |
 | --- | --- |
@@ -781,37 +788,36 @@ Nine rules in the project's `CLAUDE.md` must never break. The table shows what e
 | Only `src/server/entries/service.ts` writes entries and flags, with one audit row per change in the same transaction | Each service function runs in `withTx`; `tests/entries-service.test.ts` counts audit rows per edit |
 | `audit_events` is append-only | Trigger `audit_events_no_change` rejects UPDATE and DELETE; the entries-service test checks it |
 | Every Claude call goes through `src/server/llm/client.ts` | It is the only file that imports `@anthropic-ai/sdk`; structured outputs, zod, `llm_calls` logging and the cache all live in `callStructured` |
-| Below `MATCH_THRESHOLD`, or with quotes not in the text, an activity goes to the review queue | `decide` in `src/server/match/index.ts`; `tests/match-rules.test.ts` covers low confidence, invented quotes and missing answers |
+| Below `MATCH_THRESHOLD`, or with quotes not in the text, an activity goes to the review queue | `decide` in `src/server/match/index.ts`, which also throws on a threshold outside (0, 1]; `tests/match-rules.test.ts` covers low confidence, invented quotes, missing answers and bad thresholds |
 | `rules.ts` and `rules.go` change together and pass the shared fixtures | Both test suites run the 42 cases in `contracts/fixtures/guidelines.json` |
-| `LLM_MODE=oracle` is for tests only and never reported as a result | Labels in the eval report, the CLI output and the page footer |
+| `LLM_MODE=oracle` is for tests only and never reported as a result | Labels in the eval report and its file name, the CLI output, and the page footer, which reads the entries' prompt versions |
+| Everything binds to 127.0.0.1; nothing is deployed, published or exposed | `-H 127.0.0.1` in the `dev` and `start` scripts, `127.0.0.1` host ports in `docker-compose.yml`, the Go checker's default `ADDR` and the `127.0.0.1` URLs in `.env.example`. Nothing checks it at runtime, so an explicit `-H` or `ADDR` can still widen it |
+| A narrative counts as Claude's rewrite only with a valid `rewrite_token` | The PATCH route passes `via: "rewrite"` only when `verifyRewriteToken` in `src/server/pipeline.ts` accepts the token, and `editEntry` credits Claude only when the narrative is the only change; `tests/entries-service.test.ts` checks it binds the entry, version and narrative |
+| `MATCH_THRESHOLD` must parse to a number above 0 and at most 1 | `parseThreshold` for the variable and for `--threshold`, and `decide` throws on anything else; `tests/match-rules.test.ts` covers both |
+| The oracle never runs on holdout | `evals/run.ts` refuses it with `--split holdout` or `all`, and `refuseOracleOnHoldout` in `src/server/pipeline.ts` stops `runDay`, `resolveAndDraft` and `suggestRewrite` on a holdout day; `tests/entries-service.test.ts` checks it, and the tests run the oracle on dev days only. `oracleLLM` still reads every key to build its index (see Known gaps) |
+| `CHECKER_URL` must be a loopback address | `getChecker` in `src/server/guidelines/index.ts` refuses any other host; `tests/match-rules.test.ts` checks it |
 | Local Postgres only | `assertLocal` in `src/server/db.ts` refuses any other host |
 | Synthetic data only | Convention; `evals/generate.ts` refuses contacts that are not in `config/firm.yaml` |
 
 ### Known gaps
 
-Each gap below was confirmed twice against the code on `main` after PR #15, by two independent reviewers. The first column is ordered by impact.
+Each gap below was confirmed against the code by independent reviewers. The first column is ordered by impact.
 
 | Gap | Where |
 | --- | --- |
 | Flag rewrites, the drafter's queue and ignore updates, call merges, and the `reconciled`, `drafted` and `failed` statuses write no audit row | `recomputeDayFlags`, `src/server/draft/index.ts`, `src/server/ingest/reconcile.ts`, `src/server/pipeline.ts` |
 | `npm run db:reset`, evals and the database test truncate `audit_events`; the row trigger cannot stop TRUNCATE | `resetDb` in `src/server/db.ts` |
-| A Claude answer that fails zod is still cached, so identical calls keep failing until `LLM_CACHE=off` or `db:reset -- --all` | `src/server/llm/client.ts`, `src/server/llm/cache.ts` |
-| A zod failure on Claude's output reaches the screen as 400 "The request body is not valid." | `jsonError` in `src/server/pipeline.ts` |
-| An empty or non-numeric `MATCH_THRESHOLD` turns the confidence check off | `defaultDeps` in `src/server/pipeline.ts` |
 | The quote check also accepts quotes from participants and up to four neighbouring activities, wider than "in the text" | `quoteIsReal` in `src/server/match/llm.ts` |
-| Re-approving a reopened entry whose block flag was overridden fails with 422: the screen sends no reason, the server wants one | `src/components/EntryRow.tsx`, `approveEntry` |
-| Oracle runs are labelled but allowed on any split, holdout included, under normal report names | `evals/run.ts` |
-| The page footer shows the server's current `LLM_MODE`, not how the entries on screen were drafted | `getDayView` |
-| A saved rewrite is audited as `via claude:rewrite.v1` whatever wrote it, because the server trusts the client's `via` | `editEntry` |
-| The README's Lena Park queue step is not guaranteed: her emails score under 0.6, so a confident, quoted answer is placed automatically | `decide`, `README.md` |
 | The TypeScript and Go checkers still differ on Unicode whitespace and message quoting, and no test runs both on one day | `rules.ts`, `rules.go` |
-| LEDES export is a GET that writes an export row, an audit row and a new invoice number on every call | `src/app/api/matters/[id]/ledes/route.ts` |
-| Unit tests read the holdout days and keys | `tests/match-rules.test.ts`, `tests/reconcile.test.ts` |
+| `jsonError` treats every zod error except one from `config/firm.yaml` as bad input, so a fixture or answer-key file that fails its schema answers 400 | `jsonError` in `src/server/pipeline.ts` |
+| `oracleLLM` reads every answer key, holdout included, to build its index, even when it only runs on dev days | `evals/score.ts` |
 | Some time math sits outside `src/server/time`: the 240 cap, email estimates and the eval's own rounding | `createDraftEntry`, `src/server/ingest/estimate.ts`, `evals/score.ts` |
 | A rejected entry keeps its sources, so its activities are never redrafted; only Reopen recovers them | `draftDay` |
 | A doc session's span ends at its start plus `active_seconds`, not at its recorded end | `src/server/time/intervals.ts` |
 
 PR #15 already fixed six earlier gaps: audit rows now go through one function, a failed run reconciles again, entries dropped for a bad code queue their activities, concurrent LEDES exports get distinct numbers, TypeScript parses interval times as strictly as Go, and `npm run fixtures` really uses seed 42.
+
+The fixes after PR #16 closed ten more: a Claude answer that fails zod is no longer replayed from the cache or shown as a 400, `MATCH_THRESHOLD` is validated, a reopened entry approves again without a new reason, the oracle refuses holdout days everywhere and its eval reports say oracle in the name, the footer shows how the drafts on screen were made, a saved rewrite needs a valid token, the README's demo covers both Lena Park outcomes, LEDES export is a POST, and the match-rule and reconcile tests use dev days only.
 
 ## Production design for many users (proposal)
 
@@ -832,9 +838,9 @@ Browsers reach the pods through a CDN that caches only static assets. Every job,
 | Runs | Runs execute inside `POST /api/days/[id]/run`, guarded by an in-memory `Set`. Opening an undrafted day starts a run, and resolving a queued activity drafts inline. | `POST /api/days/{id}/runs` returns 202 with the day's queued or running job, inserting one only when there is none. Workers claim jobs with `FOR UPDATE SKIP LOCKED` under a 60 s lease and a fencing token. Resolve enqueues one coalesced `draft_day` job, and opening a page never starts a run. | A `Set` guards one process. Two replicas would pay Claude twice, and the loser would fail on the `entry_sources` unique index. |
 | Progress | SSE frames come from the process running the pipeline, and a closed tab can mark the day `failed`. | Each commit writes a `day_events` row (ids only) in the same transaction, then sends `NOTIFY`. SSE gateway pods replay rows after `Last-Event-ID`, then follow `NOTIFY`, with 15 s heartbeats. | The event commits with its change, so none is lost or early, and a viewer leaving never cancels a run. |
 | Flags | Edits lock one entry, then rewrite the whole day's flags with no day lock. Checker flags land only after every matter drafts, and `getDayView` reruns the checker on each read. | Every day-scoped write starts with `UPDATE days SET version = version + 1`. Every entry write (create, edit, approve, reject, reopen, mark billed) recomputes flags under that lock. Day-level flags go in a new `day_flags` table written by `service.ts`, and a stale `days.flags_config_version` triggers a recompute after a config change. | `OVERLAP` and `DAILY_TOTAL` span entries, so concurrent edits would leave stale or duplicate flags. |
-| Claude log and cache | `llm_calls` is also the cache: full request text, no firm, no expiry. An answer is logged before zod checks it, so an invalid one replays on every retry. | `llm_calls` keeps metadata only, plus cache-read and cache-write token counts. A new `llm_response_cache` keeps only zod-valid answers for 24 h, keyed by HMAC-SHA256 over the firm and the request. Production refuses `LLM_MODE=oracle`. | Retries need only the answer, and privileged request text should not sit in a log. |
+| Claude log and cache | `llm_calls` is also the cache: full request text, no firm, no expiry. An answer is logged before zod checks it; an invalid cached answer is skipped, so every retry pays for a new call. | `llm_calls` keeps metadata only, plus cache-read and cache-write token counts. A new `llm_response_cache` keeps only zod-valid answers for 24 h, keyed by HMAC-SHA256 over the firm and the request. Production refuses `LLM_MODE=oracle`. | Retries need only the answer, and privileged request text should not sit in a log. |
 | Prompt layout | One system block and one cache breakpoint. The first line names the firm, the attorney, the attorney's role and a pronoun; an example names one client's contact; the word minimum varies by profile. | Block 1 is identical for every firm: narrative rules, generic examples and the 40 UTBMS codes, about 700 tokens. Block 2 holds the matter card, the profile and its word minimum. Purpose instructions and the attorney's name move after the last breakpoint. A test renders block 1 for two firms and both profiles and expects identical bytes. | One tenant-free prefix can be cached once and read by every firm's drafts. |
-| LEDES export | A `GET` writes an export row, an audit row and a new invoice number on every call, reading entries outside its transaction. Exported entries can still be reopened. | `POST /api/matters/{id}/exports` sends the entry ids and versions on screen, and a known request hash returns its stored invoice. One transaction takes the number, stores the file in a pending `exports` row and calls a new `markBilled` in `service.ts` (one `billed` audit row per entry). After the commit, the file goes to object-lock storage. Billed entries refuse edit, reject and reopen. | Retries never mint a second invoice, no lock is held during an upload, and an issued invoice never drifts from the ledger. |
+| LEDES export | A `POST` writes an export row, an audit row and a new invoice number on every call, reading entries outside its transaction. Exported entries can still be reopened. | `POST /api/matters/{id}/exports` sends the entry ids and versions on screen, and a known request hash returns its stored invoice. One transaction takes the number, stores the file in a pending `exports` row and calls a new `markBilled` in `service.ts` (one `billed` audit row per entry). After the commit, the file goes to object-lock storage. Billed entries refuse edit, reject and reopen. | Retries never mint a second invoice, no lock is held during an upload, and an issued invoice never drifts from the ledger. |
 | Config | `loadFirm()` reads `config/firm.yaml` once per process. Times use a hard-coded `America/New_York` in `src/server/match/llm.ts` and three review components, and the file's `timezone` key is never used. | Matters, profiles and word lists live in versioned Postgres tables. A job pins one `config_version`; writes and exports read the current one, and the export stores it with the invoice. Each attorney has a time zone, also used by the screen. Each firm sets its threshold, never below 0.8 without a new eval. | Firms edit matters while the app runs, and one run must see one config. |
 | Late data | Ingest loads one file per day, and match runs only while the day has no matches. | Delta sync adds activities all day. Reconcile merges a call into a meeting only when neither is in an entry; otherwise the late call is ignored as a duplicate or queued with a `late_call` signal. New activities in a matched day enqueue the coalesced run job. | An entered activity's seconds never change under its billed tenths. |
 | Database safety | `assertLocal` accepts only localhost. Append-only rests on a row trigger that `TRUNCATE` skips, and `resetDb` truncates `audit_events`. | Managed Postgres behind PgBouncer. App roles get only `SELECT` and `INSERT` on `audit_events`, and every partition gets the row trigger and a `TRUNCATE` trigger. `resetDb` drops and recreates the local dev or eval database instead. Only the `entries_writer` role, assumed inside `service.ts`, writes entries, sources and flags, and a nightly check confirms that every entry version has exactly one audit row. | Roles stop stray writes from other modules; the nightly check and per-firm hash roots catch what roles cannot prevent. |
@@ -860,6 +866,8 @@ Why these TTLs:
 - **Shared block, 5 min rather than 1 h.** In busy hours, draft and repair calls read it many times a minute, and each read restarts the timer at no extra cost. A 1 h write costs 2× base input instead of 1.25×, so switch only if logs show two or more writes an hour (2 × 1.25 = 2.5, more than 2). Caches are isolated per workspace, so a ZDR workspace keeps its own warm copy.
 - **Block sizes.** Block 1 is about 700 tokens (estimated from about 2.8k characters), which clears Sonnet 5.5's 512-token minimum; only `usage.cache_read_input_tokens` proves it. A rewrite sends a different output schema, so until that number shows rewrites reading block 1, size the TTL on draft and repair traffic alone. Longer TTLs must come first in a request, so block 2 can move to 1 h only if block 1 does.
 - **Match roster, no breakpoint.** Haiku 4.5 caches nothing under 4,096 tokens, and today's match prompt is about 1.1k to 1.4k tokens. Matching also runs about once per attorney-day, so a cache write would rarely be read.
+- **The first parallel wave misses.** Anthropic's prompt-caching docs say a cache entry becomes available only after the first response begins, so parallel requests can't share one before then. The first wave of parallel draft calls each pays the write; to get hits, start one call and send the rest once its response begins.
+- **Pre-warming.** The `max_tokens: 0` pre-warm is rejected when `output_config.format` is set. Anthropic's structured-outputs page says changing the format invalidates the prompt cache, so a pre-warm without the schema may not help the real calls. Measure `cache_read_input_tokens` before relying on any pre-warm.
 - **Replay cache, 24 h rather than 7 days.** Retries back off 30 s × 2^n, capped at 30 min, for 8 attempts, which spans about 1.5 h; an evening run retried the next morning comes about 15 h later. After that, results live in `activity_matches` and `time_entries`.
 - **Config, 60 s.** The 60 s bound only affects what a screen shows. Jobs, writes and exports check the version every time, so a stale snapshot never decides a match, a flag or an invoice.
 - **Sessions, 30 min idle and 12 h at most.** Screens show privileged text on shared office machines, and 12 h covers a long working day. SSE reconnects and heartbeats don't count as activity.
@@ -944,5 +952,5 @@ Caches expire or are re-checked within a day. Activity text is redacted 90 days 
 | Shared contact | A person who works on more than one matter, such as an expert |
 | Answer key | A day's expected matches, entries and codes, used to score the pipeline |
 | Trap | A planted hard case in a synthetic day, such as a duplicate call or a shared expert |
-| Dev and holdout | Days 01 to 08 are for tuning; days 09 to 12 are meant to be scored once, at the end (nothing enforces it) |
+| Dev and holdout | Days 01 to 08 are for tuning; days 09 to 12 are meant to be scored once, at the end. Nothing enforces "once", but the oracle refuses them |
 | Oracle | An answer-key stand-in for Claude, for tests only |

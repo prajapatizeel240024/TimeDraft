@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { RewriteOutput } from '@/lib/types';
+import type { RewriteSuggestion } from '@/lib/types';
 import type { DayView, EntryView } from '@/server/entries/service';
 import type { PipelineEvent } from '@/server/pipeline';
 import type { EntrySave } from '@/components/EntryEditor';
@@ -59,7 +59,7 @@ export default function DayPage() {
           const e = JSON.parse(chunk.slice(6)) as PipelineEvent;
           if (e.type === 'stage') setStage(e.message);
           if (e.type === 'match_summary') setStage(`${e.auto} activities placed, ${e.queued} need a matter. Drafting entries…`);
-          if (e.type === 'entry') setView((v) => (v ? { ...v, entries: [...v.entries.filter((x) => x.id !== e.entry.id), e.entry] } : v));
+          if (e.type === 'entry') setView((v) => (v ? { ...v, entries: [...v.entries.filter((x) => x.id !== e.entry.id), e.entry], drafted_by: [...new Set([...v.drafted_by, ...(e.entry.prompt_version ? [e.entry.prompt_version] : [])])].sort() } : v));
           if (e.type === 'review_item') setView((v) => (v ? { ...v, queue: [...v.queue.filter((x) => x.activity_id !== e.item.activity_id), e.item] } : v));
           if (e.type === 'error') setError(e.message);
         }
@@ -93,6 +93,7 @@ export default function DayPage() {
       await act(() => api(`/api/activities/${activityId}/resolve`, 'POST', choice));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
+      await load().catch(() => undefined); // the placement may be saved even though drafting failed
     } finally {
       setBusyQueue(false);
     }
@@ -100,7 +101,7 @@ export default function DayPage() {
 
   async function exportLedes(matterId: string) {
     setError(null);
-    const res = await fetch(`/api/matters/${matterId}/ledes?day=${dayId}`);
+    const res = await fetch(`/api/matters/${matterId}/ledes`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ day_id: dayId }) });
     if (!res.ok) return setError((await res.json()).error);
     const name = /filename="([^"]+)"/.exec(res.headers.get('content-disposition') ?? '')?.[1] ?? 'invoice.txt';
     const url = URL.createObjectURL(await res.blob());
@@ -169,7 +170,7 @@ export default function DayPage() {
                     reject: (reason) => act(() => api(`/api/entries/${e.id}/reject`, 'POST', { version: e.version, reason })),
                     reopen: () => act(() => api(`/api/entries/${e.id}/reopen`, 'POST', { version: e.version })),
                     save: (s: EntrySave) => act(() => api(`/api/entries/${e.id}`, 'PATCH', { version: e.version, ...s })),
-                    rewrite: (hint) => api<RewriteOutput>(`/api/entries/${e.id}/rewrite`, 'POST', { hint }),
+                    rewrite: (hint) => api<RewriteSuggestion>(`/api/entries/${e.id}/rewrite`, 'POST', { hint }),
                     showSources: () => setDrawer({ kind: 'sources', entry: e }),
                     showHistory: () => setDrawer({ kind: 'history', entry: e }),
                   }}
@@ -192,7 +193,7 @@ export default function DayPage() {
       )}
 
       <footer className="mt-14 border-t border-rule pt-4 text-xs text-ink-soft">
-        Guideline checks ran in {view.checker === 'go@1' ? 'the Go service' : 'TypeScript'} ({view.checker}). Drafts by {view.llm === 'oracle' ? 'the answer-key stand-in, for testing only' : 'Claude'}. Synthetic data only.
+        Guideline checks ran in {view.checker === 'go@1' ? 'the Go service' : 'TypeScript'} ({view.checker}). {view.drafted_by.includes('oracle') ? 'Some drafts here came from the answer-key stand-in, for testing only.' : 'Drafts by Claude.'} Synthetic data only.
       </footer>
 
       {drawer?.kind === 'sources' && <SourcesDrawer entryId={drawer.entry.id} why={drawer.entry.why} onClose={() => setDrawer(null)} />}
